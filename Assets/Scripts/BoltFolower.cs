@@ -103,18 +103,4 @@ public class BoltFollower : MonoBehaviour
         isAnimating = false;
         effectCoroutine = null;
     }
-    public void BoltDroppedByButton()
-    {
-        StopAllCoroutines();    // zatrzymaj ewentualne animacje
-        isAnimating = false;
-
-        // przywracamy pozycję startową
-        transform.SetLocalPositionAndRotation(localStartPos, Quaternion.identity);
-        transform.localScale = Vector3.one;
-
-        // upewniamy się, że bolt ma właściwego rodzica
-        if (transform.parent != parentTransform)
-            transform.SetParent(parentTransform, true);
-        weaponController.TryChamberFromMagazine();
-    }
 }
