@@ -3,8 +3,6 @@ using UnityEngine.Events;
 
 public class WeaponController : MonoBehaviour
 {
-    public Animation anim;
-
     [Header("Referencje")]
     public AmmoSocket ammoSocket;
     public ChargingHandle chargingHandle;
@@ -16,6 +14,12 @@ public class WeaponController : MonoBehaviour
     [Header("Stan")]
     public bool isChambered = false;
     public bool isBoltLockedBack = false;
+    public FireMode currentFireMode = FireMode.Safe;
+
+    [Header("Parametry trybów ognia")]
+    public int burstCount = 3;
+    public float fireRate = 0.1f;
+    public float burstDelay = 0.08f;
 
     [Header("Eventy")]
     public UnityEvent OnFire;
@@ -25,12 +29,15 @@ public class WeaponController : MonoBehaviour
     public UnityEvent OnBoltLockedBack;
     public UnityEvent OnBoltReleasedEvent;
 
+    private float lastFireTime;
+    private bool triggerPressed;
+    private int burstShotsRemaining = 0;
+
     void Awake()
     {
         if (chargingHandle != null)
         {
             chargingHandle.OnBoltPulled.AddListener(OnBoltPulled);
-            // zamiast OnBoltReleased() -> bezpośrednio wywołujemy ReleaseBoltAction
             chargingHandle.OnBoltReleased.AddListener(() => ReleaseBoltAction(false));
         }
     }
@@ -44,16 +51,104 @@ public class WeaponController : MonoBehaviour
         }
     }
 
+    public void FireInput(bool pressed)
+    {
+        switch (currentFireMode)
+        {
+            case FireMode.Safe:
+                break;
+
+            case FireMode.Semi:
+                if (pressed && !triggerPressed)
+                    FireOnce();
+                break;
+
+            case FireMode.Burst:
+                if (pressed && !triggerPressed && burstShotsRemaining == 0)
+                    burstShotsRemaining = burstCount;
+                break;
+
+            case FireMode.BoltAction:
+                if (pressed && !triggerPressed)
+                {
+                    if (FireOnce())
+                    {
+                        isBoltLockedBack = true;
+                        OnBoltLockedBack?.Invoke();
+                    }
+                }
+                break;
+        }
+
+        triggerPressed = pressed;
+    }
+
+    void Update()
+    {
+        HandleBurstLogic();
+        HandleAutoFire();
+    }
+
+    private void HandleBurstLogic()
+    {
+        if (currentFireMode != FireMode.Burst) return;
+        if (burstShotsRemaining <= 0) return;
+
+        if (Time.time - lastFireTime >= burstDelay)
+        {
+            if (FireOnce())
+            {
+                burstShotsRemaining--;
+                lastFireTime = Time.time;
+            }
+            else
+            {
+                burstShotsRemaining = 0;
+            }
+        }
+    }
+
+    private void HandleAutoFire()
+    {
+        if (currentFireMode != FireMode.Auto) return;
+        if (!triggerPressed) return;
+
+        if (Time.time >= lastFireTime + fireRate)
+        {
+            bool fired = FireOnce();
+            if (fired)
+                lastFireTime = Time.time;
+        }
+    }
+
+    private bool FireOnce()
+    {
+        if (isBoltLockedBack || !isChambered || !bolt.IsBoltForward)
+        {
+            OnDryFire?.Invoke();
+            return false;
+        }
+
+        isChambered = false;
+        OnFire?.Invoke();
+
+        if (!TryChamberFromMagazine())
+        {
+            isBoltLockedBack = true;
+            OnBoltLockedBack?.Invoke();
+        }
+
+        return true;
+    }
+
     public void OnBoltPulled()
     {
-        // jeśli był nabój w komorze -> wyrzucamy go
         if (isChambered)
         {
             isChambered = false;
             OnRoundEjected?.Invoke();
         }
 
-        // jeśli magazynek pusty -> zamek blokuje się z tyłu
         if (!TryChamberFromMagazine())
         {
             isBoltLockedBack = true;
@@ -65,33 +160,20 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Sprawdza, czy zamek może zostać zwolniony.
-    /// </summary>
     public bool CanReleaseBolt()
     {
         bool magExists = ammoSocket != null && ammoSocket.currentMagazine != null;
         bool magHasRounds = magExists && ammoSocket.currentMagazine.currentRounds > 0;
-
-        // Można zrzucić zamek jeśli:
-        // - zamek jest zablokowany
-        // - i jest magazynek z nabojami lub nie ma magazynka wcale
         return isBoltLockedBack && (!magExists || magHasRounds);
     }
 
-    /// <summary>
-    /// Wykonuje zwolnienie zamka — niezależnie od warunków jeśli force = true.
-    /// </summary>
     public void ReleaseBoltAction(bool force = false)
     {
         if (!force && !CanReleaseBolt())
             return;
 
-        // próba pobrania naboju
-        if (TryChamberFromMagazine())
-            isBoltLockedBack = false;
-        else
-            isBoltLockedBack = false; // zamek zawsze wraca do przodu, nawet jeśli pusto
+        TryChamberFromMagazine();
+        isBoltLockedBack = false;
 
         OnBoltReleasedEvent?.Invoke();
     }
@@ -112,26 +194,5 @@ public class WeaponController : MonoBehaviour
         }
 
         return false;
-    }
-
-    public void FireSemiAuto()
-    {
-        // zamek musi być w pozycji przedniej i nabój musi być w komorze
-        if (isBoltLockedBack || !isChambered || !bolt.IsBoltForward)
-        {
-            OnDryFire?.Invoke();
-            return;
-        }
-
-        // strzał
-        isChambered = false;
-        OnFire?.Invoke();
-
-        // próba automatycznego doładowania
-        if (!TryChamberFromMagazine() && ammoSocket != null)
-        {
-            isBoltLockedBack = true;
-            OnBoltLockedBack?.Invoke();
-        }
     }
 }
