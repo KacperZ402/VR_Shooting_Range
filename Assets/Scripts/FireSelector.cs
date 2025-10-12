@@ -66,14 +66,31 @@ public class FireSelectorSimple : MonoBehaviour
 
     void Update()
     {
+        // 🔹 Automatyczna detekcja "przejęcia" chwytu przez drugą rękę
+        if (activeHand == null && weaponGrab != null && weaponGrab.interactorsSelecting.Count > 0)
+        {
+            foreach (var ix in weaponGrab.interactorsSelecting)
+            {
+                var interactor = ix as XRBaseInteractor;
+                if (interactor == null) continue;
+
+                var attach = weaponGrab.GetAttachTransform(interactor);
+                if (attach == gripPoint)
+                {
+                    activeHand = interactor;
+                    Debug.Log($"[FireSelector] Reacquired active hand: {activeHand.name}");
+                    break;
+                }
+            }
+        }
+        // 🔹 Jeśli nadal nie ma aktywnej ręki — wyjdź
         if (activeHand == null) return;
 
         bool pressed = false;
         XRNode node = GetHandNode(activeHand);
-
         var device = InputDevices.GetDeviceAtXRNode(node);
         if (device.isValid)
-            device.TryGetFeatureValue(CommonUsages.secondaryButton, out pressed); // np. B/Y lub X/A
+            device.TryGetFeatureValue(CommonUsages.secondaryButton, out pressed);
 
         if (pressed && !lastButtonPressed && Time.time >= nextButtonTime)
         {
