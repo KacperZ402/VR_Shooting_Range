@@ -7,61 +7,93 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public enum FireMode { Safe, Semi, Burst, Auto, BoltAction }
 
+[RequireComponent(typeof(XRGrabInteractable))]
 public class FireSelectorSimple : MonoBehaviour
 {
     [Header("Referencje")]
     public XRGrabInteractable weaponGrab;
     public Transform selectorLever;
-    public WeaponController weaponController; // referencja do broni
+    public Transform gripPoint; // attach point uchwytu (punkt, który ma kontrolować selektor)
+    public WeaponController weaponController;
 
-    [Header("Ustawienia")]
-    [Tooltip("Lista dostępnych trybów ognia w kolejności przełączania.")]
+    [Header("Tryby ognia")]
     public List<FireMode> availableModes = new List<FireMode> { FireMode.Safe, FireMode.Semi, FireMode.Auto };
-
-    [Tooltip("Kąt obrotu między trybami (w stopniach).")]
     public float rotationStep = 45f;
 
     private int fireModeIndex = 0;
-    private XRBaseInteractor primaryInteractor;
+    private XRBaseInteractor activeHand; // ręka trzymająca gripPoint
     private bool lastButtonPressed;
+    private float buttonCooldown = 0.2f;
+    private float nextButtonTime = 0f;
 
     void Awake()
     {
-        if (!weaponGrab) weaponGrab = GetComponent<XRGrabInteractable>();
+        if (!weaponGrab)
+            weaponGrab = GetComponent<XRGrabInteractable>();
+
         ApplyRotation();
         ApplyMode();
 
-        weaponGrab.selectEntered.AddListener(a =>
-        {
-            if (primaryInteractor == null)
-                primaryInteractor = a.interactorObject as XRBaseInteractor;
-        });
+        weaponGrab.selectEntered.AddListener(OnGrabbed);
+        weaponGrab.selectExited.AddListener(OnReleased);
+    }
 
-        weaponGrab.selectExited.AddListener(a =>
+    void OnGrabbed(SelectEnterEventArgs args)
+    {
+        var interactor = args.interactorObject as XRBaseInteractor;
+        if (interactor == null) return;
+
+        var attach = weaponGrab.GetAttachTransform(interactor);
+
+        // tylko ta ręka, która złapie za gripPoint, może być aktywną
+        if (attach == gripPoint)
         {
-            if (a.interactorObject == primaryInteractor)
-            {
-                primaryInteractor = null;
-                lastButtonPressed = false;
-            }
-        });
+            activeHand = interactor;
+            Debug.Log($"[FireSelector] Aktywna ręka ustawiona: {activeHand.name}");
+        }
+    }
+
+    void OnReleased(SelectExitEventArgs args)
+    {
+        var interactor = args.interactorObject as XRBaseInteractor;
+        if (interactor == activeHand)
+        {
+            Debug.Log("[FireSelector] Ręka zwolniła gripPoint — reset aktywnej ręki.");
+            activeHand = null;
+            lastButtonPressed = false;
+        }
     }
 
     void Update()
     {
-        if (!primaryInteractor) return;
-
-        var nf = primaryInteractor.GetComponent<NearFarInteractor>();
-        if (!nf) return;
+        if (activeHand == null) return;
 
         bool pressed = false;
-        var node = nf.handedness == InteractorHandedness.Left ? XRNode.LeftHand : XRNode.RightHand;
-        var dev = InputDevices.GetDeviceAtXRNode(node);
-        if (dev.isValid)
-            dev.TryGetFeatureValue(nf.handedness == InteractorHandedness.Left ? CommonUsages.primaryButton : CommonUsages.secondaryButton, out pressed);
+        XRNode node = GetHandNode(activeHand);
 
-        if (pressed && !lastButtonPressed) CycleFireMode();
+        var device = InputDevices.GetDeviceAtXRNode(node);
+        if (device.isValid)
+            device.TryGetFeatureValue(CommonUsages.secondaryButton, out pressed); // np. B/Y lub X/A
+
+        if (pressed && !lastButtonPressed && Time.time >= nextButtonTime)
+        {
+            CycleFireMode();
+            nextButtonTime = Time.time + buttonCooldown;
+        }
+
         lastButtonPressed = pressed;
+    }
+
+    XRNode GetHandNode(XRBaseInteractor interactor)
+    {
+        // prosty, pewny sposób — tagi "LeftHand" i "RightHand"
+        string tag = interactor.gameObject.tag;
+        if (tag == "LeftHand") return XRNode.LeftHand;
+        if (tag == "RightHand") return XRNode.RightHand;
+
+        // fallback — jeśli ktoś zapomni ustawić tagu
+        Debug.LogWarning($"[FireSelector] Interactor '{interactor.name}' nie ma tagu LeftHand/RightHand! Domyślnie: RightHand.");
+        return XRNode.RightHand;
     }
 
     void CycleFireMode()
@@ -71,6 +103,8 @@ public class FireSelectorSimple : MonoBehaviour
         fireModeIndex = (fireModeIndex + 1) % availableModes.Count;
         ApplyRotation();
         ApplyMode();
+
+        Debug.Log($"[FireSelector] Tryb ognia zmieniony na: {availableModes[fireModeIndex]}");
     }
 
     void ApplyRotation()
