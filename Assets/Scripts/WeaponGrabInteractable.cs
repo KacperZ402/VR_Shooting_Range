@@ -1,0 +1,74 @@
+using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using System.Collections.Generic;
+
+public class WeaponGrabInteractable : XRGrabInteractable
+{
+    [Header("Grip reference (attach point)")]
+    public Transform gripAttachPoint; // przypisz w inspectorze attach point gripu
+    public WeaponController weaponController;
+
+    private IXRSelectInteractor gripInteractor; // kto faktycznie trzyma za grip
+
+    protected override void OnSelectEntered(SelectEnterEventArgs args)
+    {
+        base.OnSelectEntered(args);
+
+        // jeœli nowy interactor trzyma gripAttachPoint, ustaw go jako gripInteractor
+        if (GetAttachTransform(args.interactorObject) == gripAttachPoint)
+        {
+            gripInteractor = args.interactorObject;
+            Debug.Log($"[WeaponGrab] GripInteractor ustawiony: {((gripInteractor as MonoBehaviour)?.name ?? gripInteractor.ToString())}");
+        }
+    }
+
+    protected override void OnSelectExited(SelectExitEventArgs args)
+    {
+        base.OnSelectExited(args);
+
+        // jeœli zwolniono gripInteractor, sprawdŸ, czy ktoœ inny przej¹³ grip
+        if (args.interactorObject == gripInteractor)
+        {
+            gripInteractor = null;
+
+            foreach (var ix in interactorsSelecting)
+            {
+                if (GetAttachTransform(ix) == gripAttachPoint)
+                {
+                    gripInteractor = ix;
+                    Debug.Log($"[WeaponGrab] GripInteractor przejêty przez inn¹ rêkê: {((gripInteractor as MonoBehaviour)?.name ?? gripInteractor.ToString())}");
+                    break;
+                }
+            }
+
+            if (gripInteractor == null)
+                Debug.Log("[WeaponGrab] GripInteractor zwolniony, brak aktywnej rêki na gripa.");
+        }
+    }
+
+    protected override void OnActivated(ActivateEventArgs args)
+    {
+        base.OnActivated(args);
+
+        // tylko rêka trzymaj¹ca grip mo¿e strzelaæ
+        if (weaponController == null || args.interactorObject != gripInteractor) return;
+
+        weaponController.FireInput(true);
+    }
+
+    protected override void OnDeactivated(DeactivateEventArgs args)
+    {
+        base.OnDeactivated(args);
+
+        if (weaponController == null || args.interactorObject != gripInteractor) return;
+
+        weaponController.FireInput(false);
+    }
+
+    public bool IsGripHeld => gripInteractor != null;
+
+    // Opcjonalnie metoda do debugowania
+    public IXRSelectInteractor GetGripInteractor() => gripInteractor;
+}

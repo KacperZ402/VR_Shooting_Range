@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class WeaponController : MonoBehaviour
 {
+
     [Header("Referencje")]
     public AmmoSocket ammoSocket;
     public ChargingHandle chargingHandle;
@@ -29,6 +33,11 @@ public class WeaponController : MonoBehaviour
     public UnityEvent OnBoltLockedBack;
     public UnityEvent OnBoltReleasedEvent;
 
+    [Header("XR Grip")]
+    public Transform gripAttachPoint; // przypisz attach transform gripa w inspectorze
+    private XRBaseInteractor gripInteractor; // aktualna ręka trzymająca grip
+    private XRGrabInteractable grabInteractable;
+
     private float lastFireTime;
     private bool triggerPressed;
     private int burstShotsRemaining = 0;
@@ -40,6 +49,13 @@ public class WeaponController : MonoBehaviour
             chargingHandle.OnBoltPulled.AddListener(OnBoltPulled);
             chargingHandle.OnBoltReleased.AddListener(() => ReleaseBoltAction(false));
         }
+
+        grabInteractable = GetComponent<XRGrabInteractable>();
+        if (grabInteractable != null)
+        {
+            grabInteractable.selectEntered.AddListener(OnGrab);
+            grabInteractable.selectExited.AddListener(OnRelease);
+        }
     }
 
     void OnDestroy()
@@ -49,8 +65,48 @@ public class WeaponController : MonoBehaviour
             chargingHandle.OnBoltPulled.RemoveListener(OnBoltPulled);
             chargingHandle.OnBoltReleased.RemoveAllListeners();
         }
+
+        if (grabInteractable != null)
+        {
+            grabInteractable.selectEntered.RemoveListener(OnGrab);
+            grabInteractable.selectExited.RemoveListener(OnRelease);
+        }
     }
 
+    private void OnGrab(SelectEnterEventArgs args)
+    {
+        var interactor = args.interactorObject as XRBaseInteractor;
+        if (interactor == null) return;
+
+        // sprawdzamy czy to ręka, która chwyta za gripAttachPoint
+        if (grabInteractable.GetAttachTransform(interactor) == gripAttachPoint)
+        {
+            gripInteractor = interactor;
+        }
+    }
+
+    private void OnRelease(SelectExitEventArgs args)
+    {
+        var interactor = args.interactorObject as XRBaseInteractor;
+        if (interactor == null) return;
+
+        if (interactor == gripInteractor)
+        {
+            gripInteractor = null;
+        }
+    }
+
+    // Wywoływane przez rękę (np. w HandController)
+    public void FireInputFromHand(XRBaseInteractor hand, bool pressed)
+    {
+        // tylko ręka trzymająca grip może strzelać
+        if (gripInteractor != null && hand == gripInteractor)
+        {
+            FireInput(pressed);
+        }
+    }
+
+    // ---------- Logika strzału ----------
     public void FireInput(bool pressed)
     {
         switch (currentFireMode)
@@ -77,6 +133,10 @@ public class WeaponController : MonoBehaviour
                         OnBoltLockedBack?.Invoke();
                     }
                 }
+                break;
+
+            case FireMode.Auto:
+                // handled in Update
                 break;
         }
 
@@ -141,6 +201,7 @@ public class WeaponController : MonoBehaviour
         return true;
     }
 
+    // ---------- Bolt ----------
     public void OnBoltPulled()
     {
         if (isChambered)
