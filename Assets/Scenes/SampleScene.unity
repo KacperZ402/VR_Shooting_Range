@@ -1034,7 +1034,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammoSocket: {fileID: 675215750}
   chargingHandle: {fileID: 7603829281109094879}
-  bolt: {fileID: 8977128588044564022}
+  bolt: {fileID: 990494502}
   caliber: 7.62x51
   isChambered: 0
   isBoltLockedBack: 0
@@ -1044,7 +1044,19 @@ MonoBehaviour:
   burstDelay: 0.08
   OnFire:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 990494502}
+        m_TargetAssemblyTypeName: BoltFollower, Assembly-CSharp
+        m_MethodName: OnFireKick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnDryFire:
     m_PersistentCalls:
       m_Calls: []
@@ -1061,6 +1073,57 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   gripAttachPoint: {fileID: 1380467843}
+--- !u!1 &990494500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 990494501}
+  - component: {fileID: 990494502}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &990494501
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990494500}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.001128674, y: 0, z: 0.082}
+  m_LocalScale: {x: 0.83333325, y: 0.8333335, z: 0.8333335}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7562613432080169555}
+  m_Father: {fileID: 7182134513827285283}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &990494502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990494500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d90b6a3685580cf458805d8bbfe154c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chargingHandle: {fileID: 4756091113437949391}
+  weaponController: {fileID: 731613004}
+  yEpsilon: 0.0001
+  lockedBackY: 0.0892
+  holdFrames: 1
+  returnFrames: 2
 --- !u!4 &994183302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1670256625, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
@@ -10677,8 +10740,8 @@ Transform:
   m_Children:
   - {fileID: 4756091113437949391}
   - {fileID: 8301992656863718641}
-  - {fileID: 7562613432080169555}
   - {fileID: 675215747}
+  - {fileID: 990494501}
   - {fileID: 1380467843}
   m_Father: {fileID: 543450653002227885}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11303,12 +11366,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8575916311878178864}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0047644377, y: -0.08539572, z: 0.065}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.004362898, y: -0.10247487, z: -0.020400092}
+  m_LocalScale: {x: 1.2000002, y: 1.1999998, z: 1.1999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7182134513827285283}
+  m_Father: {fileID: 990494501}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &7562613432594502358
 Transform:
@@ -12908,7 +12971,6 @@ GameObject:
   - component: {fileID: 7562613432080169555}
   - component: {fileID: 7505269820610808678}
   - component: {fileID: 8977128588044564021}
-  - component: {fileID: 8977128588044564022}
   m_Layer: 6
   m_Name: Lock_C3A3
   m_TagString: Untagged
@@ -13271,24 +13333,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8977128588044564022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8575916311878178864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d90b6a3685580cf458805d8bbfe154c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chargingHandle: {fileID: 4756091113437949391}
-  weaponController: {fileID: 731613004}
-  yEpsilon: 0.0001
-  lockedBackY: -0.0148
-  holdFrames: 1
-  returnFrames: 2
 --- !u!23 &8977128588805316272
 MeshRenderer:
   m_ObjectHideFlags: 0
