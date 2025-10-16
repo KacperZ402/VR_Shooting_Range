@@ -1034,7 +1034,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammoSocket: {fileID: 675215750}
   chargingHandle: {fileID: 7603829281109094879}
-  bolt: {fileID: 990494502}
+  bolt: {fileID: 0}
   caliber: 7.62x51
   isChambered: 0
   isBoltLockedBack: 0
@@ -1099,7 +1099,7 @@ Transform:
   m_GameObject: {fileID: 990494500}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.001128674, y: 0, z: 0.082}
+  m_LocalPosition: {x: 0.001128674, y: -0.290742, z: 0.082}
   m_LocalScale: {x: 0.83333325, y: 0.8333335, z: 0.8333335}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1121,7 +1121,7 @@ MonoBehaviour:
   chargingHandle: {fileID: 4756091113437949391}
   weaponController: {fileID: 731613004}
   yEpsilon: 0.0001
-  lockedBackY: 0.0892
+  lockedBackY: -0.2162
   holdFrames: 1
   returnFrames: 2
 --- !u!4 &994183302 stripped
@@ -8700,7 +8700,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammoSocket: {fileID: 1516062832}
   chargingHandle: {fileID: 1129875541}
-  bolt: {fileID: 7705628895140720502}
+  bolt: {fileID: 0}
   caliber: 5.56x45
   isChambered: 0
   isBoltLockedBack: 0
@@ -10741,8 +10741,8 @@ Transform:
   - {fileID: 4756091113437949391}
   - {fileID: 8301992656863718641}
   - {fileID: 675215747}
-  - {fileID: 990494501}
   - {fileID: 1380467843}
+  - {fileID: 990494501}
   m_Father: {fileID: 543450653002227885}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7182134513827285284
@@ -11367,7 +11367,7 @@ Transform:
   m_GameObject: {fileID: 8575916311878178864}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.004362898, y: -0.10247487, z: -0.020400092}
+  m_LocalPosition: {x: 0.004362898, y: 0.24641548, z: -0.020400092}
   m_LocalScale: {x: 1.2000002, y: 1.1999998, z: 1.1999998}
   m_ConstrainProportionsScale: 0
   m_Children: []

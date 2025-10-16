@@ -7,6 +7,10 @@ public class BoltFollower : MonoBehaviour
     public Transform chargingHandle;
     public WeaponController weaponController;
 
+    [Header("Tryb działania")]
+    [Tooltip("Jeśli true, zamek jest fizycznie połączony z rączką przeładowania (np. AK)")]
+    public bool boltLinkedToHandle = false;
+
     [Header("Opcje śledzenia")]
     public float yEpsilon = 0.0001f;
     public float lockedBackY = 0.05f;   // 🔥 pozycja cofnięcia zamka
@@ -20,7 +24,7 @@ public class BoltFollower : MonoBehaviour
     private Coroutine effectCoroutine;
     private bool isAnimating = false;
 
-    [HideInInspector] public bool IsBoltForward => Mathf.Abs(transform.localPosition.y) < 0.001f;
+    [HideInInspector] public bool IsBoltForward => Mathf.Abs(transform.localPosition.y - localStartPos.y) < 0.001f;
 
     void Awake()
     {
@@ -35,10 +39,7 @@ public class BoltFollower : MonoBehaviour
         localStartPos = transform.localPosition;
 
         if (weaponController != null)
-        {
-            // podpinamy event strzału
             weaponController.OnFire.AddListener(OnFireKick);
-        }
     }
 
     void OnDestroy()
@@ -49,7 +50,20 @@ public class BoltFollower : MonoBehaviour
 
     void LateUpdate()
     {
-        if (isAnimating) return; // 🔥 w czasie animacji nie nadpisujemy pozycji
+        // 🔒 jeśli AK-mode -> zamek nie jest niezależny
+        if (boltLinkedToHandle)
+        {
+            // Bolt = ChargingHandle -> nie robimy żadnych efektów ani śledzenia
+            if (isAnimating) return;
+
+            // Ustawiamy pozycję dokładnie na handle
+            transform.SetLocalPositionAndRotation(chargingHandle.localPosition, chargingHandle.localRotation);
+            transform.localScale = Vector3.one;
+            return;
+        }
+
+        // 🔥 Normalne zachowanie (dla AR, HK itd.)
+        if (isAnimating) return;
 
         float targetY = (weaponController != null && weaponController.isBoltLockedBack)
             ? lockedBackY
@@ -63,6 +77,7 @@ public class BoltFollower : MonoBehaviour
                 new Vector3(localStartPos.x, targetY, localStartPos.z),
                 Quaternion.identity
             );
+
             transform.localScale = Vector3.one;
 
             if (transform.parent != parentTransform)
@@ -72,6 +87,8 @@ public class BoltFollower : MonoBehaviour
 
     public void OnFireKick()
     {
+        if (boltLinkedToHandle) return; // 🔥 w AK trybie nie animujemy niczego
+
         if (effectCoroutine != null)
             StopCoroutine(effectCoroutine);
 
