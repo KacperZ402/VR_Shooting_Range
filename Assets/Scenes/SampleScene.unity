@@ -420,6 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761c6b6ce3e21ba49b3aece4cf6d6c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponControllerBase: {fileID: 0}
   minLocalY: 0
   maxLocalY: 0.05
   localX: 0
@@ -1157,6 +1158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761c6b6ce3e21ba49b3aece4cf6d6c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponControllerBase: {fileID: 0}
   minLocalY: 0
   maxLocalY: 0.0625
   localX: 0
@@ -1923,7 +1925,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5037440425331129123}
-        m_TargetAssemblyTypeName: WeaponController, Assembly-CSharp
+        m_TargetAssemblyTypeName: WeaponControllerBase, Assembly-CSharp
         m_MethodName: ReleaseBoltAction
         m_Mode: 6
         m_Arguments:
@@ -3640,7 +3642,7 @@ Transform:
   m_GameObject: {fileID: 9075863049387783194}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.031, y: 0.15697908, z: -0.21000981}
+  m_LocalPosition: {x: 0.205, y: 0.15697908, z: -0.21000981}
   m_LocalScale: {x: 1.2, y: 1.1999999, z: 1.1999999}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8808,7 +8810,7 @@ MonoBehaviour:
   weaponGrab: {fileID: 5037440425331129121}
   selectorLever: {fileID: 3247204917459073552}
   gripPoint: {fileID: 1208895308}
-  weaponController: {fileID: 5037440425331129123}
+  weaponController: {fileID: 0}
   availableModes: 000000000100000002000000
   rotationStep: 90
 --- !u!114 &5037440425331129121
@@ -8972,7 +8974,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5037440425331129113}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08d6b0a2e99734649ae3d91f56f401df, type: 3}
+  m_Script: {fileID: 11500000, guid: 296922d1393073948a045df61528a05f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ammoSocket: {fileID: 1516062832}
@@ -8989,19 +8991,7 @@ MonoBehaviour:
   burstDelay: 0.08
   OnFire:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7705628895140720502}
-        m_TargetAssemblyTypeName: BoltFollower, Assembly-CSharp
-        m_MethodName: OnFireKick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnDryFire:
     m_PersistentCalls:
       m_Calls: []
@@ -11331,6 +11321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761c6b6ce3e21ba49b3aece4cf6d6c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponControllerBase: {fileID: 0}
   minLocalY: 0
   maxLocalY: 0.06
   localX: 0
@@ -11513,7 +11504,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chargingHandle: {fileID: 5065137012019275751}
-  weaponController: {fileID: 8634465023755182142}
+  weaponController: {fileID: 0}
   boltLinkedToHandle: 0
   yEpsilon: 0.0001
   lockedBackY: 0.06
@@ -12644,6 +12635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761c6b6ce3e21ba49b3aece4cf6d6c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponControllerBase: {fileID: 7182134513827285285}
   minLocalY: -0.290742
   maxLocalY: -0.2162
   localX: 0.001128674
@@ -13856,8 +13848,8 @@ GameObject:
   - component: {fileID: 8634465023755182146}
   - component: {fileID: 8634465023755182145}
   - component: {fileID: 8634465023755182144}
-  - component: {fileID: 8634465023755182142}
   - component: {fileID: 8634465023755182143}
+  - component: {fileID: 8634465023755182147}
   m_Layer: 7
   m_Name: ak47
   m_TagString: Untagged
@@ -13865,60 +13857,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8634465023755182142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8634465023755182141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08d6b0a2e99734649ae3d91f56f401df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ammoSocket: {fileID: 1460948625}
-  chargingHandle: {fileID: 6843972529872684695}
-  bolt: {fileID: 0}
-  fireSelector: {fileID: 0}
-  weaponGrab: {fileID: 0}
-  caliber: 7.62x39
-  isChambered: 0
-  isBoltLockedBack: 0
-  currentFireMode: 0
-  burstCount: 3
-  fireRate: 0.1
-  burstDelay: 0.08
-  OnFire:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6843972529872684698}
-        m_TargetAssemblyTypeName: BoltFollower, Assembly-CSharp
-        m_MethodName: OnFireKick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnDryFire:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRoundChambered:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRoundEjected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnBoltLockedBack:
-    m_PersistentCalls:
-      m_Calls: []
-  OnBoltReleasedEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &8634465023755182143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13934,7 +13872,7 @@ MonoBehaviour:
   weaponGrab: {fileID: 8634465023755182144}
   selectorLever: {fileID: 5480598285514466652}
   gripPoint: {fileID: 105150438}
-  weaponController: {fileID: 8634465023755182142}
+  weaponController: {fileID: 8634465023755182147}
   availableModes: 000000000300000001000000
   rotationStep: -10
 --- !u!114 &8634465023755182144
@@ -14066,7 +14004,7 @@ MonoBehaviour:
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
   gripAttachPoint: {fileID: 105150438}
-  weaponController: {fileID: 8634465023755182142}
+  weaponController: {fileID: 8634465023755182147}
 --- !u!64 &8634465023755182145
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -14116,6 +14054,60 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8634465023755182147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8634465023755182141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56dc2e42d1b8e0946be1ba2140d2fa3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ammoSocket: {fileID: 1460948625}
+  chargingHandle: {fileID: 6843972529872684695}
+  bolt: {fileID: 6843972529872684698}
+  fireSelector: {fileID: 8634465023755182143}
+  weaponGrab: {fileID: 8634465023755182144}
+  caliber: 7.62x39
+  isChambered: 0
+  isBoltLockedBack: 0
+  currentFireMode: 0
+  burstCount: 3
+  fireRate: 0.1
+  burstDelay: 0.08
+  OnFire:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6843972529872684698}
+        m_TargetAssemblyTypeName: BoltFollower, Assembly-CSharp
+        m_MethodName: OnFireKick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDryFire:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRoundChambered:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRoundEjected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBoltLockedBack:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBoltReleasedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!33 &8637833319275163212
 MeshFilter:
   m_ObjectHideFlags: 0
