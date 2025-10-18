@@ -14,7 +14,8 @@ public class FireSelectorSimple : MonoBehaviour
     public XRGrabInteractable weaponGrab;
     public Transform selectorLever;
     public Transform gripPoint; // attach point uchwytu (punkt, który ma kontrolować selektor)
-    public WeaponController weaponController;
+    public WeaponControllerBase weaponController;
+
 
     [Header("Tryby ognia")]
     public List<FireMode> availableModes = new List<FireMode> { FireMode.Safe, FireMode.Semi, FireMode.Auto };

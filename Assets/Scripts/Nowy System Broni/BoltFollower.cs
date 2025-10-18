@@ -1,12 +1,11 @@
-﻿/*
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class BoltFollower : MonoBehaviour
 {
     [Header("Referencje")]
     public Transform chargingHandle;
-    public WeaponController weaponController;
+    public WeaponControllerBase weaponController;
 
     [Header("Tryb działania")]
     [Tooltip("Jeśli true, zamek jest fizycznie połączony z rączką przeładowania (np. AK)")]
@@ -40,7 +39,7 @@ public class BoltFollower : MonoBehaviour
         parentTransform = transform.parent;
         localStartPos = transform.localPosition;
 
-        // ✅ wykrywanie, czy bolt i handle to ten sam obiekt (np. AK)
+        // 🔹 wykrywanie, czy bolt i handle to ten sam obiekt (np. AK)
         isSameObject = (chargingHandle == transform);
 
         if (weaponController != null)
@@ -58,11 +57,11 @@ public class BoltFollower : MonoBehaviour
         if (isAnimating)
             return;
 
-        // 🔹 Jeśli AK (boltLinkedToHandle) I to ten sam obiekt — nie śledzimy nic
+        // 🔹 Jeśli AK (boltLinkedToHandle) i to ten sam obiekt — brak animacji
         if (boltLinkedToHandle && isSameObject)
             return;
 
-        // 🔹 W trybie AK, ale różne obiekty (teoretycznie) — ustawiamy pozycję jak handle
+        // 🔹 W trybie AK, ale różne obiekty — ustawiamy bolt względem handle
         if (boltLinkedToHandle && !isSameObject)
         {
             transform.localPosition = chargingHandle.localPosition;
@@ -81,39 +80,31 @@ public class BoltFollower : MonoBehaviour
         }
     }
 
-    public void OnFireKick()
+    // 🔹 Animacja strzału
+    public void StartKickbackAnimation(float lockedBackY, int holdFrames, int returnFrames)
     {
         if (effectCoroutine != null)
             StopCoroutine(effectCoroutine);
 
-        effectCoroutine = StartCoroutine(KickBackAndReturn());
+        effectCoroutine = StartCoroutine(KickBackAndReturn(lockedBackY, holdFrames, returnFrames));
     }
 
-    private IEnumerator KickBackAndReturn()
+    private IEnumerator KickBackAndReturn(float lockedBackY, int holdFrames, int returnFrames)
     {
         isAnimating = true;
 
-        // 🔥 Jeśli AK (ta sama część co handle) — cofamy względem pozycji startowej
         Vector3 startPos = transform.localPosition;
-        Vector3 kickPos;
+        Vector3 kickPos = isSameObject
+            ? localStartPos + new Vector3(0f, lockedBackY, 0f)   // AK: bolt == handle
+            : new Vector3(localStartPos.x, localStartPos.y + lockedBackY, localStartPos.z); // AR/HK
 
-        if (boltLinkedToHandle && isSameObject)
-        {
-            kickPos = localStartPos + new Vector3(0f, lockedBackY, 0f);
-        }
-        else
-        {
-            kickPos = new Vector3(localStartPos.x, localStartPos.y + lockedBackY, localStartPos.z);
-        }
-
-        // 🔥 Cofnięcie
         transform.localPosition = kickPos;
 
-        // 🔥 Przytrzymanie
+        // Przytrzymanie
         for (int i = 0; i < holdFrames; i++)
             yield return null;
 
-        // 🔥 Powrót
+        // Powrót
         for (int step = 1; step <= Mathf.Max(1, returnFrames); step++)
         {
             float t = (float)step / returnFrames;
@@ -125,5 +116,16 @@ public class BoltFollower : MonoBehaviour
         isAnimating = false;
         effectCoroutine = null;
     }
+
+    // 🔹 Łączenie bolt + handle (np. dla AK)
+    public void LinkBoltWithHandle(bool linked)
+    {
+        boltLinkedToHandle = linked;
+        isSameObject = (chargingHandle == transform);
+    }
+
+    public void OnFireKick()
+    {
+        StartKickbackAnimation(lockedBackY, holdFrames, returnFrames);
+    }
 }
-*/

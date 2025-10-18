@@ -8,7 +8,7 @@ public class WeaponGrabInteractable : XRGrabInteractable
 {
     [Header("Grip reference (attach point)")]
     public Transform gripAttachPoint; // przypisz w inspectorze attach point gripu
-    public WeaponController weaponController;
+    public WeaponControllerBase weaponController;
 
     private IXRSelectInteractor gripInteractor; // kto faktycznie trzyma za grip
 

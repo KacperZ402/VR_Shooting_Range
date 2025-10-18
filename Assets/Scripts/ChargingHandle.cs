@@ -7,6 +7,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 [RequireComponent(typeof(Rigidbody))]
 public class ChargingHandle : MonoBehaviour
 {
+    public WeaponControllerBase weaponControllerBase;
     [Header("Zakres ruchu (lokalne)")]
     public float minLocalY = 0f;
     public float maxLocalY = 0.05f;
@@ -102,6 +103,7 @@ public class ChargingHandle : MonoBehaviour
             isLocked = false;
             boltPulledTriggered = false;
             rb.isKinematic = false;
+            weaponControllerBase.ReleaseBoltAction(true);
         }
     }
 
