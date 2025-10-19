@@ -13,25 +13,6 @@ public class AKPlatform : WeaponControllerBase
         // AK: nie potrzebuje boltFollowera
         bolt = null;
     }
-
-    /// <summary>
-    /// AK: Odciągnięcie zamka wyrzuca nabój, ale zamek nie blokuje się
-    /// </summary>
-    public override void OnBoltPulled()
-    {
-        if (isChambered)
-        {
-            isChambered = false;
-            OnRoundEjected?.Invoke();
-        }
-
-        // Nie blokujemy zamka, niezależnie od stanu magazynku
-        isBoltLockedBack = false;
-    }
-
-    /// <summary>
-    /// AK: Próba przerepetowania/załadowania nowego naboju
-    /// </summary>
     public override void ReleaseBoltAction(bool force = false)
     {
         TryChamberFromMagazine();
@@ -40,7 +21,7 @@ public class AKPlatform : WeaponControllerBase
     }
 
     /// <summary>
-    /// AK: FireOnce nie korzysta z bolta, tylko sprawdza czy jest nabój w komorze
+    /// AK: FireOnce nie korzysta z bolta, Tylko z Charging Handle
     /// </summary>
     protected override bool FireOnce()
     {
