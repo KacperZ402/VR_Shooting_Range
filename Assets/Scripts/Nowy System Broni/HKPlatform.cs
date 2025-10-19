@@ -35,7 +35,6 @@ public class HKPlatform : WeaponControllerBase
             isChambered = false;
             OnRoundEjected?.Invoke();
         }
-        isBoltLockedBack = true;
 
         // 🔹 HK nie blokuje się automatycznie — ale handle może ustawić blokadę ręcznie
         // (np. ChargingHandle ma wewnętrzną logikę: jeśli user "zahaczy" o slot → zamek się blokuje)

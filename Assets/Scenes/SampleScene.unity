@@ -196,246 +196,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6660842895972547743}
   m_LocalEulerAnglesHint: {x: 100, y: 0, z: 0}
---- !u!1 &314169017
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 314169018}
-  - component: {fileID: 314169022}
-  - component: {fileID: 314169020}
-  - component: {fileID: 314169023}
-  - component: {fileID: 314169019}
-  m_Layer: 0
-  m_Name: chargin_handle_m16a4
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &314169018
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 314169017}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.1228, y: -0.006644938, z: 0.12900002}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1318009222613875014}
-  m_Father: {fileID: 7874630958700724670}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &314169019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 314169017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_InteractionManager: {fileID: 0}
-  m_Colliders:
-  - {fileID: 314169020}
-  m_InteractionLayers:
-    m_Bits: 1
-  m_DistanceCalculationMode: 1
-  m_SelectMode: 0
-  m_FocusMode: 1
-  m_CustomReticle: {fileID: 0}
-  m_AllowGazeInteraction: 0
-  m_AllowGazeSelect: 0
-  m_OverrideGazeTimeToSelect: 0
-  m_GazeTimeToSelect: 0.5
-  m_OverrideTimeToAutoDeselectGaze: 0
-  m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 0
-  m_FirstHoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FirstSelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FirstFocusEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastFocusExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FocusEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FocusExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Activated:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Deactivated:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_StartingInteractionStrengthFilters: []
-  m_AttachTransform: {fileID: 0}
-  m_SecondaryAttachTransform: {fileID: 0}
-  m_UseDynamicAttach: 0
-  m_MatchAttachPosition: 1
-  m_MatchAttachRotation: 1
-  m_SnapToColliderVolume: 1
-  m_ReinitializeDynamicAttachEverySingleGrab: 1
-  m_AttachEaseInTime: 0.15
-  m_MovementType: 0
-  m_PredictedVisualsTransform: {fileID: 0}
-  m_VelocityDamping: 1
-  m_VelocityScale: 1
-  m_AngularVelocityDamping: 1
-  m_AngularVelocityScale: 1
-  m_TrackPosition: 1
-  m_SmoothPosition: 0
-  m_SmoothPositionAmount: 8
-  m_TightenPosition: 0.1
-  m_TrackRotation: 0
-  m_SmoothRotation: 0
-  m_SmoothRotationAmount: 8
-  m_TightenRotation: 0.1
-  m_TrackScale: 1
-  m_SmoothScale: 0
-  m_SmoothScaleAmount: 8
-  m_TightenScale: 0.1
-  m_ThrowOnDetach: 1
-  m_ThrowSmoothingDuration: 0.25
-  m_ThrowSmoothingCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_ThrowVelocityScale: 1.5
-  m_ThrowAngularVelocityScale: 1
-  m_ForceGravityOnDetach: 0
-  m_RetainTransformParent: 1
-  m_StartingSingleGrabTransformers: []
-  m_StartingMultipleGrabTransformers: []
-  m_AddDefaultGrabTransformers: 1
-  m_FarAttachMode: 0
-  m_LimitLinearVelocity: 0
-  m_LimitAngularVelocity: 0
-  m_MaxLinearVelocityDelta: 10
-  m_MaxAngularVelocityDelta: 20
---- !u!65 &314169020
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 314169017}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.030467616, y: 0.02, z: 0.0068866936}
-  m_Center: {x: 0, y: 0.015, z: 0.04316328}
---- !u!54 &314169022
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 314169017}
-  serializedVersion: 5
-  m_Mass: 2
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 1
---- !u!114 &314169023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 314169017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 761c6b6ce3e21ba49b3aece4cf6d6c9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponControllerBase: {fileID: 0}
-  minLocalY: 0
-  maxLocalY: 0.05
-  localX: 0
-  localZ: 0
-  returnSpeed: 1
-  lockOnFullPull: 1
-  lockRotationY: 50
-  rotateOnGrab: 0
-  grabRotationZ: -90
-  OnBoltPulled:
-    m_PersistentCalls:
-      m_Calls: []
-  OnBoltReleased:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,7 +714,7 @@ MonoBehaviour:
   m_SnapToColliderVolume: 1
   m_ReinitializeDynamicAttachEverySingleGrab: 1
   m_AttachEaseInTime: 0.15
-  m_MovementType: 1
+  m_MovementType: 2
   m_PredictedVisualsTransform: {fileID: 0}
   m_VelocityDamping: 1
   m_VelocityScale: 1
@@ -1094,14 +854,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 990494500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d90b6a3685580cf458805d8bbfe154c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 54c36f31d90dd174c8934a2d97a75213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   chargingHandle: {fileID: 4756091113437949391}
   weaponController: {fileID: 7182134513827285285}
-  boltLinkedToHandle: 0
   yEpsilon: 0.0001
-  lockedBackY: -0.2162
+  lockedBackY: -0.074542
   holdFrames: 1
   returnFrames: 2
 --- !u!4 &994183302 stripped
@@ -1158,7 +917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761c6b6ce3e21ba49b3aece4cf6d6c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponControllerBase: {fileID: 0}
+  weaponControllerBase: {fileID: 5037440425331129123}
   minLocalY: 0
   maxLocalY: 0.0625
   localX: 0
@@ -1186,6 +945,9 @@ MonoBehaviour:
   OnBoltReleased:
     m_PersistentCalls:
       m_Calls: []
+  kickbackDistance: 0.02
+  holdFrames: 1
+  returnFrames: 2
 --- !u!114 &1129875542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4534,21 +4296,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4528000562298289582}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1318009222613875014
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6728512476901361240}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.10909999, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 314169018}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1323084289055628673
 GameObject:
   m_ObjectHideFlags: 0
@@ -7795,14 +7542,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &3899593979076104691
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6728512476901361240}
-  m_Mesh: {fileID: -5664757711439829424, guid: c4de23acd22013b4bb68aab28c36bb1c, type: 3}
 --- !u!1 &3914235410780438683
 GameObject:
   m_ObjectHideFlags: 0
@@ -8810,7 +8549,7 @@ MonoBehaviour:
   weaponGrab: {fileID: 5037440425331129121}
   selectorLever: {fileID: 3247204917459073552}
   gripPoint: {fileID: 1208895308}
-  weaponController: {fileID: 0}
+  weaponController: {fileID: 5037440425331129123}
   availableModes: 000000000100000002000000
   rotationStep: 90
 --- !u!114 &5037440425331129121
@@ -10607,7 +10346,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7248258, y: 3.3882908e-18, z: -4.5575638e-18, w: 0.68893224}
   m_LocalPosition: {x: 1.241, y: 0.0905292, z: 0.23558104}
-  m_LocalScale: {x: 7.5, y: 7.5, z: 7.5}
+  m_LocalScale: {x: 6.25, y: 6.25, z: 6.25}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8803435287017788575}
@@ -10961,7 +10700,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0.87451005, y: 0.09052935, z: 0.23719943}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5065137012019275751}
@@ -11098,24 +10837,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6728512476901361240
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1318009222613875014}
-  - component: {fileID: 3899593979076104691}
-  - component: {fileID: 8469049609559209376}
-  m_Layer: 6
-  m_Name: chargin_handle_m16a4
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!33 &6737804147401992585
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -11280,7 +11001,6 @@ GameObject:
   - component: {fileID: 6843972529872684696}
   - component: {fileID: 6843972529872684695}
   - component: {fileID: 6843972529872684694}
-  - component: {fileID: 6843972529872684698}
   m_Layer: 6
   m_Name: lock_ak47
   m_TagString: Untagged
@@ -11307,8 +11027,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.02, y: 0.03, z: 0.02}
-  m_Center: {x: 0.02, y: -0.03, z: 0.06514954}
+  m_Size: {x: 0.03, y: 0.03, z: 0.02}
+  m_Center: {x: 0.027, y: -0.03, z: 0.06514954}
 --- !u!114 &6843972529872684695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11321,7 +11041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761c6b6ce3e21ba49b3aece4cf6d6c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponControllerBase: {fileID: 0}
+  weaponControllerBase: {fileID: 8634465023755182147}
   minLocalY: 0
   maxLocalY: 0.06
   localX: 0
@@ -11337,6 +11057,9 @@ MonoBehaviour:
   OnBoltReleased:
     m_PersistentCalls:
       m_Calls: []
+  kickbackDistance: 0.09
+  holdFrames: 1
+  returnFrames: 2
 --- !u!114 &6843972529872684696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11491,25 +11214,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6843972529872684698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6843972529872684692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d90b6a3685580cf458805d8bbfe154c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chargingHandle: {fileID: 5065137012019275751}
-  weaponController: {fileID: 0}
-  boltLinkedToHandle: 0
-  yEpsilon: 0.0001
-  lockedBackY: 0.06
-  holdFrames: 1
-  returnFrames: 2
 --- !u!4 &6859700439548955505
 Transform:
   m_ObjectHideFlags: 0
@@ -12651,6 +12355,9 @@ MonoBehaviour:
   OnBoltReleased:
     m_PersistentCalls:
       m_Calls: []
+  kickbackDistance: 0.02
+  holdFrames: 1
+  returnFrames: 2
 --- !u!114 &7603829281109094880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12896,12 +12603,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 850062083706668880}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d90b6a3685580cf458805d8bbfe154c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 54c36f31d90dd174c8934a2d97a75213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   chargingHandle: {fileID: 1129875540}
   weaponController: {fileID: 5037440425331129123}
-  boltLinkedToHandle: 0
   yEpsilon: 0.0001
   lockedBackY: 0.0625
   holdFrames: 1
@@ -13054,7 +12760,6 @@ Transform:
   - {fileID: 4564098369674997635}
   - {fileID: 3444451558247962239}
   - {fileID: 1469474949}
-  - {fileID: 314169018}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7913850553411564900
@@ -13634,51 +13339,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3959810358243795074}
   m_Mesh: {fileID: -960792827377379976, guid: 8ff954ef19c6ceb4fae4817ea5dc5937, type: 3}
---- !u!23 &8469049609559209376
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6728512476901361240}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: -876546973899608171, guid: c4de23acd22013b4bb68aab28c36bb1c, type: 3}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &8479095969546151997
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -14068,7 +13728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammoSocket: {fileID: 1460948625}
   chargingHandle: {fileID: 6843972529872684695}
-  bolt: {fileID: 6843972529872684698}
+  bolt: {fileID: 0}
   fireSelector: {fileID: 8634465023755182143}
   weaponGrab: {fileID: 8634465023755182144}
   caliber: 7.62x39
@@ -14081,9 +13741,9 @@ MonoBehaviour:
   OnFire:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6843972529872684698}
-        m_TargetAssemblyTypeName: BoltFollower, Assembly-CSharp
-        m_MethodName: OnFireKick
+      - m_Target: {fileID: 6843972529872684695}
+        m_TargetAssemblyTypeName: ChargingHandle, Assembly-CSharp
+        m_MethodName: AnimateKickback
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14383,7 +14043,7 @@ MonoBehaviour:
   m_SnapToColliderVolume: 1
   m_ReinitializeDynamicAttachEverySingleGrab: 1
   m_AttachEaseInTime: 0.15
-  m_MovementType: 1
+  m_MovementType: 2
   m_PredictedVisualsTransform: {fileID: 0}
   m_VelocityDamping: 1
   m_VelocityScale: 1
@@ -14421,7 +14081,7 @@ MonoBehaviour:
   m_ThrowVelocityScale: 1.5
   m_ThrowAngularVelocityScale: 1
   m_ForceGravityOnDetach: 0
-  m_RetainTransformParent: 0
+  m_RetainTransformParent: 1
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1

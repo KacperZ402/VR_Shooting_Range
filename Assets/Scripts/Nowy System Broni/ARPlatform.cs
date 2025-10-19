@@ -18,7 +18,7 @@ public class ARPlatform : WeaponControllerBase
         isChambered = false;
 
         // 🔹 Próbuj chamberować z magazynka
-        if (!TryChamberFromMagazine() && ammoSocket == null)
+        if (!TryChamberFromMagazine() && ammoSocket.currentMagazine.currentRounds == 0)
         {
             // 🔹 Jeśli pusto — blokuj zamek
             isBoltLockedBack = true;

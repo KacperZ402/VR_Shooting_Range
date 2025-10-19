@@ -7,10 +7,6 @@ public class BoltFollower : MonoBehaviour
     public Transform chargingHandle;
     public WeaponControllerBase weaponController;
 
-    [Header("Tryb działania")]
-    [Tooltip("Jeśli true, zamek jest fizycznie połączony z rączką przeładowania (np. AK)")]
-    public bool boltLinkedToHandle = false;
-
     [Header("Opcje śledzenia")]
     public float yEpsilon = 0.0001f;
     public float lockedBackY = 0.05f;
@@ -23,7 +19,6 @@ public class BoltFollower : MonoBehaviour
     private Transform parentTransform;
     private Coroutine effectCoroutine;
     private bool isAnimating = false;
-    private bool isSameObject = false;
 
     [HideInInspector] public bool IsBoltForward => Mathf.Abs(transform.localPosition.y - localStartPos.y) < 0.001f;
 
@@ -39,9 +34,6 @@ public class BoltFollower : MonoBehaviour
         parentTransform = transform.parent;
         localStartPos = transform.localPosition;
 
-        // 🔹 wykrywanie, czy bolt i handle to ten sam obiekt (np. AK)
-        isSameObject = (chargingHandle == transform);
-
         if (weaponController != null)
             weaponController.OnFire.AddListener(OnFireKick);
     }
@@ -56,18 +48,6 @@ public class BoltFollower : MonoBehaviour
     {
         if (isAnimating)
             return;
-
-        // 🔹 Jeśli AK (boltLinkedToHandle) i to ten sam obiekt — brak animacji
-        if (boltLinkedToHandle && isSameObject)
-            return;
-
-        // 🔹 W trybie AK, ale różne obiekty — ustawiamy bolt względem handle
-        if (boltLinkedToHandle && !isSameObject)
-        {
-            transform.localPosition = chargingHandle.localPosition;
-            transform.localRotation = chargingHandle.localRotation;
-            return;
-        }
 
         // 🔹 Normalne zachowanie (AR / HK)
         float targetY = (weaponController != null && weaponController.isBoltLockedBack)
@@ -94,9 +74,7 @@ public class BoltFollower : MonoBehaviour
         isAnimating = true;
 
         Vector3 startPos = transform.localPosition;
-        Vector3 kickPos = isSameObject
-            ? localStartPos + new Vector3(0f, lockedBackY, 0f)   // AK: bolt == handle
-            : new Vector3(localStartPos.x, localStartPos.y + lockedBackY, localStartPos.z); // AR/HK
+        Vector3 kickPos = new Vector3(localStartPos.x, localStartPos.y + Mathf.Abs(lockedBackY), localStartPos.z);
 
         transform.localPosition = kickPos;
 
@@ -108,20 +86,13 @@ public class BoltFollower : MonoBehaviour
         for (int step = 1; step <= Mathf.Max(1, returnFrames); step++)
         {
             float t = (float)step / returnFrames;
-            transform.localPosition = Vector3.Lerp(kickPos, localStartPos, t);
+            transform.localPosition = Vector3.Lerp(kickPos, startPos, t);
             yield return null;
         }
 
-        transform.localPosition = localStartPos;
+        transform.localPosition = startPos;
         isAnimating = false;
         effectCoroutine = null;
-    }
-
-    // 🔹 Łączenie bolt + handle (np. dla AK)
-    public void LinkBoltWithHandle(bool linked)
-    {
-        boltLinkedToHandle = linked;
-        isSameObject = (chargingHandle == transform);
     }
 
     public void OnFireKick()

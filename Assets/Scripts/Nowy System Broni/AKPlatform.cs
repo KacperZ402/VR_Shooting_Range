@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class AKPlatform : WeaponControllerBase
 {
@@ -6,28 +6,63 @@ public class AKPlatform : WeaponControllerBase
     {
         base.Awake();
 
-        // AK: zamek nie blokuje siê po pustym magazynku
+        // AK: zamek nigdy nie blokuje siÄ™ przy pustym magazynku
         if (chargingHandle != null)
-        {
             chargingHandle.lockOnFullPull = false;
-        }
+
+        // AK: nie potrzebuje boltFollowera
+        bolt = null;
     }
 
+    /// <summary>
+    /// AK: OdciÄ…gniÄ™cie zamka wyrzuca nabÃ³j, ale zamek nie blokuje siÄ™
+    /// </summary>
     public override void OnBoltPulled()
     {
-        // W AK – zawsze mo¿na wyrzuciæ nabój i spróbowaæ za³adowaæ nowy
         if (isChambered)
         {
             isChambered = false;
             OnRoundEjected?.Invoke();
         }
 
-        TryChamberFromMagazine();
+        // Nie blokujemy zamka, niezaleÅ¼nie od stanu magazynku
+        isBoltLockedBack = false;
     }
 
+    /// <summary>
+    /// AK: PrÃ³ba przerepetowania/zaÅ‚adowania nowego naboju
+    /// </summary>
     public override void ReleaseBoltAction(bool force = false)
     {
+        TryChamberFromMagazine();
         isBoltLockedBack = false;
         OnBoltReleasedEvent?.Invoke();
     }
+
+    /// <summary>
+    /// AK: FireOnce nie korzysta z bolta, tylko sprawdza czy jest nabÃ³j w komorze
+    /// </summary>
+    protected override bool FireOnce()
+    {
+
+        if (chargingHandle != null &&
+           (chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f))
+        {
+            // opcjonalnie debug
+            // Debug.Log("[AKPlatform] StrzaÅ‚ zablokowany â€“ charging handle nie w spoczynku!");
+            return false;
+        }
+        if (!isChambered)
+        {
+            OnDryFire?.Invoke();
+            return false;
+        }
+
+        // StrzaÅ‚
+        OnFire?.Invoke();
+        isChambered = false;
+
+        return true;
+    }
+
 }
