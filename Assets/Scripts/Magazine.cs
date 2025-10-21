@@ -32,7 +32,36 @@ public class Magazine : MonoBehaviour
     {
         currentRounds = maxRounds;
     }
+    public bool OnInsertedBullet()
+    {
+        if(currentRounds < maxRounds) 
+        {
+            currentRounds++;
+            return true;
+        }
+        return false;
+    }
 
     public void NotifyInserted() => OnInsertedToSocket?.Invoke();
     public void NotifyRemoved() => OnRemovedFromSocket?.Invoke();
+    [Header("Trigger nabojów")]
+    [Tooltip("Tag obiektów nabojów akceptowanych przez magazyn")]
+    public string bulletTag = "Bullet";
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Sprawdzenie tagu
+        if (!other.CompareTag(bulletTag)) return;
+
+        // Pobranie komponentu Bullet (opcjonalnie, jeœli chcesz filtrowaæ kaliber)
+        Bullet bullet = other.GetComponent<Bullet>();
+        if (bullet != null && bullet.caliber != caliber) return;
+
+        // Dodanie naboju do magazynka
+        if (OnInsertedBullet())
+        {
+            Debug.Log("[Magazine] Nabój dodany do magazynka.");
+            Destroy(other.gameObject); // usuniêcie naboju ze sceny
+        }
+    }
 }
