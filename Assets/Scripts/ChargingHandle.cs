@@ -36,13 +36,13 @@ public class ChargingHandle : MonoBehaviour
     public int holdFrames = 1;
     public int returnFrames = 2;
 
-    private XRGrabInteractable grabInteractable;
-    private Rigidbody rb;
-    private bool isGrabbed = false;
+    protected XRGrabInteractable grabInteractable;
+    protected Rigidbody rb;
+    protected bool isGrabbed = false;
 
     private Vector3 localStartPos;
     private bool boltPulledTriggered = false;
-    private Transform parentTransform;
+    protected Transform parentTransform;
 
     private bool isLocked = false;
     private Quaternion lockedRotation;
@@ -51,7 +51,7 @@ public class ChargingHandle : MonoBehaviour
     // Nowe pola do animacji
     private bool isAnimating = false;
 
-    void Awake()
+    protected virtual void Awake()
     {
         grabInteractable = GetComponent<XRGrabInteractable>();
         rb = GetComponent<Rigidbody>();
@@ -69,14 +69,14 @@ public class ChargingHandle : MonoBehaviour
         grabInteractable.trackRotation = false;
     }
 
-    void OnDestroy()
+    protected virtual void OnDestroy()
     {
         grabInteractable.selectEntered.RemoveListener(OnGrab);
         grabInteractable.selectExited.RemoveListener(OnRelease);
         grabInteractable.hoverEntered.RemoveListener(OnHoverEnter);
     }
 
-    void OnGrab(SelectEnterEventArgs args)
+    protected virtual void OnGrab(SelectEnterEventArgs args)
     {
         if (isLocked) return;
 
@@ -107,7 +107,7 @@ public class ChargingHandle : MonoBehaviour
         }
     }
 
-    void LateUpdate()
+    protected virtual void LateUpdate()
     {
         if (isAnimating) return;
 
