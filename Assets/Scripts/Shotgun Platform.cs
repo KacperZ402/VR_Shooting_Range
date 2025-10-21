@@ -5,13 +5,13 @@ public class ShotgunPlatform : WeaponControllerBase
     [Header("Strzelba typu pump-action")]
     [Tooltip("Czy po cofnięciu zamka wyrzuca pustą łuskę?")]
     public bool ejectOnPump = true;
+    public Magazine magazine;
 
     protected override void Awake()
     {
         base.Awake();
-
-        // Strzelba to zawsze BoltAction — ręczne przeładowanie po strzale
-        currentFireMode = FireMode.BoltAction;
+        if (magazine != null)
+            magCollider = magazine.GetComponent<Collider>();
     }
 
     protected override bool FireOnce()
@@ -22,7 +22,10 @@ public class ShotgunPlatform : WeaponControllerBase
             OnDryFire?.Invoke();
             return false;
         }
-
+        if(chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f)
+        {
+            return false;
+        }
         // Jeśli brak naboju w komorze → pusty strzał
         if (!isChambered)
         {
@@ -89,7 +92,7 @@ public class ShotgunPlatform : WeaponControllerBase
     // 🔫 BoltAction fire — używamy bez zmian, ale nadpisujemy, żeby było czytelne
     protected override void HandleBoltActionFire()
     {
-        if (isChambered)
+        if (isChambered && chargingHandle.transform.localPosition.y <= chargingHandle.minLocalY + 0.001f)
         {
             OnFire?.Invoke();
             isChambered = false;
@@ -97,6 +100,18 @@ public class ShotgunPlatform : WeaponControllerBase
         else
         {
             OnDryFire?.Invoke();
+        }
+    }
+    private bool lastEnabledState;
+    private Collider magCollider;
+
+    void Update()
+    {
+        bool shouldBeEnabled = Mathf.Abs(chargingHandle.transform.localPosition.y - chargingHandle.minLocalY) < 0.001f;
+        if (shouldBeEnabled != lastEnabledState)
+        {
+            magCollider.enabled = shouldBeEnabled;
+            lastEnabledState = shouldBeEnabled;
         }
     }
 }

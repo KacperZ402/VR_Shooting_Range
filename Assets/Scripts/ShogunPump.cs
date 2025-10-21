@@ -1,13 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-
-/// <summary>
-/// System pompki do strzelby — dziedziczy po ChargingHandle.
-/// - Ma ograniczony zakres ruchu (minLocalY - maxLocalY)
-/// - Wywołuje OnBoltPulled przy maksymalnym cofnięciu
-/// - Wywołuje OnBoltReleased przy powrocie do przodu
-/// - NIE wraca automatycznie po puszczeniu — zostaje w miejscu
-/// </summary>
 public class ShotgunPump : ChargingHandle
 {
     protected override void LateUpdate()
