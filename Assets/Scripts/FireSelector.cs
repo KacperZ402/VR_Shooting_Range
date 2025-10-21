@@ -20,18 +20,20 @@ public class FireSelectorSimple : MonoBehaviour
     [Header("Tryby ognia")]
     public List<FireMode> availableModes = new List<FireMode> { FireMode.Safe, FireMode.Semi, FireMode.Auto };
     public float rotationStep = 45f;
+    public Vector3 positionStep = Vector3.zero;
 
     private int fireModeIndex = 0;
     private XRBaseInteractor activeHand; // ręka trzymająca gripPoint
     private bool lastButtonPressed;
     private float buttonCooldown = 0.2f;
     private float nextButtonTime = 0f;
+    private Vector3 initialPosition;
 
     void Awake()
     {
         if (!weaponGrab)
             weaponGrab = GetComponent<XRGrabInteractable>();
-
+        initialPosition = selectorLever.localPosition;
         ApplyRotation();
         ApplyMode();
 
@@ -129,6 +131,7 @@ public class FireSelectorSimple : MonoBehaviour
     {
         if (!selectorLever) return;
         selectorLever.localRotation = Quaternion.Euler(fireModeIndex * -rotationStep, 0f, 0f);
+        selectorLever.localPosition = initialPosition + (positionStep * fireModeIndex);
     }
 
     void ApplyMode()

@@ -41,7 +41,7 @@ public class ChargingHandle : MonoBehaviour
     protected bool isGrabbed = false;
 
     private Vector3 localStartPos;
-    private bool boltPulledTriggered = false;
+    protected bool boltPulledTriggered = false;
     protected Transform parentTransform;
 
     private bool isLocked = false;
