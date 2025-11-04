@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8732876977290428245}
   - component: {fileID: 615799435226526967}
   - component: {fileID: 3429919666280950002}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: 12ga_shell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
