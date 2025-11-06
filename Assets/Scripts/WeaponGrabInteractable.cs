@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
@@ -16,7 +16,7 @@ public class WeaponGrabInteractable : XRGrabInteractable
     {
         base.OnSelectEntered(args);
 
-        // jeœli nowy interactor trzyma gripAttachPoint, ustaw go jako gripInteractor
+        // jeÅ›li nowy interactor trzyma gripAttachPoint, ustaw go jako gripInteractor
         if (GetAttachTransform(args.interactorObject) == gripAttachPoint)
         {
             gripInteractor = args.interactorObject;
@@ -28,7 +28,7 @@ public class WeaponGrabInteractable : XRGrabInteractable
     {
         base.OnSelectExited(args);
 
-        // jeœli zwolniono gripInteractor, sprawdŸ, czy ktoœ inny przej¹³ grip
+        // jeÅ›li zwolniono gripInteractor, sprawdÅº, czy ktoÅ› inny przejÄ…Å‚ grip
         if (args.interactorObject == gripInteractor)
         {
             gripInteractor = null;
@@ -38,13 +38,13 @@ public class WeaponGrabInteractable : XRGrabInteractable
                 if (GetAttachTransform(ix) == gripAttachPoint)
                 {
                     gripInteractor = ix;
-                    Debug.Log($"[WeaponGrab] GripInteractor przejêty przez inn¹ rêkê: {((gripInteractor as MonoBehaviour)?.name ?? gripInteractor.ToString())}");
+                    Debug.Log($"[WeaponGrab] GripInteractor przejÄ™ty przez innÄ… rÄ™kÄ™: {((gripInteractor as MonoBehaviour)?.name ?? gripInteractor.ToString())}");
                     break;
                 }
             }
 
             if (gripInteractor == null)
-                Debug.Log("[WeaponGrab] GripInteractor zwolniony, brak aktywnej rêki na gripa.");
+                Debug.Log("[WeaponGrab] GripInteractor zwolniony, brak aktywnej rÄ™ki na gripa.");
         }
     }
 
@@ -52,7 +52,7 @@ public class WeaponGrabInteractable : XRGrabInteractable
     {
         base.OnActivated(args);
 
-        // tylko rêka trzymaj¹ca grip mo¿e strzelaæ
+        // tylko rÄ™ka trzymajÄ…ca grip moÅ¼e strzelaÄ‡
         if (weaponController == null || args.interactorObject != gripInteractor) return;
 
         weaponController.FireInput(true);

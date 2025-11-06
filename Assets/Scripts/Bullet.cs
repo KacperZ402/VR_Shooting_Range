@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
     [Tooltip("Kaliber naboju, np. 9mm, 5.56, .45ACP")]
     public string caliber = "5.56x45";
 
-    [Header("Opcjonalne: iloúÊ amunicji w jednym obiekcie")]
-    [Tooltip("Domyúlnie jeden nabÛj na obiekt")]
+    [Header("Opcjonalne: ilo≈ì√¶ amunicji w jednym obiekcie")]
+    [Tooltip("Domy≈ìlnie jeden nab√≥j na obiekt")]
     public int amount = 1;
 }

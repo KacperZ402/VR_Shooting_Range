@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.Events;
 
 public class Magazine : MonoBehaviour
@@ -34,7 +34,7 @@ public class Magazine : MonoBehaviour
     }
     public bool OnInsertedBullet()
     {
-        if(currentRounds < maxRounds) 
+        if (currentRounds < maxRounds)
         {
             currentRounds++;
             return true;
@@ -44,8 +44,8 @@ public class Magazine : MonoBehaviour
 
     public void NotifyInserted() => OnInsertedToSocket?.Invoke();
     public void NotifyRemoved() => OnRemovedFromSocket?.Invoke();
-    [Header("Trigger nabojów")]
-    [Tooltip("Tag obiektów nabojów akceptowanych przez magazyn")]
+    [Header("Trigger nabojÃ³w")]
+    [Tooltip("Tag obiektÃ³w nabojÃ³w akceptowanych przez magazyn")]
     public string bulletTag = "Bullet";
 
     private void OnTriggerEnter(Collider other)
@@ -53,15 +53,15 @@ public class Magazine : MonoBehaviour
         // Sprawdzenie tagu
         if (!other.CompareTag(bulletTag)) return;
 
-        // Pobranie komponentu Bullet (opcjonalnie, jeœli chcesz filtrowaæ kaliber)
+        // Pobranie komponentu Bullet (opcjonalnie, jeÅ“li chcesz filtrowaÃ¦ kaliber)
         Bullet bullet = other.GetComponent<Bullet>();
         if (bullet != null && bullet.caliber != caliber) return;
 
         // Dodanie naboju do magazynka
         if (OnInsertedBullet())
         {
-            Debug.Log("[Magazine] Nabój dodany do magazynka.");
-            Destroy(other.gameObject); // usuniêcie naboju ze sceny
+            Debug.Log("[Magazine] NabÃ³j dodany do magazynka.");
+            Destroy(other.gameObject); // usuniÃªcie naboju ze sceny
         }
     }
 }

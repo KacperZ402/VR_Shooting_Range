@@ -7,6 +7,15 @@ TagManager:
   - LeftHand
   - RightHand
   - Bullet
+  - Bullet_556
+  - Casing_556
+  - Bullet_762
+  - Bullet_9
+  - Bullet_12
+  - Casing_762
+  - Cassing_9
+  - Casing_12
+  - Projectile
   layers:
   - Default
   - TransparentFX
