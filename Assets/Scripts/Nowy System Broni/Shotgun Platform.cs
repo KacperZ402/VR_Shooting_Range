@@ -3,8 +3,8 @@
 // Definicja typu ładowania magazynka (bez zmian)
 public enum MagazineLoadType
 {
-    PumpAction_LoadForward, // Collider aktywny, gdy pompka jest z przodu (minLocalY)
-    BoltAction_LoadBack     // Collider aktywny, gdy zamek jest z tyłu (maxLocalY)
+    PumpAction_LoadForward,
+    BoltAction_LoadBack
 }
 
 public class ShotgunPlatform : WeaponControllerBase
@@ -18,18 +18,17 @@ public class ShotgunPlatform : WeaponControllerBase
     public MagazineLoadType magazineLoadLogic = MagazineLoadType.PumpAction_LoadForward;
 
     [Tooltip("Referencja do magazynka (dla collidera)")]
-    public Magazine magazine; // Używane do włączania/wyłączania collidera ładowania
+    public Magazine magazine;
 
     private bool lastEnabledState;
     private Collider magCollider;
 
     protected override void Awake()
     {
-        base.Awake();
+        base.Awake(); // To już pobiera 'ammoPool'
         if (magazine != null)
             magCollider = magazine.GetComponent<Collider>();
 
-        // Ustawiamy stan początkowy, aby uniknąć "błysku" collidera
         if (magCollider != null)
         {
             lastEnabledState = magCollider.enabled;
@@ -38,7 +37,6 @@ public class ShotgunPlatform : WeaponControllerBase
 
     protected override bool FireOnce()
     {
-        // Nie strzela, jeśli zamek jest zablokowany z tyłu
         if (isBoltLockedBack)
         {
             OnDryFire?.Invoke();
@@ -49,7 +47,6 @@ public class ShotgunPlatform : WeaponControllerBase
             return false;
         }
 
-        // 🔹 ZMIANA: Sprawdzamy prefab, nie bool
         if (chamberedRound == null)
         {
             OnDryFire?.Invoke();
@@ -57,57 +54,55 @@ public class ShotgunPlatform : WeaponControllerBase
         }
 
         // Strzał!
-        // TODO: Tutaj w przyszłości będzie logika balistyki
+        // TODO: Balistyka
         OnFire?.Invoke();
 
-        // 🔹 ZMIANA: Zużywamy prefab z komory
-        chamberedRound = null;
+        // 🔹 ZMIANA: Zwracamy do puli
+        if (ammoPool != null)
+            ammoPool.ReturnRound(chamberedRound);
+        else
+            Destroy(chamberedRound);
 
-        // Strzelba nie chamberuje automatycznie — wymaga manualnego przeładowania
+        chamberedRound = null;
         return true;
     }
 
-    // Cofnięcie zamka / pompki (ręczne przeładowanie)
+    // Cofnięcie zamka / pompki
     public override void OnBoltPulled()
     {
-        // 🔹 ZMIANA: Sprawdzamy prefab
         if (chamberedRound != null && ejectOnPump)
         {
             OnRoundEjected?.Invoke();
-            // 🔹 ZMIANA: Wyrzucamy prefab z komory
-            chamberedRound = null;
             // TODO: Wyrzucanie łuski
+
+            // 🔹 ZMIANA: Zwracamy do puli
+            if (ammoPool != null)
+                ammoPool.ReturnRound(chamberedRound);
+            else
+                Destroy(chamberedRound);
+
+            chamberedRound = null;
         }
 
-        // Strzelba nie ma klasycznego “bolt locked back” — zamek po prostu cofa się
         isBoltLockedBack = true;
     }
 
     // Zwolnienie zamka (pchnięcie pompki)
     public override void ReleaseBoltAction(bool force = false)
     {
-        // Po pchnięciu pompki próbujemy załadować nowy nabój z magazynka
         TryChamberFromMagazine();
-
-        // W każdej sytuacji zamek wraca do przodu
         isBoltLockedBack = false;
-
         OnBoltReleasedEvent?.Invoke();
     }
 
-    // 🔹 ZMIANA: Zastąpiono całą metodę nową logiką z WeaponControllerBase
-    /// <summary>
-    /// Załadowanie naboju z magazynka (teraz pobiera prefab)
-    /// </summary>
+    // 🔹 ZMIANA: Zaktualizowana logika ładowania
     public override bool TryChamberFromMagazine()
     {
-        // Jeśli komora jest już pełna, nie rób nic
         if (chamberedRound != null) return true;
 
         if (ammoSocket == null)
             return false;
 
-        // Pobieramy prefab naboju z gniazda
         GameObject roundToChamber = ammoSocket.TryTakeRound();
 
         if (roundToChamber == null)
@@ -115,35 +110,51 @@ public class ShotgunPlatform : WeaponControllerBase
             return false; // Pusty magazynek
         }
 
-        // Sprawdzamy kaliber pobranego naboju
         Bullet bulletData = roundToChamber.GetComponent<Bullet>();
         if (bulletData == null)
         {
             Debug.LogError("Pobrany nabój nie ma komponentu 'Bullet'!", this);
+
+            // 🔹 ZMIANA: Zwracamy zepsuty nabój do puli
+            if (ammoPool != null)
+                ammoPool.ReturnRound(roundToChamber);
+            else
+                Destroy(roundToChamber);
+
             return false;
         }
 
         if (bulletData.caliber != this.caliber)
         {
             Debug.LogWarning($"Próba załadowania złego kalibru! Broń: {this.caliber}, Nabój: {bulletData.caliber}", this);
-            // TODO: Zacięcie
+
+            // 🔹 ZMIANA: Zwracamy zły nabój do puli
+            if (ammoPool != null)
+                ammoPool.ReturnRound(roundToChamber);
+            else
+                Destroy(roundToChamber);
+
             return false;
         }
 
-        // Wszystko się zgadza - ładujemy prefab do komory
         chamberedRound = roundToChamber;
         OnRoundChambered?.Invoke();
         return true;
     }
 
-    // 🔫 BoltAction fire — używamy bez zmian, ale nadpisujemy, żeby było czytelne
+    // BoltAction fire
     protected override void HandleBoltActionFire()
     {
-        // 🔹 ZMIANA: Sprawdzamy prefab
         if (chamberedRound != null && chargingHandle.transform.localPosition.y <= chargingHandle.minLocalY + 0.001f)
         {
             OnFire?.Invoke();
-            // 🔹 ZMIANA: Zużywamy prefab
+
+            // 🔹 ZMIANA: Zwracamy do puli
+            if (ammoPool != null)
+                ammoPool.ReturnRound(chamberedRound);
+            else
+                Destroy(chamberedRound);
+
             chamberedRound = null;
         }
         else
@@ -151,13 +162,21 @@ public class ShotgunPlatform : WeaponControllerBase
             OnDryFire?.Invoke();
         }
     }
+
+    // Logika Update pozostaje BEZ ZMIAN
     protected override void Update()
     {
-
         if (weaponGrab == null || !weaponGrab.IsGripHeld)
         {
+            // 🔹 DODANA OPTYMALIZACJA: Sprzątanie collidera po upuszczeniu broni
+            if (magCollider != null && lastEnabledState == true)
+            {
+                magCollider.enabled = false;
+                lastEnabledState = false;
+            }
             return;
         }
+
         if (magCollider == null || chargingHandle == null)
         {
             return;
@@ -166,21 +185,17 @@ public class ShotgunPlatform : WeaponControllerBase
         bool shouldBeEnabled = false;
         float currentY = chargingHandle.transform.localPosition.y;
 
-        // Sprawdzamy, którą logikę mamy zastosować
         switch (magazineLoadLogic)
         {
-            // Logika dla strzelby: Włącz collider, gdy pompka jest z przodu
             case MagazineLoadType.PumpAction_LoadForward:
                 shouldBeEnabled = Mathf.Abs(currentY - chargingHandle.minLocalY) < 0.001f;
                 break;
 
-            // Logika dla 4-taktów: Włącz collider, gdy zamek jest z tyłu
             case MagazineLoadType.BoltAction_LoadBack:
                 shouldBeEnabled = Mathf.Abs(currentY - chargingHandle.maxLocalY) < 0.001f;
                 break;
         }
 
-        // Zastosuj zmianę (tylko jeśli stan się zmienił, dla optymalizacji)
         if (shouldBeEnabled != lastEnabledState)
         {
             magCollider.enabled = shouldBeEnabled;

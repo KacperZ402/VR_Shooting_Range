@@ -44,8 +44,16 @@ public class WeaponControllerBase : MonoBehaviour
     protected bool triggerPressed;
     protected int burstShotsRemaining = 0;
 
+    protected AmmoPoolManager ammoPool;
+
     protected virtual void Awake()
     {
+        ammoPool = AmmoPoolManager.Instance; // Pobierz Singleton
+        if (ammoPool == null)
+        {
+            Debug.LogError("AmmoPoolManager nie znaleziony! Broń nie będzie zwracać nabojów do puli.", this);
+        }
+
         if (fireSelector != null)
             fireSelector.weaponController = this;
 
@@ -129,7 +137,6 @@ public class WeaponControllerBase : MonoBehaviour
 
     protected virtual bool FireOnce()
     {
-        // 🔹 ZMIANA: Sprawdzamy instancję, nie prefab
         if (isBoltLockedBack || chamberedRound == null || !bolt.IsBoltForward)
         {
             OnDryFire?.Invoke();
@@ -137,29 +144,34 @@ public class WeaponControllerBase : MonoBehaviour
         }
 
         // TODO: BALISTYKA
-        // Kiedy dojdziemy do balistyki, tutaj będzie kod, który pobiera
-        // komponent Projectile.cs z 'chamberedRound', aktywuje go,
-        // nadaje mu prędkość i "wystrzeliwuje".
+        // Tutaj odczytujemy dane z 'chamberedRound.GetComponent<Bullet>()'
 
         OnFire?.Invoke();
 
-        // 🔹 ZMIANA: "Zużywamy" instancję naboju
-        Destroy(chamberedRound);
+        // 🔹 ZMIANA: Zamiast Destroy(), zwracamy do puli
+        if (ammoPool != null)
+            ammoPool.ReturnRound(chamberedRound);
+        else
+            Destroy(chamberedRound); // Wyjście awaryjne, jeśli pula nie działa
+
         chamberedRound = null;
 
         TryChamberFromMagazine();
-
         return true;
     }
 
     protected virtual void HandleBoltActionFire()
     {
-        // 🔹 ZMIANA: Sprawdzamy instancję
         if (chamberedRound != null && bolt.IsBoltForward)
         {
             OnFire?.Invoke();
-            // 🔹 ZMIANA: Zużywamy instancję
-            Destroy(chamberedRound);
+
+            // 🔹 ZMIANA: Zamiast Destroy(), zwracamy do puli
+            if (ammoPool != null)
+                ammoPool.ReturnRound(chamberedRound);
+            else
+                Destroy(chamberedRound);
+
             chamberedRound = null;
         }
         else
@@ -172,17 +184,19 @@ public class WeaponControllerBase : MonoBehaviour
 
     public virtual void OnBoltPulled()
     {
-        // 🔹 ZMIANA: Sprawdzamy instancję
         if (chamberedRound != null)
         {
             // TODO: WYRZUCANIE ŁUSKI
-            // Tutaj w przyszłości będziemy aktywować obiekt 'chamberedRound'
-            // i nadawać mu fizykę wyrzucanej łuski.
+            // W przyszłości 'ReturnRound' zamienimy na 'EjectCasing(chamberedRound)'
 
             OnRoundEjected?.Invoke();
 
-            // 🔹 ZMIANA: "Wyrzucamy" instancję naboju (na razie niszczymy)
-            Destroy(chamberedRound);
+            // 🔹 ZMIANA: Zamiast Destroy(), zwracamy do puli (jako niewystrzelony nabój)
+            if (ammoPool != null)
+                ammoPool.ReturnRound(chamberedRound);
+            else
+                Destroy(chamberedRound);
+
             chamberedRound = null;
         }
     }
@@ -230,8 +244,6 @@ public class WeaponControllerBase : MonoBehaviour
             Destroy(roundToChamber);
             return false;
         }
-
-        // Wszystko się zgadza - przechowujemy instancję w komorze
         chamberedRound = roundToChamber;
         // Na razie instancja pozostaje nieaktywna, 'w pamięci'.
         // Zostanie aktywowana przy strzale/wyrzucie.

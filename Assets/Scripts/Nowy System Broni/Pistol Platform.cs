@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Platforma Pistoletu. Oryginalna logika zachowana.
+/// Wersja zaktualizowana do systemu AmmoPoolManager.
+/// </summary>
 public class PistolPlatform : WeaponControllerBase
 {
     protected override void Awake()
     {
-        base.Awake();
+        base.Awake(); // To już pobiera 'ammoPool'
 
         // Pistolety nie mają bolta, tylko charging handle
         bolt = null;
@@ -19,7 +23,6 @@ public class PistolPlatform : WeaponControllerBase
             return false;
         }
 
-        // 🔹 ZMIANA: Sprawdzamy prefab, nie bool
         if (chamberedRound == null)
         {
             OnDryFire?.Invoke();
@@ -29,7 +32,12 @@ public class PistolPlatform : WeaponControllerBase
         // Strzał
         OnFire?.Invoke();
 
-        // 🔹 ZMIANA: Zużywamy prefab z komory
+        // 🔹 ZMIANA: Zamiast niszczyć, zwracamy nabój do puli
+        if (ammoPool != null)
+            ammoPool.ReturnRound(chamberedRound);
+        else
+            Destroy(chamberedRound); // Wyjście awaryjne
+
         chamberedRound = null;
 
         // Twoja oryginalna logika nie miała tutaj automatycznego przeładowania
@@ -38,16 +46,19 @@ public class PistolPlatform : WeaponControllerBase
 
     public override void OnBoltPulled()
     {
-        // 🔹 ZMIANA: Sprawdzamy prefab
         if (chamberedRound != null)
         {
-            // 🔹 ZMIANA: Wyrzucamy prefab z komory
+            // 🔹 ZMIANA: Zwracamy nabój do puli (jako niewystrzelony)
+            if (ammoPool != null)
+                ammoPool.ReturnRound(chamberedRound);
+            else
+                Destroy(chamberedRound); // Wyjście awaryjne
+
             chamberedRound = null;
             OnRoundEjected?.Invoke();
         }
 
-        // Jeśli mag pusty, ustaw stan blokady (do wizualnego efektu handle)
-        // Ta logika jest poprawna, bo sprawdza stan magazynka
+        // Jeśli mag pusty, ustaw stan blokady (logika bez zmian)
         if (ammoSocket != null && ammoSocket.currentMagazine != null &&
             ammoSocket.currentMagazine.currentRounds == 0)
         {
@@ -58,7 +69,9 @@ public class PistolPlatform : WeaponControllerBase
 
     public override void ReleaseBoltAction(bool force = false)
     {
-       
+        // Ta logika jest już w 100% kompatybilna,
+        // ponieważ opiera się na TryChamberFromMagazine() z klasy bazowej.
+
         if (TryChamberFromMagazine())
         {
             isBoltLockedBack = false;

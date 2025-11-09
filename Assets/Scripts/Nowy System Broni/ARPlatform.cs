@@ -3,14 +3,12 @@
 /// <summary>
 /// Platforma AR: zamek blokuje się po pustym magazynku,
 /// automatycznie chamberuje po strzale.
-/// Wersja zaktualizowana do systemu prefabów nabojów.
-/// ZMODYFIKOWANA LOGIKA OnBoltPulled.
+/// Wersja zaktualizowana do systemu AmmoPoolManager.
 /// </summary>
 public class ARPlatform : WeaponControllerBase
 {
     protected override bool FireOnce()
     {
-        // Ta logika jest poprawna (blokuje tylko z pustym magazynkiem)
         if (!bolt.IsBoltForward || chamberedRound == null)
         {
             OnDryFire?.Invoke();
@@ -20,10 +18,16 @@ public class ARPlatform : WeaponControllerBase
         // TODO: Tutaj w przyszłości będzie logika balistyki
         OnFire?.Invoke();
 
+        // 🔹 ZMIANA: Zamiast niszczyć, zwracamy nabój do puli
+        if (ammoPool != null)
+            ammoPool.ReturnRound(chamberedRound);
+        else
+            Destroy(chamberedRound); // Wyjście awaryjne
+
         chamberedRound = null;
 
+        // --- Logika blokady zamka (bez zmian) ---
         bool didChamber = TryChamberFromMagazine();
-
         bool magExists = (ammoSocket != null && ammoSocket.currentMagazine != null);
         bool magIsEmpty = magExists && ammoSocket.currentMagazine.currentRounds == 0;
 
@@ -40,18 +44,23 @@ public class ARPlatform : WeaponControllerBase
     {
         if (chamberedRound != null)
         {
-            chamberedRound = null;
-            OnRoundEjected?.Invoke();
             // TODO: Tutaj w przyszłości będzie wyrzucanie łuski
+            OnRoundEjected?.Invoke();
+
+            // 🔹 ZMIANA: Zamiast niszczyć, zwracamy nabój do puli
+            if (ammoPool != null)
+                ammoPool.ReturnRound(chamberedRound);
+            else
+                Destroy(chamberedRound); // Wyjście awaryjne
+
+            chamberedRound = null;
         }
 
+        // --- Logika blokady zamka (bez zmian) ---
         bool didChamber = TryChamberFromMagazine();
-
         bool magExists = (ammoSocket != null && ammoSocket.currentMagazine != null);
-
         bool magIsEmpty = magExists && ammoSocket.currentMagazine.currentRounds == 0;
 
-        // Jeśli ładowanie się nie powiodło ORAZ jest włożony pusty magazynek
         if (!didChamber && magIsEmpty)
         {
             isBoltLockedBack = true;
@@ -59,7 +68,6 @@ public class ARPlatform : WeaponControllerBase
         }
         else
         {
- 
             isBoltLockedBack = false;
         }
     }

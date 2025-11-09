@@ -151,6 +151,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   caliber: 7.62x51
+  muzzleEnergy: 1750
+  mass: 0.004
+  dragCoefficient: 0.0005
+  projectileCount: 1
   amount: 1
 --- !u!114 &-843223226963430450
 MonoBehaviour:
