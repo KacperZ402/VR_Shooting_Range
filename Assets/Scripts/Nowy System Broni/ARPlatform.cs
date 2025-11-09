@@ -3,24 +3,32 @@
 /// <summary>
 /// Platforma AR: zamek blokuje się po pustym magazynku,
 /// automatycznie chamberuje po strzale.
+/// Wersja zaktualizowana do systemu prefabów nabojów.
+/// ZMODYFIKOWANA LOGIKA OnBoltPulled.
 /// </summary>
 public class ARPlatform : WeaponControllerBase
 {
     protected override bool FireOnce()
     {
-        if (!bolt.IsBoltForward || !isChambered)
+        // Ta logika jest poprawna (blokuje tylko z pustym magazynkiem)
+        if (!bolt.IsBoltForward || chamberedRound == null)
         {
             OnDryFire?.Invoke();
             return false;
         }
 
+        // TODO: Tutaj w przyszłości będzie logika balistyki
         OnFire?.Invoke();
-        isChambered = false;
 
-        // 🔹 Próbuj chamberować z magazynka
-        if (!TryChamberFromMagazine() && ammoSocket.currentMagazine.currentRounds == 0)
+        chamberedRound = null;
+
+        bool didChamber = TryChamberFromMagazine();
+
+        bool magExists = (ammoSocket != null && ammoSocket.currentMagazine != null);
+        bool magIsEmpty = magExists && ammoSocket.currentMagazine.currentRounds == 0;
+
+        if (!didChamber && magIsEmpty)
         {
-            // 🔹 Jeśli pusto — blokuj zamek
             isBoltLockedBack = true;
             OnBoltLockedBack?.Invoke();
         }
@@ -30,20 +38,28 @@ public class ARPlatform : WeaponControllerBase
 
     public override void OnBoltPulled()
     {
-        if (isChambered)
+        if (chamberedRound != null)
         {
-            isChambered = false;
+            chamberedRound = null;
             OnRoundEjected?.Invoke();
+            // TODO: Tutaj w przyszłości będzie wyrzucanie łuski
         }
 
-        // 🔹 AR blokuje się po pustym magazynku
-        if (!TryChamberFromMagazine())
+        bool didChamber = TryChamberFromMagazine();
+
+        bool magExists = (ammoSocket != null && ammoSocket.currentMagazine != null);
+
+        bool magIsEmpty = magExists && ammoSocket.currentMagazine.currentRounds == 0;
+
+        // Jeśli ładowanie się nie powiodło ORAZ jest włożony pusty magazynek
+        if (!didChamber && magIsEmpty)
         {
             isBoltLockedBack = true;
             OnBoltLockedBack?.Invoke();
         }
         else
         {
+ 
             isBoltLockedBack = false;
         }
     }

@@ -17,16 +17,22 @@ public class WeaponControllerBase : MonoBehaviour
     public string caliber = "5.56x45";
 
     [Header("Stan broni")]
-    public bool isChambered = false;
+
+    // 🔹 ZMIANA: Przechowujemy instancję naboju, nie prefab
+    [Tooltip("Instancja naboju aktualnie w komorze")]
+    public GameObject chamberedRound;
+
     public bool isBoltLockedBack = false;
     public FireMode currentFireMode = FireMode.Safe;
 
     [Header("Parametry trybów ognia")]
+    // ... (reszta pól bez zmian) ...
     public int burstCount = 3;
     public float fireRate = 0.1f;
     public float burstDelay = 0.08f;
 
     [Header("Eventy")]
+    // ... (eventy bez zmian) ...
     public UnityEvent OnFire;
     public UnityEvent OnDryFire;
     public UnityEvent OnRoundChambered;
@@ -59,38 +65,31 @@ public class WeaponControllerBase : MonoBehaviour
         HandleAutoFire();
     }
 
-    // -------------------------- STRZAŁ --------------------------
+    // -------------------------- STRZAŁ (logika inputu - bez zmian) --------------------------
 
     public virtual void FireInput(bool pressed)
     {
-        // tylko ręka trzymająca grip może strzelać
         if (weaponGrab != null && !weaponGrab.IsGripHeld) return;
-
+        // ... (reszta logiki inputu bez zmian) ...
         switch (currentFireMode)
         {
             case FireMode.Safe:
                 break;
-
             case FireMode.Semi:
                 if (pressed && !triggerPressed)
                     FireOnce();
                 break;
-
             case FireMode.Burst:
                 if (pressed && !triggerPressed && burstShotsRemaining == 0)
                     burstShotsRemaining = burstCount;
                 break;
-
             case FireMode.BoltAction:
                 if (pressed && !triggerPressed)
                     HandleBoltActionFire();
                 break;
-
             case FireMode.Auto:
-                // obsługiwany w Update
                 break;
         }
-
         triggerPressed = pressed;
     }
 
@@ -125,20 +124,29 @@ public class WeaponControllerBase : MonoBehaviour
         }
     }
 
-    // -------------------------- LOGIKA STRZAŁU --------------------------
+
+    // -------------------------- 🔹 LOGIKA STRZAŁU (ZMIENIONA) --------------------------
 
     protected virtual bool FireOnce()
     {
-        if (isBoltLockedBack || !isChambered || !bolt.IsBoltForward)
+        // 🔹 ZMIANA: Sprawdzamy instancję, nie prefab
+        if (isBoltLockedBack || chamberedRound == null || !bolt.IsBoltForward)
         {
             OnDryFire?.Invoke();
             return false;
         }
 
-        isChambered = false;
+        // TODO: BALISTYKA
+        // Kiedy dojdziemy do balistyki, tutaj będzie kod, który pobiera
+        // komponent Projectile.cs z 'chamberedRound', aktywuje go,
+        // nadaje mu prędkość i "wystrzeliwuje".
+
         OnFire?.Invoke();
 
-        // 🔹 brak automatycznego blokowania zamka przy pustym magu!
+        // 🔹 ZMIANA: "Zużywamy" instancję naboju
+        Destroy(chamberedRound);
+        chamberedRound = null;
+
         TryChamberFromMagazine();
 
         return true;
@@ -146,10 +154,13 @@ public class WeaponControllerBase : MonoBehaviour
 
     protected virtual void HandleBoltActionFire()
     {
-        if (isChambered && bolt.IsBoltForward)
+        // 🔹 ZMIANA: Sprawdzamy instancję
+        if (chamberedRound != null && bolt.IsBoltForward)
         {
             OnFire?.Invoke();
-            isChambered = false;
+            // 🔹 ZMIANA: Zużywamy instancję
+            Destroy(chamberedRound);
+            chamberedRound = null;
         }
         else
         {
@@ -157,14 +168,22 @@ public class WeaponControllerBase : MonoBehaviour
         }
     }
 
-    // -------------------------- ZAMEK --------------------------
+    // -------------------------- 🔹 ZAMEK (ZMIENIONY) --------------------------
 
     public virtual void OnBoltPulled()
     {
-        if (isChambered)
+        // 🔹 ZMIANA: Sprawdzamy instancję
+        if (chamberedRound != null)
         {
-            isChambered = false;
+            // TODO: WYRZUCANIE ŁUSKI
+            // Tutaj w przyszłości będziemy aktywować obiekt 'chamberedRound'
+            // i nadawać mu fizykę wyrzucanej łuski.
+
             OnRoundEjected?.Invoke();
+
+            // 🔹 ZMIANA: "Wyrzucamy" instancję naboju (na razie niszczymy)
+            Destroy(chamberedRound);
+            chamberedRound = null;
         }
     }
 
@@ -177,24 +196,51 @@ public class WeaponControllerBase : MonoBehaviour
         OnBoltReleasedEvent?.Invoke();
     }
 
+    // 🔹 ZMIANA: Logika ładowania komory
     public virtual bool TryChamberFromMagazine()
     {
-        if (ammoSocket == null || ammoSocket.currentMagazine == null)
+        // Jeśli komora jest już pełna, nie rób nic
+        if (chamberedRound != null) return true;
+
+        if (ammoSocket == null)
             return false;
 
-        if (ammoSocket.currentMagazine.caliber != caliber)
-            return false;
+        // 🔹 ZMIANA: Pobieramy INSTANCJĘ naboju z gniazda
+        GameObject roundToChamber = ammoSocket.TryTakeRound();
 
-        if (ammoSocket.TryTakeRound())
+        if (roundToChamber == null)
         {
-            isChambered = true;
-            OnRoundChambered?.Invoke();
-            return true;
+            Debug.Log("Magazynek Jest pusty, podczas próby załadowania naboju");
+            return false; // Pusty magazynek
         }
 
-        return false;
+        // Sprawdzamy kaliber pobranej INSTANCJI
+        Bullet bulletData = roundToChamber.GetComponent<Bullet>();
+        if (bulletData == null)
+        {
+            Debug.LogError("Pobrany nabój (instancja) nie ma komponentu 'Bullet'!", this);
+            Destroy(roundToChamber); // Zniszcz zły obiekt
+            return false;
+        }
+
+        if (bulletData.caliber != this.caliber)
+        {
+            Debug.LogWarning($"Próba załadowania złego kalibru! Broń: {this.caliber}, Nabój: {bulletData.caliber}", this);
+            // TODO: Co zrobić ze złym nabojem? Na razie go niszczymy.
+            Destroy(roundToChamber);
+            return false;
+        }
+
+        // Wszystko się zgadza - przechowujemy instancję w komorze
+        chamberedRound = roundToChamber;
+        // Na razie instancja pozostaje nieaktywna, 'w pamięci'.
+        // Zostanie aktywowana przy strzale/wyrzucie.
+
+        OnRoundChambered?.Invoke();
+        return true;
     }
 
+    // Bez zmian
     public virtual bool CanReleaseBolt()
     {
         bool magExists = ammoSocket != null && ammoSocket.currentMagazine != null;

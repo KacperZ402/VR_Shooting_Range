@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
@@ -31,6 +31,8 @@ public class AmmoSocket : MonoBehaviour
             socket.selectExited.RemoveListener(OnSelectExited);
         }
     }
+
+    // Logika wpinania magazynka pozostaje bez zmian
     private void OnSelectEntered(SelectEnterEventArgs args)
     {
         // Sprawdzenie, czy warstwa magazynka jest dozwolona
@@ -40,6 +42,9 @@ public class AmmoSocket : MonoBehaviour
         var mag = args.interactableObject.transform.GetComponentInParent<Magazine>();
         if (mag != null)
         {
+            // TODO: W przyszłości można dodać tu sprawdzanie kalibru i odrzucanie magazynka
+            // np. sprawdzając kaliber broni (GetComponentInParent<WeaponControllerBase>().caliber)
+
             currentMagazine = mag;
             currentMagazine.NotifyInserted();
             OnMagazineInserted?.Invoke();
@@ -56,12 +61,18 @@ public class AmmoSocket : MonoBehaviour
         }
     }
 
-    public bool TryTakeRound()
+    // 🔹 ZMIANA: Zwraca prefab pocisku (GameObject) zamiast bool
+    /// <summary>
+    /// Próbuje pobrać prefab naboju z magazynka.
+    /// </summary>
+    /// <returns>Prefab pocisku (GameObject) lub null, jeśli się nie udało.</returns>
+    public GameObject TryTakeRound()
     {
-        if (currentMagazine == null) return false;
+        if (currentMagazine == null) return null;
         return currentMagazine.ExtractRound();
     }
 
+    // Bez zmian
     public int GetRoundsRemaining()
     {
         return currentMagazine != null ? currentMagazine.currentRounds : 0;

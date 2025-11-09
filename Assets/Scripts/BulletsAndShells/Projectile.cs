@@ -1,115 +1,90 @@
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(Bullet))]
 public class Projectile : MonoBehaviour
 {
-    [Header("Konfiguracja Puli")]
-    public string poolTag = "Projectile"; // Upewnij si�, �e tag zgadza si� z ObjectPooler
-
-    [Header("Parametry Balistyczne")]
     private Rigidbody rb;
-    private float mass;
-    private float dragCoefficient;
+    private Bullet bulletData;
 
-    [Header("Rykoszety")]
-    [Tooltip("K�t (w stopniach od normalnej), poni�ej kt�rego nast�pi rykoszet.")]
-    public float ricochetAngle = 20f; // K�t od powierzchni
-    [Tooltip("Mno�nik pr�dko�ci po rykoszecie.")]
-    public float ricochetSpeedLoss = 0.4f; // Traci 60% pr�dko�ci
-    public int maxRicochets = 2;
-    private int ricochetCount = 0;
+    [HideInInspector]
+    public string poolKey; // Klucz do puli (ustawiany przez PoolManager)
 
-    [Header("Czas �ycia")]
-    public float maxLifetime = 5.0f; // Czas w sekundach, po kt�rym pocisk zniknie
+    [Tooltip("Czas życia pocisku w sekundach (zabezpieczenie)")]
+    public float maxLifetime = 10.0f;
+
+    private bool isLaunched = false;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        bulletData = GetComponent<Bullet>();
+
+        if (bulletData == null)
+        {
+            Debug.LogError("Komponent Projectile nie może znaleźć komponentu Bullet!");
+        }
+    }
+
+    void OnEnable()
+    {
+        Invoke(nameof(ReturnToPool), maxLifetime);
+        isLaunched = false;
+    }
+
+    void OnDisable()
+    {
+        CancelInvoke(nameof(ReturnToPool));
+
+        // 🔹 POPRAWKA: Używamy linearVelocity
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 
     /// <summary>
-    /// Metoda wywo�ywana przez bro�, aby "wystrzeli�" pocisk z puli.
+    /// Wystrzeliwuje pocisk. Wywoływane przez WeaponController.
     /// </summary>
-    [System.Obsolete]
-    public void Initialize(Vector3 initialVelocity, float bulletMass, float bulletDrag)
+    public void Launch(Vector3 initialVelocity)
     {
-        this.mass = bulletMass;
-        this.dragCoefficient = bulletDrag;
-
-        rb.mass = this.mass;
-        rb.linearVelocity = initialVelocity; // Nadanie pr�dko�ci wylotowej
-
-        ricochetCount = 0;
-
-        // Rozpocznij odliczanie do autodestrukcji
-        StopAllCoroutines();
-        StartCoroutine(ReturnToPoolAfterTime(maxLifetime));
+        // 🔹 POPRAWKA: Używamy linearVelocity
+        rb.linearVelocity = initialVelocity;
+        isLaunched = true;
     }
 
-    [System.Obsolete]
     void FixedUpdate()
     {
-        // 1. Si�a Grawitacji (F = m * g)
-        // Dzia�amy na Rigidbody, wi�c u�ywamy ForceMode.Acceleration (a = g)
-        rb.AddForce(Physics.gravity, ForceMode.Acceleration);
+        if (!isLaunched) return;
 
-        // 2. Si�a Oporu Powietrza (F_d = -v^2 * C_d)
-        // Uproszczony wz�r F_d = -v.normalized * v.magnitude^2 * dragCoefficient
-        Vector3 dragForce = -rb.linearVelocity.normalized * rb.linearVelocity.sqrMagnitude * dragCoefficient;
+        // 🔹 POPRAWKA: Używamy linearVelocity
+        if (rb.linearVelocity != Vector3.zero)
+        {
+            // 🔹 POPRAWKA: Używamy linearVelocity
+            transform.rotation = Quaternion.LookRotation(rb.linearVelocity);
+        }
 
-        // Dzia�amy na Rigidbody, wi�c u�ywamy ForceMode.Force (F)
+        // 🔹 POPRAWKA: Używamy linearVelocity
+        // Używamy linearVelocity.normalized i linearVelocity.sqrMagnitude
+        Vector3 dragForce = -rb.linearVelocity.normalized * rb.linearVelocity.sqrMagnitude * bulletData.dragCoefficient;
+
         rb.AddForce(dragForce, ForceMode.Force);
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        // --- Logika Rykoszetu ---
-        if (ricochetCount < maxRicochets)
+        if (!isLaunched) return;
+
+        // TODO: Dodać logikę obrażeń, rykoszetów, efektów trafienia
+        Debug.Log($"[Projectile] Trafiono: {collision.gameObject.name}");
+
+        ReturnToPool();
+    }
+
+    void ReturnToPool()
+    {
+        isLaunched = false;
+        // Sprawdź, czy Instance jeszcze istnieje (np. przy zamykaniu sceny)
+        if (BulletPoolManager.Instance != null)
         {
-            ContactPoint contact = collision.GetContact(0);
-            Vector3 normal = contact.normal;
-
-            // K�t mi�dzy wektorem pr�dko�ci a normaln� powierzchni
-            float impactAngle = Vector3.Angle(-rb.linearVelocity.normalized, normal);
-
-            // K�t < 20 stopni (p�ytki) -> rykoszet
-            if (impactAngle < ricochetAngle)
-            {
-                ricochetCount++;
-
-                // Oblicz wektor odbicia i zastosuj utrat� pr�dko�ci
-                Vector3 reflection = Vector3.Reflect(rb.linearVelocity, normal);
-                rb.linearVelocity = reflection * (1.0f - ricochetSpeedLoss);
-
-                // TODO: Odtw�rz d�wi�k rykoszetu i efekt cz�steczkowy w 'contact.point'
-                return; // Nie niszcz pocisku, leci dalej
-            }
+            BulletPoolManager.Instance.ReturnBullet(this.gameObject, poolKey);
         }
-
-        // --- Logika Trafienia (Brak rykoszetu) ---
-
-        // TODO: Tutaj logika obra�e� (np. collision.gameObject.GetComponent<Health>().TakeDamage())
-        // TODO: Odtw�rz efekt trafienia (dziura po kuli) w 'contact.point'
-
-        // Zwr�� pocisk do puli
-        Deactivate();
-    }
-
-    private IEnumerator ReturnToPoolAfterTime(float time)
-    {
-        yield return new WaitForSeconds(time);
-        Deactivate();
-    }
-
-    /// <summary>
-    /// Deaktywuje pocisk i zwraca go do puli.
-    /// </summary>
-    private void Deactivate()
-    {
-        StopAllCoroutines();
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        ObjectPooler.Instance.ReturnToPool(poolTag, this.gameObject);
     }
 }

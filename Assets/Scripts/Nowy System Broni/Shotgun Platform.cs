@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-// 🔹 NOWOŚĆ: Definicja typu ładowania magazynka
-// Możesz to umieścić poza klasą (w tym samym pliku), aby było czytelniejsze.
+// Definicja typu ładowania magazynka (bez zmian)
 public enum MagazineLoadType
 {
     PumpAction_LoadForward, // Collider aktywny, gdy pompka jest z przodu (minLocalY)
@@ -14,12 +13,15 @@ public class ShotgunPlatform : WeaponControllerBase
     [Tooltip("Czy po cofnięciu zamka wyrzuca pustą łuskę?")]
     public bool ejectOnPump = true;
 
-    [Header("Logika Magazynka")] // 🔹 NOWOŚĆ: Nowa sekcja w inspektorze
+    [Header("Logika Magazynka")]
     [Tooltip("Definiuje, kiedy collider magazynka (do ładowania) jest aktywny.")]
     public MagazineLoadType magazineLoadLogic = MagazineLoadType.PumpAction_LoadForward;
 
     [Tooltip("Referencja do magazynka (dla collidera)")]
-    public Magazine magazine;
+    public Magazine magazine; // Używane do włączania/wyłączania collidera ładowania
+
+    private bool lastEnabledState;
+    private Collider magCollider;
 
     protected override void Awake()
     {
@@ -27,7 +29,7 @@ public class ShotgunPlatform : WeaponControllerBase
         if (magazine != null)
             magCollider = magazine.GetComponent<Collider>();
 
-        // 🔹 NOWOŚĆ: Ustawiamy stan początkowy, aby uniknąć "błysku" collidera
+        // Ustawiamy stan początkowy, aby uniknąć "błysku" collidera
         if (magCollider != null)
         {
             lastEnabledState = magCollider.enabled;
@@ -46,16 +48,20 @@ public class ShotgunPlatform : WeaponControllerBase
         {
             return false;
         }
-        // Jeśli brak naboju w komorze → pusty strzał
-        if (!isChambered)
+
+        // 🔹 ZMIANA: Sprawdzamy prefab, nie bool
+        if (chamberedRound == null)
         {
             OnDryFire?.Invoke();
             return false;
         }
 
         // Strzał!
+        // TODO: Tutaj w przyszłości będzie logika balistyki
         OnFire?.Invoke();
-        isChambered = false;
+
+        // 🔹 ZMIANA: Zużywamy prefab z komory
+        chamberedRound = null;
 
         // Strzelba nie chamberuje automatycznie — wymaga manualnego przeładowania
         return true;
@@ -64,11 +70,13 @@ public class ShotgunPlatform : WeaponControllerBase
     // Cofnięcie zamka / pompki (ręczne przeładowanie)
     public override void OnBoltPulled()
     {
-        // Jeśli był nabój w komorze → wyrzucamy łuskę
-        if (isChambered && ejectOnPump)
+        // 🔹 ZMIANA: Sprawdzamy prefab
+        if (chamberedRound != null && ejectOnPump)
         {
             OnRoundEjected?.Invoke();
-            isChambered = false;
+            // 🔹 ZMIANA: Wyrzucamy prefab z komory
+            chamberedRound = null;
+            // TODO: Wyrzucanie łuski
         }
 
         // Strzelba nie ma klasycznego “bolt locked back” — zamek po prostu cofa się
@@ -87,48 +95,69 @@ public class ShotgunPlatform : WeaponControllerBase
         OnBoltReleasedEvent?.Invoke();
     }
 
-    //Załadowanie naboju z magazynka
+    // 🔹 ZMIANA: Zastąpiono całą metodę nową logiką z WeaponControllerBase
+    /// <summary>
+    /// Załadowanie naboju z magazynka (teraz pobiera prefab)
+    /// </summary>
     public override bool TryChamberFromMagazine()
     {
-        if (ammoSocket == null || ammoSocket.currentMagazine == null)
+        // Jeśli komora jest już pełna, nie rób nic
+        if (chamberedRound != null) return true;
+
+        if (ammoSocket == null)
             return false;
 
-        var mag = ammoSocket.currentMagazine;
+        // Pobieramy prefab naboju z gniazda
+        GameObject roundToChamber = ammoSocket.TryTakeRound();
 
-        if (mag.caliber != caliber || mag.currentRounds <= 0)
-            return false;
-
-        // Pobieramy jeden nabój z magazynka
-        if (ammoSocket.TryTakeRound())
+        if (roundToChamber == null)
         {
-            isChambered = true;
-            OnRoundChambered?.Invoke();
-            return true;
+            return false; // Pusty magazynek
         }
 
-        return false;
+        // Sprawdzamy kaliber pobranego naboju
+        Bullet bulletData = roundToChamber.GetComponent<Bullet>();
+        if (bulletData == null)
+        {
+            Debug.LogError("Pobrany nabój nie ma komponentu 'Bullet'!", this);
+            return false;
+        }
+
+        if (bulletData.caliber != this.caliber)
+        {
+            Debug.LogWarning($"Próba załadowania złego kalibru! Broń: {this.caliber}, Nabój: {bulletData.caliber}", this);
+            // TODO: Zacięcie
+            return false;
+        }
+
+        // Wszystko się zgadza - ładujemy prefab do komory
+        chamberedRound = roundToChamber;
+        OnRoundChambered?.Invoke();
+        return true;
     }
 
     // 🔫 BoltAction fire — używamy bez zmian, ale nadpisujemy, żeby było czytelne
     protected override void HandleBoltActionFire()
     {
-        if (isChambered && chargingHandle.transform.localPosition.y <= chargingHandle.minLocalY + 0.001f)
+        // 🔹 ZMIANA: Sprawdzamy prefab
+        if (chamberedRound != null && chargingHandle.transform.localPosition.y <= chargingHandle.minLocalY + 0.001f)
         {
             OnFire?.Invoke();
-            isChambered = false;
+            // 🔹 ZMIANA: Zużywamy prefab
+            chamberedRound = null;
         }
         else
         {
             OnDryFire?.Invoke();
         }
     }
-    private bool lastEnabledState;
-    private Collider magCollider;
-
-    // 🔹 NOWOŚĆ: Zmodyfikowana metoda Update()
     protected override void Update()
     {
-        // Upewnij się, że mamy wszystko, czego potrzebujemy
+
+        if (weaponGrab == null || !weaponGrab.IsGripHeld)
+        {
+            return;
+        }
         if (magCollider == null || chargingHandle == null)
         {
             return;

@@ -16,6 +16,7 @@ TagManager:
   - Cassing_9
   - Casing_12
   - Projectile
+  - BulletPickup
   layers:
   - Default
   - TransparentFX

@@ -19,7 +19,8 @@ public class PistolPlatform : WeaponControllerBase
             return false;
         }
 
-        if (!isChambered)
+        // 🔹 ZMIANA: Sprawdzamy prefab, nie bool
+        if (chamberedRound == null)
         {
             OnDryFire?.Invoke();
             return false;
@@ -27,20 +28,26 @@ public class PistolPlatform : WeaponControllerBase
 
         // Strzał
         OnFire?.Invoke();
-        isChambered = false;
 
+        // 🔹 ZMIANA: Zużywamy prefab z komory
+        chamberedRound = null;
+
+        // Twoja oryginalna logika nie miała tutaj automatycznego przeładowania
         return true;
     }
 
     public override void OnBoltPulled()
     {
-        if (isChambered)
+        // 🔹 ZMIANA: Sprawdzamy prefab
+        if (chamberedRound != null)
         {
-            isChambered = false;
+            // 🔹 ZMIANA: Wyrzucamy prefab z komory
+            chamberedRound = null;
             OnRoundEjected?.Invoke();
         }
 
         // Jeśli mag pusty, ustaw stan blokady (do wizualnego efektu handle)
+        // Ta logika jest poprawna, bo sprawdza stan magazynka
         if (ammoSocket != null && ammoSocket.currentMagazine != null &&
             ammoSocket.currentMagazine.currentRounds == 0)
         {
@@ -51,12 +58,14 @@ public class PistolPlatform : WeaponControllerBase
 
     public override void ReleaseBoltAction(bool force = false)
     {
+       
         if (TryChamberFromMagazine())
         {
             isBoltLockedBack = false;
         }
         else
         {
+            // Pozostaje zablokowany, jeśli TryChamberFromMagazine się nie powiodło
             isBoltLockedBack = true;
             OnBoltLockedBack?.Invoke();
         }

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -621534318267493206}
   - component: {fileID: 3915633435220053643}
   m_Layer: 0
-  m_Name: 5.56x45mm
+  m_Name: 5.56x45mm_HP
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -278,4 +278,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   caliber: 5.56x45
+  muzzleEnergy: 1650
+  mass: 0.006
+  dragCoefficient: 0.001
+  projectileCount: 1
   amount: 1
