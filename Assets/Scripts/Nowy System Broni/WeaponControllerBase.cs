@@ -228,7 +228,7 @@ public class WeaponControllerBase : MonoBehaviour
     protected virtual void HandleBoltActionFire()
     {
         // 1. Sprawdź warunki broni
-        if (isBoltLockedBack || !bolt.IsBoltForward)
+        if (chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f)
         {
             OnDryFire?.Invoke();
             return;
