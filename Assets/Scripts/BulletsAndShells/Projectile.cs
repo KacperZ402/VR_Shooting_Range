@@ -1,27 +1,25 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(Bullet))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Projectile : MonoBehaviour
 {
     private Rigidbody rb;
-    private Bullet bulletData;
-
-    [HideInInspector]
-    public string poolKey; // Klucz do puli (ustawiany przez PoolManager)
+    private BulletPoolManager bulletPool; // Referencja do puli pocisków
 
     [Tooltip("Czas życia pocisku w sekundach (zabezpieczenie)")]
     public float maxLifetime = 10.0f;
 
     private bool isLaunched = false;
+    private float dragCoefficient; // 🔹 ZMIANA: Przechowuje opór nadany przy starcie
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        bulletData = GetComponent<Bullet>();
+        bulletPool = BulletPoolManager.Instance;
 
-        if (bulletData == null)
+        if (bulletPool == null)
         {
-            Debug.LogError("Komponent Projectile nie może znaleźć komponentu Bullet!");
+            Debug.LogError("Projectile nie może znaleźć BulletPoolManager!");
         }
     }
 
@@ -34,8 +32,6 @@ public class Projectile : MonoBehaviour
     void OnDisable()
     {
         CancelInvoke(nameof(ReturnToPool));
-
-        // 🔹 POPRAWKA: Używamy linearVelocity
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
@@ -43,27 +39,23 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// Wystrzeliwuje pocisk. Wywoływane przez WeaponController.
     /// </summary>
-    public void Launch(Vector3 initialVelocity)
+    // 🔹 ZMIANA: Przyjmuje teraz 'drag' z naboju
+    public void Launch(Vector3 initialVelocity, float drag)
     {
-        // 🔹 POPRAWKA: Używamy linearVelocity
         rb.linearVelocity = initialVelocity;
+        this.dragCoefficient = drag; // Zapisuje opór dla tej instancji
         isLaunched = true;
     }
 
     void FixedUpdate()
     {
-        if (!isLaunched) return;
+        if (!isLaunched || rb.linearVelocity == Vector3.zero) return;
 
-        // 🔹 POPRAWKA: Używamy linearVelocity
-        if (rb.linearVelocity != Vector3.zero)
-        {
-            // 🔹 POPRAWKA: Używamy linearVelocity
-            transform.rotation = Quaternion.LookRotation(rb.linearVelocity);
-        }
+        // Obracanie pocisku w kierunku lotu
+        transform.rotation = Quaternion.LookRotation(rb.linearVelocity);
 
-        // 🔹 POPRAWKA: Używamy linearVelocity
-        // Używamy linearVelocity.normalized i linearVelocity.sqrMagnitude
-        Vector3 dragForce = -rb.linearVelocity.normalized * rb.linearVelocity.sqrMagnitude * bulletData.dragCoefficient;
+        // 🔹 ZMIANA: Używa zapisanego 'dragCoefficient'
+        Vector3 dragForce = -rb.linearVelocity.normalized * rb.linearVelocity.sqrMagnitude * this.dragCoefficient;
 
         rb.AddForce(dragForce, ForceMode.Force);
     }
@@ -81,10 +73,13 @@ public class Projectile : MonoBehaviour
     void ReturnToPool()
     {
         isLaunched = false;
-        // Sprawdź, czy Instance jeszcze istnieje (np. przy zamykaniu sceny)
-        if (BulletPoolManager.Instance != null)
+        if (bulletPool != null)
         {
-            BulletPoolManager.Instance.ReturnBullet(this.gameObject, poolKey);
+            bulletPool.ReturnBullet(this.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject); // Wyjście awaryjne
         }
     }
 }

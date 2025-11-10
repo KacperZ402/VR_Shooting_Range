@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Dzia³a jak pude³ko z amunicj¹. Posiada publiczn¹ metodê
 /// 'OpenBox', która po wywo³aniu wyrzuca zawartoœæ z puli
-/// i niszczy pude³ko.
+/// w zorganizowanej siatce i niszczy pude³ko.
 /// </summary>
 public class AmmoBox : MonoBehaviour
 {
@@ -11,11 +11,15 @@ public class AmmoBox : MonoBehaviour
     [Tooltip("Prefab naboju (z komponentem Bullet), który ma zostaæ pobrany z puli.")]
     public GameObject ammoPrefab;
 
-    [Tooltip("Liczba nabojów do pobrania/wyrzucenia.")]
-    public int count = 30;
+    [Header("Ustawienia Siatki (Grid)")]
+    [Tooltip("Liczba kolumn w siatce (Oœ X)")]
+    public int gridColumns = 5;
 
-    [Tooltip("Jak daleko naboje maj¹ zostaæ rozrzucone (promieñ).")]
-    public float spawnRadius = 0.15f;
+    [Tooltip("Liczba rzêdów w siatce (Oœ Y/Z)")]
+    public int gridRows = 2;
+
+    [Tooltip("Odstêp miêdzy nabojami w siatce (w metrach).")]
+    public float gridSpacing = 0.05f; // 5 cm
 
     private AmmoPoolManager ammoPool;
 
@@ -39,7 +43,7 @@ public class AmmoBox : MonoBehaviour
         if (ammoPool == null)
         {
             Debug.LogError("[AmmoBox] Próba otwarcia pude³ka, ale nie znaleziono AmmoPoolManager!", this);
-            Destroy(gameObject); // Zniszcz siebie, bo i tak nie zadzia³a
+            Destroy(gameObject);
             return;
         }
 
@@ -51,38 +55,58 @@ public class AmmoBox : MonoBehaviour
         }
 
         // 1. Wyrzuæ zawartoœæ
-        SpawnRounds();
+        SpawnRoundsInGrid();
 
         // 2. Zniszcz pude³ko
         Destroy(gameObject);
     }
 
     /// <summary>
-    /// Wewnêtrzna logika pobierania i rozrzucania nabojów.
+    /// Wewnêtrzna logika pobierania i uk³adania nabojów w siatce.
     /// </summary>
-    private void SpawnRounds()
+    private void SpawnRoundsInGrid()
     {
-        for (int i = 0; i < count; i++)
+        int totalSpawned = 0;
+        int totalToSpawn = gridColumns * gridRows;
+
+        if (totalToSpawn <= 0) return;
+
+        // --- Obliczanie centrowania siatki ---
+        // Obliczamy ca³kowit¹ szerokoœæ i g³êbokoœæ siatki
+        float gridWidth = (gridColumns - 1) * gridSpacing;
+        float gridDepth = (gridRows - 1) * gridSpacing;
+
+        // Znajdujemy punkt startowy (lewy dolny róg), aby siatka by³a wyœrodkowana
+        // na obiekcie AmmoBox. Dodajemy ma³y offset Y, aby naboje nie kolidowa³y z pod³og¹.
+        Vector3 startOffset = new Vector3(-gridWidth / 2.0f, 0.01f, -gridDepth / 2.0f);
+
+        for (int y = 0; y < gridRows; y++)
         {
-            // A. Pobierz nabój z puli
-            GameObject round = ammoPool.GetRound(ammoPrefab);
-            if (round == null)
+            for (int x = 0; x < gridColumns; x++)
             {
-                Debug.LogWarning($"[AmmoBox] Pula zwróci³a 'null' dla prefabu: {ammoPrefab.name}. Przerywam.", this);
-                return;
-            }
+                // A. Pobierz nabój z puli
+                GameObject round = ammoPool.GetRound(ammoPrefab);
+                if (round == null)
+                {
+                    Debug.LogWarning($"[AmmoBox] Pula zwróci³a 'null'. Spawniono {totalSpawned} z {totalToSpawn} nabojów.", this);
+                    return; // Przerwij, jeœli pula jest pusta
+                }
 
-            // B. Ustaw pozycjê (rozrzucone w ma³ym promieniu)
-            Vector3 randomOffset = Random.insideUnitSphere * spawnRadius;
-            round.transform.position = transform.position + randomOffset;
-            round.transform.rotation = Random.rotation;
+                // B. Oblicz pozycjê lokaln¹ dla tego naboju
+                Vector3 localPos = startOffset + new Vector3(x * gridSpacing, 0, y * gridSpacing);
 
-            // C. (Opcjonalnie) "Kopnij" naboje, jeœli maj¹ Rigidbody
-            Rigidbody rb = round.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.AddForce(Vector3.up * 0.3f + randomOffset * 0.5f, ForceMode.Impulse);
+                // C. Przekszta³æ pozycjê lokaln¹ na œwiatow¹, uwzglêdniaj¹c rotacjê pude³ka
+                Vector3 spawnPosition = transform.position + (transform.rotation * localPos);
+
+                // D. Ustaw pozycjê i rotacjê naboju (taka sama jak pude³ka)
+                round.transform.position = spawnPosition;
+                round.transform.rotation = transform.rotation;
+
+                // Usunêliœmy "wyrzut" fizyczny - naboje po prostu pojawi¹ siê u³o¿one
+                totalSpawned++;
             }
         }
+
+        Debug.Log($"[AmmoBox] Otwarto i wyrzucono {totalSpawned} nabojów typu {ammoPrefab.name} w siatce.", this);
     }
 }

@@ -21,10 +21,8 @@ public class Bullet : MonoBehaviour
     [Tooltip("Ilość pocisków wystrzeliwanych na raz (1 dla kuli, >1 dla śrutu)")]
     public int projectileCount = 1;
 
-    // To pole z Twojego drugiego skryptu. Możemy je zostawić, jeśli planujesz,
-    // że obiekty 'Bullet' będą fizycznie ładowane do magazynka.
-    // Na razie nie jest używane przez system strzelania.
     [Header("Opcjonalne: Ładowanie magazynka")]
     [Tooltip("Ilość amunicji w jednym obiekcie (do ładowania magazynka)")]
     public int amount = 1;
+
 }

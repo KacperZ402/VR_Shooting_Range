@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8313233966495398778}
   m_Layer: 0
   m_Name: 9x19mm
-  m_TagString: Bullet_9
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -278,8 +278,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   caliber: 9x19
-  bulletType: 0
   muzzleEnergy: 500
   mass: 0.008
-  projectileCount: 1
   dragCoefficient: 0.002
+  projectileCount: 1
+  amount: 1

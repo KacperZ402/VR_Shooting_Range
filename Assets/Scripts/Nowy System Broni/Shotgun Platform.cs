@@ -25,7 +25,7 @@ public class ShotgunPlatform : WeaponControllerBase
 
     protected override void Awake()
     {
-        base.Awake(); // To już pobiera 'ammoPool'
+        base.Awake(); // To już pobiera 'ammoPool' i 'bulletPool'
         if (magazine != null)
             magCollider = magazine.GetComponent<Collider>();
 
@@ -37,6 +37,7 @@ public class ShotgunPlatform : WeaponControllerBase
 
     protected override bool FireOnce()
     {
+        // 1. Warunki wstępne (specyficzne dla strzelby)
         if (isBoltLockedBack)
         {
             OnDryFire?.Invoke();
@@ -47,24 +48,59 @@ public class ShotgunPlatform : WeaponControllerBase
             return false;
         }
 
-        if (chamberedRound == null)
+        // 2. 🔹 UPROSZCZENIE: Pobierz dane (funkcja bazowa obsługuje błędy)
+        Bullet ammoData = GetChamberedBulletData();
+        if (ammoData == null)
         {
-            OnDryFire?.Invoke();
-            return false;
+            return false; // Błąd został już obsłużony
         }
 
-        // Strzał!
-        // TODO: Balistyka
+        // 3. Wystrzel pocisk
+        SpawnProjectile(ammoData);
         OnFire?.Invoke();
 
-        // 🔹 ZMIANA: Zwracamy do puli
+        // 4. Zwróć zużytą amunicję do puli
         if (ammoPool != null)
             ammoPool.ReturnRound(chamberedRound);
         else
             Destroy(chamberedRound);
 
         chamberedRound = null;
+
+        // Logika specyficzna dla strzelby: Brak automatycznego przeładowania
         return true;
+    }
+
+    // BoltAction fire
+    protected override void HandleBoltActionFire()
+    {
+        // 1. Warunki wstępne (specyficzne dla strzelby)
+        if (chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f)
+        {
+            OnDryFire?.Invoke();
+            return;
+        }
+
+        // 2. 🔹 UPROSZCZENIE: Pobierz dane (funkcja bazowa obsługuje błędy)
+        Bullet ammoData = GetChamberedBulletData();
+        if (ammoData == null)
+        {
+            return; // Błąd został już obsłużony
+        }
+
+        // 3. Wystrzel pocisk
+        SpawnProjectile(ammoData);
+        OnFire?.Invoke();
+
+        // 4. Zwróć zużytą amunicję do puli
+        if (ammoPool != null)
+            ammoPool.ReturnRound(chamberedRound);
+        else
+            Destroy(chamberedRound);
+
+        chamberedRound = null;
+
+        // Bolt-action nie przeładowuje automatycznie
     }
 
     // Cofnięcie zamka / pompki
@@ -75,7 +111,6 @@ public class ShotgunPlatform : WeaponControllerBase
             OnRoundEjected?.Invoke();
             // TODO: Wyrzucanie łuski
 
-            // 🔹 ZMIANA: Zwracamy do puli
             if (ammoPool != null)
                 ammoPool.ReturnRound(chamberedRound);
             else
@@ -84,7 +119,7 @@ public class ShotgunPlatform : WeaponControllerBase
             chamberedRound = null;
         }
 
-        isBoltLockedBack = true;
+        isBoltLockedBack = true; // Strzelba zawsze się "blokuje" po pociągnięciu pompki
     }
 
     // Zwolnienie zamka (pchnięcie pompki)
@@ -95,7 +130,7 @@ public class ShotgunPlatform : WeaponControllerBase
         OnBoltReleasedEvent?.Invoke();
     }
 
-    // 🔹 ZMIANA: Zaktualizowana logika ładowania
+    // Ta funkcja nadpisuje klasę bazową, aby poprawnie zwracać złe naboje do puli
     public override bool TryChamberFromMagazine()
     {
         if (chamberedRound != null) return true;
@@ -115,7 +150,7 @@ public class ShotgunPlatform : WeaponControllerBase
         {
             Debug.LogError("Pobrany nabój nie ma komponentu 'Bullet'!", this);
 
-            // 🔹 ZMIANA: Zwracamy zepsuty nabój do puli
+            // Zwracamy zepsuty nabój do puli
             if (ammoPool != null)
                 ammoPool.ReturnRound(roundToChamber);
             else
@@ -128,7 +163,7 @@ public class ShotgunPlatform : WeaponControllerBase
         {
             Debug.LogWarning($"Próba załadowania złego kalibru! Broń: {this.caliber}, Nabój: {bulletData.caliber}", this);
 
-            // 🔹 ZMIANA: Zwracamy zły nabój do puli
+            // Zwracamy zły nabój do puli
             if (ammoPool != null)
                 ammoPool.ReturnRound(roundToChamber);
             else
@@ -142,33 +177,11 @@ public class ShotgunPlatform : WeaponControllerBase
         return true;
     }
 
-    // BoltAction fire
-    protected override void HandleBoltActionFire()
-    {
-        if (chamberedRound != null && chargingHandle.transform.localPosition.y <= chargingHandle.minLocalY + 0.001f)
-        {
-            OnFire?.Invoke();
-
-            // 🔹 ZMIANA: Zwracamy do puli
-            if (ammoPool != null)
-                ammoPool.ReturnRound(chamberedRound);
-            else
-                Destroy(chamberedRound);
-
-            chamberedRound = null;
-        }
-        else
-        {
-            OnDryFire?.Invoke();
-        }
-    }
-
     // Logika Update pozostaje BEZ ZMIAN
     protected override void Update()
     {
         if (weaponGrab == null || !weaponGrab.IsGripHeld)
         {
-            // 🔹 DODANA OPTYMALIZACJA: Sprzątanie collidera po upuszczeniu broni
             if (magCollider != null && lastEnabledState == true)
             {
                 magCollider.enabled = false;

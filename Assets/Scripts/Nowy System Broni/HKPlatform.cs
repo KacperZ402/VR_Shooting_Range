@@ -3,33 +3,41 @@
 /// <summary>
 /// Platforma HK: Automatycznie ładuje kolejny nabój.
 /// Zamek nigdy nie blokuje się automatycznie.
-/// Wersja zaktualizowana do systemu AmmoPoolManager.
+/// Wersja zrefaktoryzowana (używa GetChamberedBulletData).
 /// </summary>
 public class HKPlatform : WeaponControllerBase
 {
     // Awake() jest dziedziczone z WeaponControllerBase,
-    // więc automatycznie pobiera referencję 'ammoPool'.
+    // więc automatycznie pobiera 'ammoPool' i 'bulletPool'.
 
     protected override bool FireOnce()
     {
-        if (!bolt.IsBoltForward || chamberedRound == null)
+        // 1. Warunki wstępne
+        if (isBoltLockedBack || !bolt.IsBoltForward)
         {
             OnDryFire?.Invoke();
             return false;
         }
 
-        // TODO: Tutaj w przyszłości będzie logika balistyki
+        // 2. 🔹 UPROSZCZENIE: Pobierz dane (funkcja bazowa obsługuje błędy)
+        Bullet ammoData = GetChamberedBulletData();
+        if (ammoData == null)
+        {
+            return false; // Błąd został już obsłużony
+        }
+
+        // 3. Wystrzel pocisk
+        SpawnProjectile(ammoData);
         OnFire?.Invoke();
 
-        // 🔹 ZMIANA: Zamiast niszczyć, zwracamy nabój do puli
+        // 4. Zwróć zużytą amunicję do puli
         if (ammoPool != null)
             ammoPool.ReturnRound(chamberedRound);
         else
-            Destroy(chamberedRound); // Wyjście awaryjne
+            Destroy(chamberedRound);
 
         chamberedRound = null;
-
-        // Automatycznie ładuj następny (bez zmian)
+        // 5. Logika specyficzna dla HK: Automatyczne przeładowanie
         TryChamberFromMagazine();
 
         return true;

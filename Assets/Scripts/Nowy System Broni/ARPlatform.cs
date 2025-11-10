@@ -3,30 +3,39 @@
 /// <summary>
 /// Platforma AR: zamek blokuje się po pustym magazynku,
 /// automatycznie chamberuje po strzale.
-/// Wersja zaktualizowana do systemu AmmoPoolManager.
+/// Wersja zrefaktoryzowana (używa SpawnProjectile).
 /// </summary>
 public class ARPlatform : WeaponControllerBase
 {
     protected override bool FireOnce()
     {
-        if (!bolt.IsBoltForward || chamberedRound == null)
+        // 1. Warunki wstępne
+        if (isBoltLockedBack || !bolt.IsBoltForward)
         {
             OnDryFire?.Invoke();
             return false;
         }
 
-        // TODO: Tutaj w przyszłości będzie logika balistyki
+        // 2. Pobierz dane (funkcja bazowa obsługuje błędy)
+        Bullet ammoData = GetChamberedBulletData();
+        if (ammoData == null)
+        {
+            return false;
+        }
+
+        // 3. Wystrzel pocisk
+        SpawnProjectile(ammoData);
         OnFire?.Invoke();
 
-        // 🔹 ZMIANA: Zamiast niszczyć, zwracamy nabój do puli
+        // 4. Zwróć zużytą amunicję do puli
         if (ammoPool != null)
             ammoPool.ReturnRound(chamberedRound);
         else
-            Destroy(chamberedRound); // Wyjście awaryjne
+            Destroy(chamberedRound);
 
         chamberedRound = null;
 
-        // --- Logika blokady zamka (bez zmian) ---
+        // 5. Logika specyficzna dla AR: Blokada zamka
         bool didChamber = TryChamberFromMagazine();
         bool magExists = (ammoSocket != null && ammoSocket.currentMagazine != null);
         bool magIsEmpty = magExists && ammoSocket.currentMagazine.currentRounds == 0;
@@ -40,23 +49,21 @@ public class ARPlatform : WeaponControllerBase
         return true;
     }
 
+    // OnBoltPulled dziedziczy poprawną logikę z WeaponControllerBase
+    // Ale jeśli chcesz zachować swoją specyficzną logikę blokowania zamka:
     public override void OnBoltPulled()
     {
         if (chamberedRound != null)
         {
-            // TODO: Tutaj w przyszłości będzie wyrzucanie łuski
             OnRoundEjected?.Invoke();
-
-            // 🔹 ZMIANA: Zamiast niszczyć, zwracamy nabój do puli
             if (ammoPool != null)
                 ammoPool.ReturnRound(chamberedRound);
             else
-                Destroy(chamberedRound); // Wyjście awaryjne
-
+                Destroy(chamberedRound);
             chamberedRound = null;
         }
 
-        // --- Logika blokady zamka (bez zmian) ---
+        // Logika blokady zamka (Twoja z poprzedniej wersji)
         bool didChamber = TryChamberFromMagazine();
         bool magExists = (ammoSocket != null && ammoSocket.currentMagazine != null);
         bool magIsEmpty = magExists && ammoSocket.currentMagazine.currentRounds == 0;

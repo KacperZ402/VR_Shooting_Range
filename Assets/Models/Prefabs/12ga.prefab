@@ -279,4 +279,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   caliber: 12x76
+  muzzleEnergy: 1750
+  mass: 0.004
+  dragCoefficient: 0.0005
+  projectileCount: 8
   amount: 1

@@ -1,46 +1,46 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Platforma Pistoletu. Oryginalna logika zachowana.
-/// Wersja zaktualizowana do systemu AmmoPoolManager.
+/// Platforma Pistoletu. Używa SpawnProjectile.
+/// Zachowuje oryginalną logikę (brak auto-chamber).
 /// </summary>
 public class PistolPlatform : WeaponControllerBase
 {
     protected override void Awake()
     {
-        base.Awake(); // To już pobiera 'ammoPool'
-
-        // Pistolety nie mają bolta, tylko charging handle
-        bolt = null;
+        base.Awake();
+        bolt = null; // Pistolety używają 'chargingHandle' jako zamka
     }
 
     protected override bool FireOnce()
     {
-        // Jeśli handle nie w spoczynku — blokujemy strzał
+        // 1. Warunki wstępne (specyficzne dla pistoletu)
         if (chargingHandle != null &&
             chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f)
         {
             return false;
         }
 
-        if (chamberedRound == null)
+        // 2. Pobierz dane (funkcja bazowa obsługuje błędy)
+        Bullet ammoData = GetChamberedBulletData();
+        if (ammoData == null)
         {
-            OnDryFire?.Invoke();
             return false;
         }
 
-        // Strzał
+        // 3. Wystrzel pocisk
+        SpawnProjectile(ammoData);
         OnFire?.Invoke();
 
-        // 🔹 ZMIANA: Zamiast niszczyć, zwracamy nabój do puli
+        // 4. Zwróć zużytą amunicję do puli
         if (ammoPool != null)
             ammoPool.ReturnRound(chamberedRound);
         else
-            Destroy(chamberedRound); // Wyjście awaryjne
+            Destroy(chamberedRound);
 
         chamberedRound = null;
 
-        // Twoja oryginalna logika nie miała tutaj automatycznego przeładowania
+        // Logika specyficzna dla pistoletu: Brak automatycznego przeładowania
         return true;
     }
 
@@ -48,17 +48,15 @@ public class PistolPlatform : WeaponControllerBase
     {
         if (chamberedRound != null)
         {
-            // 🔹 ZMIANA: Zwracamy nabój do puli (jako niewystrzelony)
             if (ammoPool != null)
                 ammoPool.ReturnRound(chamberedRound);
             else
-                Destroy(chamberedRound); // Wyjście awaryjne
-
+                Destroy(chamberedRound);
             chamberedRound = null;
             OnRoundEjected?.Invoke();
         }
 
-        // Jeśli mag pusty, ustaw stan blokady (logika bez zmian)
+        // Logika blokady zamka (Twoja z poprzedniej wersji)
         if (ammoSocket != null && ammoSocket.currentMagazine != null &&
             ammoSocket.currentMagazine.currentRounds == 0)
         {
@@ -69,20 +67,15 @@ public class PistolPlatform : WeaponControllerBase
 
     public override void ReleaseBoltAction(bool force = false)
     {
-        // Ta logika jest już w 100% kompatybilna,
-        // ponieważ opiera się na TryChamberFromMagazine() z klasy bazowej.
-
         if (TryChamberFromMagazine())
         {
             isBoltLockedBack = false;
         }
         else
         {
-            // Pozostaje zablokowany, jeśli TryChamberFromMagazine się nie powiodło
             isBoltLockedBack = true;
             OnBoltLockedBack?.Invoke();
         }
-
         OnBoltReleasedEvent?.Invoke();
     }
 }

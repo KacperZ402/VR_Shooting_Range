@@ -2,13 +2,13 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// Zarz¹dza pul¹ obiektów pocisków (Singleton).
+/// Zarz¹dza pul¹ obiektów POCISKÓW (tych, które lataj¹),
+/// aby unikn¹æ kosztownego Instantiate/Destroy przy strzale.
 /// </summary>
 public class BulletPoolManager : MonoBehaviour
 {
     public static BulletPoolManager Instance { get; private set; }
 
-    // S³ownik przechowuj¹cy pule (Klucz = nazwa prefabu, Wartoœæ = Kolejka pocisków)
     private Dictionary<string, Queue<GameObject>> pools = new Dictionary<string, Queue<GameObject>>();
     private Transform poolParent;
 
@@ -21,9 +21,34 @@ public class BulletPoolManager : MonoBehaviour
         else
         {
             Instance = this;
-            poolParent = new GameObject("BulletPool").transform;
+            poolParent = new GameObject("BulletPool").transform; // Inna nazwa dla porz¹dku
             poolParent.SetParent(this.transform);
         }
+    }
+
+    /// <summary>
+    /// Zwraca pocisk do puli.
+    /// </summary>
+    public void ReturnBullet(GameObject bulletInstance)
+    {
+        // "Czyœcimy" nazwê, aby znaleŸæ klucz prefabu
+        string dirtyName = bulletInstance.name;
+        string key = dirtyName.Split('(')[0].Trim();
+
+        if (string.IsNullOrEmpty(key))
+        {
+            Destroy(bulletInstance);
+            return;
+        }
+
+        if (!pools.ContainsKey(key))
+        {
+            pools[key] = new Queue<GameObject>();
+        }
+
+        bulletInstance.SetActive(false);
+        bulletInstance.transform.SetParent(poolParent);
+        pools[key].Enqueue(bulletInstance);
     }
 
     /// <summary>
@@ -38,45 +63,14 @@ public class BulletPoolManager : MonoBehaviour
         {
             bulletInstance = pools[key].Dequeue();
             bulletInstance.transform.SetParent(null);
-            bulletInstance.SetActive(true);
         }
         else
         {
             bulletInstance = Instantiate(bulletPrefab);
-
-            Projectile p = bulletInstance.GetComponent<Projectile>();
-            if (p != null)
-            {
-                p.poolKey = key; // Zapisz klucz, aby wiedzia³ dok¹d wróciæ
-            }
-            else
-            {
-                Debug.LogError($"Prefab pocisku '{key}' nie posiada komponentu Projectile!");
-            }
+            // Nie musimy siê martwiæ nazw¹ (1), bo ReturnBullet j¹ czyœci
         }
 
+        bulletInstance.SetActive(true);
         return bulletInstance;
-    }
-
-    /// <summary>
-    /// Zwraca pocisk do puli.
-    /// </summary>
-    public void ReturnBullet(GameObject bulletInstance, string poolKey)
-    {
-        if (string.IsNullOrEmpty(poolKey))
-        {
-            Debug.LogError("Próbowano zwróciæ pocisk bez klucza puli!", bulletInstance);
-            Destroy(bulletInstance);
-            return;
-        }
-
-        if (!pools.ContainsKey(poolKey))
-        {
-            pools[poolKey] = new Queue<GameObject>();
-        }
-
-        bulletInstance.SetActive(false);
-        bulletInstance.transform.SetParent(poolParent);
-        pools[poolKey].Enqueue(bulletInstance);
     }
 }

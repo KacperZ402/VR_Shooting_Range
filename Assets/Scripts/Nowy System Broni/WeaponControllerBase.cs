@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 [RequireComponent(typeof(XRGrabInteractable))]
@@ -17,22 +16,21 @@ public class WeaponControllerBase : MonoBehaviour
     public string caliber = "5.56x45";
 
     [Header("Stan broni")]
-
-    // 🔹 ZMIANA: Przechowujemy instancję naboju, nie prefab
-    [Tooltip("Instancja naboju aktualnie w komorze")]
     public GameObject chamberedRound;
-
     public bool isBoltLockedBack = false;
     public FireMode currentFireMode = FireMode.Safe;
 
     [Header("Parametry trybów ognia")]
-    // ... (reszta pól bez zmian) ...
     public int burstCount = 3;
     public float fireRate = 0.1f;
     public float burstDelay = 0.08f;
 
+    [Header("Balistyka")]
+    public Transform muzzleTransform;
+    public float velocityMultiplier = 1.0f;
+    public GameObject universalProjectilePrefab;
+
     [Header("Eventy")]
-    // ... (eventy bez zmian) ...
     public UnityEvent OnFire;
     public UnityEvent OnDryFire;
     public UnityEvent OnRoundChambered;
@@ -45,14 +43,16 @@ public class WeaponControllerBase : MonoBehaviour
     protected int burstShotsRemaining = 0;
 
     protected AmmoPoolManager ammoPool;
+    protected BulletPoolManager bulletPool;
 
     protected virtual void Awake()
     {
-        ammoPool = AmmoPoolManager.Instance; // Pobierz Singleton
-        if (ammoPool == null)
-        {
-            Debug.LogError("AmmoPoolManager nie znaleziony! Broń nie będzie zwracać nabojów do puli.", this);
-        }
+        // Pobieramy oba menedżery
+        ammoPool = AmmoPoolManager.Instance;
+        bulletPool = BulletPoolManager.Instance;
+
+        if (ammoPool == null) Debug.LogError("Nie znaleziono AmmoPoolManager!", this);
+        if (bulletPool == null) Debug.LogError("Nie znaleziono BulletPoolManager!", this);
 
         if (fireSelector != null)
             fireSelector.weaponController = this;
@@ -73,12 +73,9 @@ public class WeaponControllerBase : MonoBehaviour
         HandleAutoFire();
     }
 
-    // -------------------------- STRZAŁ (logika inputu - bez zmian) --------------------------
-
     public virtual void FireInput(bool pressed)
     {
         if (weaponGrab != null && !weaponGrab.IsGripHeld) return;
-        // ... (reszta logiki inputu bez zmian) ...
         switch (currentFireMode)
         {
             case FireMode.Safe:
@@ -105,7 +102,6 @@ public class WeaponControllerBase : MonoBehaviour
     {
         if (currentFireMode != FireMode.Burst) return;
         if (burstShotsRemaining <= 0) return;
-
         if (Time.time - lastFireTime >= burstDelay)
         {
             if (FireOnce())
@@ -124,7 +120,6 @@ public class WeaponControllerBase : MonoBehaviour
     {
         if (currentFireMode != FireMode.Auto) return;
         if (!triggerPressed) return;
-
         if (Time.time >= lastFireTime + fireRate)
         {
             if (FireOnce())
@@ -132,66 +127,141 @@ public class WeaponControllerBase : MonoBehaviour
         }
     }
 
+    // -------------------------- FUNKCJA BALISTYKI --------------------------
 
-    // -------------------------- 🔹 LOGIKA STRZAŁU (ZMIENIONA) --------------------------
-
-    protected virtual bool FireOnce()
+    /// <summary>
+    /// Główna logika balistyczna. Pobiera dane z naboju, oblicza trajektorię
+    /// i wystrzeliwuje pocisk(i) z puli.
+    /// </summary>
+    /// <param name="ammoData">Komponent 'Bullet' z instancji naboju w komorze.</param>
+    protected virtual void SpawnProjectile(Bullet ammoData)
     {
-        if (isBoltLockedBack || chamberedRound == null || !bolt.IsBoltForward)
+        // 1. Sprawdź, czy mamy czym strzelać
+        if (universalProjectilePrefab == null)
         {
-            OnDryFire?.Invoke();
-            return false;
+            Debug.LogError("Brak 'universalProjectilePrefab' na broni!", this);
+            return;
         }
 
-        // TODO: BALISTYKA
-        // Tutaj odczytujemy dane z 'chamberedRound.GetComponent<Bullet>()'
+        // 2. Oblicz prędkość wylotową
+        float muzzleVelocity = Mathf.Sqrt((2f * ammoData.muzzleEnergy) / ammoData.mass) * velocityMultiplier;
+        float drag = ammoData.dragCoefficient;
+        int count = ammoData.projectileCount; // Dla śrutu
 
-        OnFire?.Invoke();
+        // 3. Wystrzel wymaganą liczbę pocisków
+        for (int i = 0; i < count; i++)
+        {
+            // 4. Pobierz instancję POCISKU z puli pocisków
+            GameObject projectileInstance = bulletPool.GetBullet(universalProjectilePrefab);
 
-        // 🔹 ZMIANA: Zamiast Destroy(), zwracamy do puli
-        if (ammoPool != null)
-            ammoPool.ReturnRound(chamberedRound);
-        else
-            Destroy(chamberedRound); // Wyjście awaryjne, jeśli pula nie działa
+            projectileInstance.transform.position = muzzleTransform.position;
+            projectileInstance.transform.rotation = muzzleTransform.rotation;
 
-        chamberedRound = null;
-
-        TryChamberFromMagazine();
-        return true;
+            Projectile projectileLogic = projectileInstance.GetComponent<Projectile>();
+            if (projectileLogic != null)
+            {
+                projectileLogic.Launch(projectileInstance.transform.forward * muzzleVelocity, drag);
+            }
+        }
     }
 
-    protected virtual void HandleBoltActionFire()
+    protected virtual Bullet GetChamberedBulletData()
     {
-        if (chamberedRound != null && bolt.IsBoltForward)
+        if (chamberedRound == null)
         {
-            OnFire?.Invoke();
+            OnDryFire?.Invoke(); // Pusta komora
+            return null;
+        }
 
-            // 🔹 ZMIANA: Zamiast Destroy(), zwracamy do puli
+        Bullet ammoData = chamberedRound.GetComponent<Bullet>();
+        if (ammoData == null)
+        {
+            // Krytyczny błąd - obiekt w komorze nie ma danych
+            Debug.LogError("Nabój w komorze nie ma komponentu Bullet!", this);
+
+            // Zwróć zły obiekt do puli, żeby posprzątać
             if (ammoPool != null)
                 ammoPool.ReturnRound(chamberedRound);
             else
                 Destroy(chamberedRound);
 
             chamberedRound = null;
+            OnDryFire?.Invoke();
+            return null;
         }
-        else
+
+        return ammoData;
+    }
+    protected virtual bool FireOnce()
+    {
+        // 1. Sprawdź warunki broni (np. zamek)
+        if (isBoltLockedBack || !bolt.IsBoltForward)
         {
             OnDryFire?.Invoke();
+            return false;
         }
+
+        // 2. 🔹 UPROSZCZENIE: Pobierz dane (funkcja sama obsłuży błędy i OnDryFire)
+        Bullet ammoData = GetChamberedBulletData();
+        if (ammoData == null)
+        {
+            return false; // Błąd został już obsłużony w GetChamberedBulletData
+        }
+
+        // 3. Wystrzel
+        SpawnProjectile(ammoData);
+        OnFire?.Invoke();
+
+        // 4. Zwróć zużytą amunicję
+        if (ammoPool != null)
+            ammoPool.ReturnRound(chamberedRound);
+        else
+            Destroy(chamberedRound);
+
+        chamberedRound = null;
+
+        // 5. Przeładuj (dla semi-auto)
+        TryChamberFromMagazine();
+        return true;
     }
 
-    // -------------------------- 🔹 ZAMEK (ZMIENIONY) --------------------------
+    protected virtual void HandleBoltActionFire()
+    {
+        // 1. Sprawdź warunki broni
+        if (isBoltLockedBack || !bolt.IsBoltForward)
+        {
+            OnDryFire?.Invoke();
+            return;
+        }
+
+        // 2. 🔹 UPROSZCZENIE: Pobierz dane
+        Bullet ammoData = GetChamberedBulletData();
+        if (ammoData == null)
+        {
+            return; // Błąd obsłużony
+        }
+
+        // 3. Wystrzel
+        SpawnProjectile(ammoData);
+        OnFire?.Invoke();
+
+        // 4. Zwróć zużytą amunicję
+        if (ammoPool != null)
+            ammoPool.ReturnRound(chamberedRound);
+        else
+            Destroy(chamberedRound);
+
+        chamberedRound = null;
+    }
+
+    // -------------------------- ZAMEK (BEZ ZMIAN) --------------------------
 
     public virtual void OnBoltPulled()
     {
         if (chamberedRound != null)
         {
-            // TODO: WYRZUCANIE ŁUSKI
-            // W przyszłości 'ReturnRound' zamienimy na 'EjectCasing(chamberedRound)'
-
             OnRoundEjected?.Invoke();
 
-            // 🔹 ZMIANA: Zamiast Destroy(), zwracamy do puli (jako niewystrzelony nabój)
             if (ammoPool != null)
                 ammoPool.ReturnRound(chamberedRound);
             else
@@ -210,49 +280,41 @@ public class WeaponControllerBase : MonoBehaviour
         OnBoltReleasedEvent?.Invoke();
     }
 
-    // 🔹 ZMIANA: Logika ładowania komory
     public virtual bool TryChamberFromMagazine()
     {
-        // Jeśli komora jest już pełna, nie rób nic
         if (chamberedRound != null) return true;
 
         if (ammoSocket == null)
             return false;
 
-        // 🔹 ZMIANA: Pobieramy INSTANCJĘ naboju z gniazda
         GameObject roundToChamber = ammoSocket.TryTakeRound();
 
         if (roundToChamber == null)
         {
             Debug.Log("Magazynek Jest pusty, podczas próby załadowania naboju");
-            return false; // Pusty magazynek
+            return false;
         }
 
-        // Sprawdzamy kaliber pobranej INSTANCJI
         Bullet bulletData = roundToChamber.GetComponent<Bullet>();
         if (bulletData == null)
         {
             Debug.LogError("Pobrany nabój (instancja) nie ma komponentu 'Bullet'!", this);
-            Destroy(roundToChamber); // Zniszcz zły obiekt
+            Destroy(roundToChamber);
             return false;
         }
 
         if (bulletData.caliber != this.caliber)
         {
             Debug.LogWarning($"Próba załadowania złego kalibru! Broń: {this.caliber}, Nabój: {bulletData.caliber}", this);
-            // TODO: Co zrobić ze złym nabojem? Na razie go niszczymy.
             Destroy(roundToChamber);
             return false;
         }
-        chamberedRound = roundToChamber;
-        // Na razie instancja pozostaje nieaktywna, 'w pamięci'.
-        // Zostanie aktywowana przy strzale/wyrzucie.
 
+        chamberedRound = roundToChamber;
         OnRoundChambered?.Invoke();
         return true;
     }
 
-    // Bez zmian
     public virtual bool CanReleaseBolt()
     {
         bool magExists = ammoSocket != null && ammoSocket.currentMagazine != null;

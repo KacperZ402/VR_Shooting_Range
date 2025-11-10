@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6980852160269677474}
   m_Layer: 0
   m_Name: 7.62x39mm
-  m_TagString: Bullet_762
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
