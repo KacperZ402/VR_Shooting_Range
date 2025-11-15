@@ -3,26 +3,36 @@
 public class Bullet : MonoBehaviour
 {
     [Header("Informacje Główne")]
-    [Tooltip("Kaliber naboju, np. 9mm, 5.56, .45ACP. Używane do sprawdzania magazynka.")]
     public string caliber = "5.56x45";
+    public GameObject casingPrefab;
 
     [Header("Parametry Balistyczne (Dane Fabryczne)")]
-    [Tooltip("Bazowa energia wylotowa pocisku w Dżulach (J).")]
     public float muzzleEnergy = 1750f;
-
-    [Tooltip("Masa samego pocisku (nie całego naboju) w kilogramach (kg).")]
-    public float mass = 0.004f; // 4 gramy dla 5.56
-
-    [Tooltip("Współczynnik oporu (Cd * A * rho / 2). " +
-             "Większa wartość = większy opór. Dla pocisku pistoletowego ok. 0.002, dla karabinowego ok. 0.0005")]
+    public float mass = 0.004f;
     public float dragCoefficient = 0.0005f;
 
     [Header("Typ Amunicji")]
-    [Tooltip("Ilość pocisków wystrzeliwanych na raz (1 dla kuli, >1 dla śrutu)")]
     public int projectileCount = 1;
 
+    // 🔹 🔹 🔹 SEKCJA DLA RYKOSZETÓW 🔹 🔹 🔹
+    [Header("Balistyka Terminalna (Rykoszet)")]
+
+    [Tooltip("Minimalny kąt uderzenia (mierzony od normalnej), aby doszło do rykoszetu. 0=czołowo, 90=ślizg. Dobre wartości to 60-75.")]
+    [Range(0, 90)]
+    public float ricochetAngle = 70f;
+
+    [Tooltip("Maksymalna liczba rykoszetów, zanim pocisk się zatrzyma.")]
+    public int maxRicochets = 1;
+
+    [Tooltip("Dynamiczna 'sprężystość' pocisku (0-1). Jak dużo energii odzyska przy odbiciu. Niskie wartości (0.1-0.3) są realistyczne.")]
+    [Range(0, 1)]
+    public float ricochetBounciness = 0.2f;
+
+    [Tooltip("Dynamiczne 'tarcie' pocisku (0-1). Jak bardzo zwolni przy ślizgu.")]
+    [Range(0, 1)]
+    public float ricochetFriction = 0.3f;
+
     [Header("Opcjonalne: Ładowanie magazynka")]
-    [Tooltip("Ilość amunicji w jednym obiekcie (do ładowania magazynka)")]
     public int amount = 1;
 
 }

@@ -278,6 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   caliber: 5.56x45
+  casingPrefab: {fileID: 1810596719827917129, guid: 2e00dec2ed078fd47b97066ad961dc48, type: 3}
   muzzleEnergy: 1650
   mass: 0.006
   dragCoefficient: 0.001

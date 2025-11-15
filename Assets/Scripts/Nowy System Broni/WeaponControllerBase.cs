@@ -143,10 +143,18 @@ public class WeaponControllerBase : MonoBehaviour
             return;
         }
 
-        // 2. Oblicz prędkość wylotową
+        // 2. Oblicz prędkość wylotową i pobierz dane
         float muzzleVelocity = Mathf.Sqrt((2f * ammoData.muzzleEnergy) / ammoData.mass) * velocityMultiplier;
         float drag = ammoData.dragCoefficient;
         int count = ammoData.projectileCount; // Dla śrutu
+
+        // 🔹 NOWOŚĆ: Pobierz dane do rykoszetu z amunicji
+        // (Zakładam, że dodałeś te pola do klasy 'Bullet')
+        float ammoRicochetAngle = ammoData.ricochetAngle;
+        int ammoMaxRicochets = ammoData.maxRicochets;
+        float ammoBounciness = ammoData.ricochetBounciness;
+        float ammoFriction = ammoData.ricochetFriction;
+
 
         // 3. Wystrzel wymaganą liczbę pocisków
         for (int i = 0; i < count; i++)
@@ -157,10 +165,22 @@ public class WeaponControllerBase : MonoBehaviour
             projectileInstance.transform.position = muzzleTransform.position;
             projectileInstance.transform.rotation = muzzleTransform.rotation;
 
+            // --- (Opcjonalny TODO: Jeśli count > 1, dodaj tutaj logikę rozrzutu, 
+            // ---  np. lekko modyfikując projectileInstance.transform.rotation 
+            // ---  lub wektor 'projectileInstance.transform.forward' przed przekazaniem) ---
+
             Projectile projectileLogic = projectileInstance.GetComponent<Projectile>();
             if (projectileLogic != null)
             {
-                projectileLogic.Launch(projectileInstance.transform.forward * muzzleVelocity, drag);
+                // 🔹 ZMIANA: Wywołaj nową, rozszerzoną funkcję Launch
+                projectileLogic.Launch(
+                    projectileInstance.transform.forward * muzzleVelocity,
+                    drag,
+                    ammoRicochetAngle,
+                    ammoMaxRicochets,
+                    ammoBounciness,
+                    ammoFriction
+                );
             }
         }
     }

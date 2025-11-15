@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3423613631550247122}
   - component: {fileID: 1902969524602334936}
   - component: {fileID: 278184106231544221}
-  - component: {fileID: 8840795030832694047}
+  - component: {fileID: 3240775597132056544}
   m_Layer: 6
   m_Name: 5.56x45mm_Shell
   m_TagString: Casing_556
@@ -137,7 +137,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8840795030832694047
+--- !u!114 &3240775597132056544
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,10 +146,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1810596719827917129}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8fdb9242ee96bb4c9c91874651bb40e, type: 3}
+  m_Script: {fileID: 11500000, guid: cc4594538c52ea94b9ff77e7d5b8c375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolTag: Casing_556
-  lifeTime: 4
-  ejectionForce: {x: 1.5, y: 0.5, z: 0}
-  torqueAmount: 5

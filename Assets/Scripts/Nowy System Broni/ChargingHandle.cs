@@ -103,8 +103,10 @@ public class ChargingHandle : MonoBehaviour
     // Zmieniono na 'virtual', aby klasa pochodna mogła ją nadpisać
     protected virtual void LateUpdate()
     {
-        // 'isAnimating' zostało usunięte
-
+        if (weaponControllerBase.weaponGrab == null || !weaponControllerBase.weaponGrab.IsGripHeld)
+        {
+            return;
+        }
         if (isLocked)
         {
             transform.localPosition = new Vector3(localX, maxLocalY, localZ);

@@ -97,7 +97,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3102821641765768627}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 151da38b97e1086408ef80d93b3800af, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -124,6 +124,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLifetime: 10
+  showDebugImpact: 1
+  showDebugTrajectory: 1
+  debugImpactLifetime: 5
+  debugImpactSize: 0.05
 --- !u!54 &5289195860029696166
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -159,7 +163,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3102821641765768627}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
