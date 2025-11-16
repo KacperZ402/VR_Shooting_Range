@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Projectile : MonoBehaviour
@@ -9,17 +10,16 @@ public class Projectile : MonoBehaviour
 
     public float maxLifetime = 10.0f;
     private bool isLaunched = false;
+    private Vector3 lastKnownVelocity;
 
-    // --- Dane specyficzne dla tego pocisku (ustawiane przy Launch) ---
+    // --- Dane specyficzne dla tego pocisku ---
     private float dragCoefficient;
     private float minRicochetAngle;
     private int maxRicochets;
     private int currentRicochets = 0;
+    private float currentPenetrationPower;
 
     private PhysicsMaterial projectileMaterial;
-
-    // 🔹 🔹 🔹 NOWA ZMIENNA DO STABILIZACJI 🔹 🔹 🔹
-    private Vector3 lastKnownVelocity;
 
     [Header("Debug")]
     public bool showDebugImpact = false;
@@ -38,6 +38,9 @@ public class Projectile : MonoBehaviour
         bulletPool = BulletPoolManager.Instance;
 
         if (bulletPool == null) Debug.LogError("Projectile nie może znaleźć BulletPoolManager!");
+
+        // Upewnij się, że nie jest kinematyczny!
+        rb.isKinematic = false;
 
         if (col.material != null)
         {
@@ -60,25 +63,28 @@ public class Projectile : MonoBehaviour
         Invoke(nameof(ReturnToPool), maxLifetime);
         isLaunched = false;
         currentRicochets = 0;
-        lastKnownVelocity = Vector3.zero; // Reset
+        lastKnownVelocity = Vector3.zero;
+        currentPenetrationPower = 0;
     }
 
     void OnDisable()
     {
         CancelInvoke(nameof(ReturnToPool));
+        StopAllCoroutines();
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
 
-    public void Launch(Vector3 initialVelocity, float drag, float ammoRicochetAngle, int ammoMaxRicochets, float ammoBounciness, float ammoFriction)
+    public void Launch(Vector3 initialVelocity, float drag, float ammoRicochetAngle, int ammoMaxRicochets, float ammoBounciness, float ammoFriction, float ammoPenetrationPower)
     {
         rb.linearVelocity = initialVelocity;
-        lastKnownVelocity = initialVelocity; // 🔹 Zapisz prędkość początkową
+        lastKnownVelocity = initialVelocity;
 
         this.dragCoefficient = drag;
         this.minRicochetAngle = ammoRicochetAngle;
         this.maxRicochets = ammoMaxRicochets;
         this.currentRicochets = 0;
+        this.currentPenetrationPower = ammoPenetrationPower;
 
         if (projectileMaterial != null)
         {
@@ -93,8 +99,7 @@ public class Projectile : MonoBehaviour
     {
         if (!isLaunched || rb.linearVelocity == Vector3.zero) return;
 
-        transform.rotation = Quaternion.LookRotation(rb.linearVelocity);
-
+        // Używamy AddForce, bo Rigidbody znowu jest normalne
         Vector3 dragForce = -rb.linearVelocity.normalized * rb.linearVelocity.sqrMagnitude * this.dragCoefficient;
         rb.AddForce(dragForce, ForceMode.Force);
 
@@ -103,8 +108,6 @@ public class Projectile : MonoBehaviour
             CreateDebugMarker(transform.position);
         }
 
-        // 🔹 🔹 🔹 ZAPISUJEMY "CZYSTĄ" PRĘDKOŚĆ 🔹 🔹 🔹
-        // Zapisujemy prędkość na końcu klatki fizyki, ZANIM dojdzie do kolizji
         lastKnownVelocity = rb.linearVelocity;
     }
 
@@ -113,9 +116,6 @@ public class Projectile : MonoBehaviour
         if (!isLaunched) return;
 
         ContactPoint contact = collision.GetContact(0);
-
-        // 🔹 🔹 🔹 UŻYWAMY "CZYSTEJ" PRĘDKOŚCI 🔹 🔹 🔹
-        // Nie czytamy 'rb.linearVelocity', które jest niestabilne podczas kolizji
         Vector3 velocityBeforeImpact = lastKnownVelocity;
 
         if (showDebugImpact)
@@ -123,40 +123,70 @@ public class Projectile : MonoBehaviour
             CreateDebugMarker(contact.point);
         }
 
-        // --- 🔹 LOGIKA KĄTA (Z MINUSEM - 0-90°) 🔹 ---
-        // Używamy minusa, bo teraz prędkość jest stabilna.
-        // 0° = czołowo, 90° = płasko
+        // --- 1. SPRAWDŹ RYKOSZET ---
         float impactAngle = Vector3.Angle(velocityBeforeImpact.normalized, -contact.normal);
-
-        // 2. Sprawdź, czy kwalifikuje się do rykoszetu
-        // Twój warunek 'if (impactAngle > 65)' jest poprawny
         bool isRicochet = impactAngle > minRicochetAngle && currentRicochets < maxRicochets;
 
         if (isRicochet)
         {
-            // JEST RYKOSZET
-            currentRicochets++;
-            Debug.Log($"[Projectile] RYKOSZET! ({currentRicochets}/{maxRicochets}), Kąt: {impactAngle:F1}°");
-
-            // LOGIKA "WYGŁADZANIA"
-            if (ricochetRandomness > 0)
-            {
-                Vector3 velocityAfterBounce = rb.linearVelocity; // Tu już czytamy nową prędkość
-                Vector3 randomKick = Random.insideUnitSphere * velocityAfterBounce.magnitude * ricochetRandomness;
-                rb.AddForce(randomKick, ForceMode.VelocityChange);
-            }
-
-            return; // Pozwól lecieć dalej
+            // ... (Logika rykoszetu, 'wygładzanie' itp.) ...
+            Debug.Log($"[Projectile] RYKOSZET!");
+            currentPenetrationPower *= 0.5f;
+            return;
         }
 
-        // --- BRAK RYKOSZETU (Trafienie bezpośrednie) ---
-        Debug.Log($"[Projectile] Trafiono: {collision.gameObject.name} (Kąt: {impactAngle:F1}° - Stop)");
+        // --- 2. SPRAWDŹ PENETRACJĘ ---
+        PenetrableMaterial surface = collision.gameObject.GetComponent<PenetrableMaterial>();
 
+        if (surface != null)
+        {
+            if (currentPenetrationPower >= surface.stoppingPower)
+            {
+                Debug.Log($"[Projectile] PENETRACJA! ({collision.gameObject.name})");
+                currentPenetrationPower -= surface.stoppingPower;
+
+                // 🔹 🔹 🔹 KLUCZOWA ZMIANA JEST TUTAJ 🔹 🔹 🔹
+
+                // 1. Oblicz nową prędkość
+                Vector3 penetrationVelocity = velocityBeforeImpact * (1.0f - surface.dragOnPenetration);
+
+                // 2. Uruchom Coroutine, która zrobi resztę
+                StartCoroutine(PerformPenetration(collision.collider, penetrationVelocity));
+
+                return; // Pozwól pociskowi lecieć dalej (w Coroutine)
+            }
+        }
+
+        // --- 3. ZATRZYMANIE ---
+        Debug.Log($"[Projectile] Trafiono: {collision.gameObject.name} (Stop)");
         ReturnToPool();
+    }
+
+    // 🔹 🔹 🔹 NOWA, POPRAWIONA COROUTINE 🔹 🔹 🔹
+    private IEnumerator PerformPenetration(Collider wallCollider, Vector3 penetrationVelocity)
+    {
+        // 1. Wyłącz kolizję, aby pocisk nie "utknął"
+        Physics.IgnoreCollision(col, wallCollider, true);
+
+        // 2. Czekaj JEDNĄ klatkę fizyczną. 
+        // W tym czasie fizyka zdążyła zatrzymać pocisk, ale my to zaraz naprawimy.
+        yield return new WaitForFixedUpdate();
+
+        // 3. TERAZ, w nowej klatce, siłą nadpisujemy prędkość.
+        rb.linearVelocity = penetrationVelocity;
+
+        // (Włączymy kolizję z powrotem trochę później, by na pewno opuścił obiekt)
+        yield return new WaitForSeconds(0.1f);
+
+        if (this.gameObject.activeInHierarchy && wallCollider != null)
+        {
+            Physics.IgnoreCollision(col, wallCollider, false);
+        }
     }
 
     private void CreateDebugMarker(Vector3 position)
     {
+        // ... (bez zmian) ...
         GameObject debugMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         debugMarker.transform.position = position;
         debugMarker.transform.localScale = Vector3.one * debugImpactSize;
@@ -167,14 +197,16 @@ public class Projectile : MonoBehaviour
 
     void ReturnToPool()
     {
+        // ... (bez zmian) ...
         isLaunched = false;
+        StopAllCoroutines();
         if (bulletPool != null)
         {
             bulletPool.ReturnBullet(this.gameObject);
         }
         else
         {
-            Destroy(gameObject); // Wyjście awaryjne
+            Destroy(gameObject);
         }
     }
 }

@@ -154,6 +154,7 @@ public class WeaponControllerBase : MonoBehaviour
         int ammoMaxRicochets = ammoData.maxRicochets;
         float ammoBounciness = ammoData.ricochetBounciness;
         float ammoFriction = ammoData.ricochetFriction;
+        float ammoPenetrationPower = ammoData.penetrationPower;
 
 
         // 3. Wystrzel wymaganą liczbę pocisków
@@ -179,7 +180,8 @@ public class WeaponControllerBase : MonoBehaviour
                     ammoRicochetAngle,
                     ammoMaxRicochets,
                     ammoBounciness,
-                    ammoFriction
+                    ammoFriction,
+                    ammoPenetrationPower
                 );
             }
         }

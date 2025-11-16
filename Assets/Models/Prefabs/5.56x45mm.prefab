@@ -283,6 +283,7 @@ MonoBehaviour:
   mass: 0.004
   dragCoefficient: 0.0005
   projectileCount: 1
+  penetrationPower: 25
   ricochetAngle: 65
   maxRicochets: 2
   ricochetBounciness: 0.2

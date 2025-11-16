@@ -279,8 +279,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   caliber: 12x76
+  casingPrefab: {fileID: 0}
   muzzleEnergy: 1750
   mass: 0.004
   dragCoefficient: 0.0005
   projectileCount: 8
+  penetrationPower: 8
+  ricochetAngle: 70
+  maxRicochets: 1
+  ricochetBounciness: 0.2
+  ricochetFriction: 0.3
   amount: 1

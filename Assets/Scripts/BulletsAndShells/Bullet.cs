@@ -15,8 +15,8 @@ public class Bullet : MonoBehaviour
     public int projectileCount = 1;
 
     // 🔹 🔹 🔹 SEKCJA DLA RYKOSZETÓW 🔹 🔹 🔹
-    [Header("Balistyka Terminalna (Rykoszet)")]
-
+    [Header("Balistyka Terminalna")]
+    public float penetrationPower = 20f;
     [Tooltip("Minimalny kąt uderzenia (mierzony od normalnej), aby doszło do rykoszetu. 0=czołowo, 90=ślizg. Dobre wartości to 60-75.")]
     [Range(0, 90)]
     public float ricochetAngle = 70f;

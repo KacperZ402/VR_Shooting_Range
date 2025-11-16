@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 547392168338221466}
   - component: {fileID: 5289195860029696166}
   - component: {fileID: 5129990389460505479}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: Projectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -128,6 +128,7 @@ MonoBehaviour:
   showDebugTrajectory: 1
   debugImpactLifetime: 5
   debugImpactSize: 0.05
+  ricochetRandomness: 0.1
 --- !u!54 &5289195860029696166
 Rigidbody:
   m_ObjectHideFlags: 0
