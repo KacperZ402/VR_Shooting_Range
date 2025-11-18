@@ -30,13 +30,13 @@ public class AmmoPoolManager : MonoBehaviour
     {
         Bullet bullet = roundInstance.GetComponent<Bullet>();
         if (bullet == null) { Destroy(roundInstance); return; }
+
         // Pobieramy pełną nazwę, np. "5.56_AP(1)" lub "5.56_AP(Clone)"
         string dirtyName = roundInstance.name;
         // Odcinamy wszystko, co zaczyna się od nawiasu '('
         string key = dirtyName.Split('(')[0];
         // Usuwamy ewentualne białe znaki na końcu
         key = key.Trim();
-        // 'key' ma teraz wartość "5.56_AP"
 
         if (string.IsNullOrEmpty(key))
         {
@@ -49,6 +49,26 @@ public class AmmoPoolManager : MonoBehaviour
         {
             pools[key] = new Queue<GameObject>();
         }
+
+        // 🔽🔽🔽 NOWA SEKCJA: RESETOWANIE STANU NABOJU 🔽🔽🔽
+
+        // 1. Włącz Collider (bo mógł zostać wyłączony w komorze)
+        Collider col = roundInstance.GetComponent<Collider>();
+        if (col != null)
+        {
+            col.enabled = true;
+        }
+
+        // 2. Zresetuj fizykę (żeby nie zachował pędu lub stanu isKinematic z komory)
+        Rigidbody rb = roundInstance.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false; // Przywracamy fizykę
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        // 🔼🔼🔼 KONIEC NOWEJ SEKCJI 🔼🔼🔼
 
         roundInstance.SetActive(false);
         roundInstance.transform.SetParent(poolParent);

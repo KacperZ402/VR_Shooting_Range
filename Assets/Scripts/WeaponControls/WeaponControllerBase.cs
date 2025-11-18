@@ -179,6 +179,12 @@ public class WeaponControllerBase : MonoBehaviour
         if (objToEject == null) return;
         objToEject.transform.SetParent(null);
 
+        Collider col = objToEject.GetComponent<Collider>();
+        if (col != null)
+        {
+            col.enabled = true; // Włącz kolizje z otoczeniem
+        }
+
         Rigidbody rb = objToEject.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -333,6 +339,12 @@ public class WeaponControllerBase : MonoBehaviour
             chamberedRound.transform.SetParent(chamberTransform);
             Rigidbody rb = chamberedRound.GetComponent<Rigidbody>();
             if (rb != null) rb.isKinematic = true;
+            Collider col = chamberedRound.GetComponent<Collider>();
+            if (col != null)
+            {
+                col.enabled = false; // Wyłączamy kolizje, żeby nie gryzło się z bronią
+            }
+            chamberedRound.SetActive(true);
         }
         OnRoundChambered?.Invoke();
         return true;
