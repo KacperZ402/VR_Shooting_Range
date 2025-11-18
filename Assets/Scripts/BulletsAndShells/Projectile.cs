@@ -81,7 +81,7 @@ public class Projectile : MonoBehaviour
         lastKnownVelocity = initialVelocity;
 
         this.dragCoefficient = drag;
-        this.minRicochetAngle = ammoRicochetAngle;
+        this.minRicochetAngle = ammoRicochetAngle; 
         this.maxRicochets = ammoMaxRicochets;
         this.currentRicochets = 0;
         this.currentPenetrationPower = ammoPenetrationPower;

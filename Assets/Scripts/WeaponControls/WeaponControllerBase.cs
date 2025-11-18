@@ -11,6 +11,21 @@ public class WeaponControllerBase : MonoBehaviour
     public BoltFollower bolt;
     public FireSelectorSimple fireSelector;
     public WeaponGrabInteractable weaponGrab;
+    [Tooltip("Transform (pusty GameObject) reprezentujący pozycję komory nabojowej.")]
+    public Transform chamberTransform;
+
+    [Header("Wyrzut Łuski")]
+    [Tooltip("Transform (pusty GameObject) w miejscu, z którego wylatuje łuska.")]
+    public Transform ejectionPort;
+    [Tooltip("Siła wyrzutu łuski.")]
+    public Vector3 ejectionForce = new Vector3(1.5f, 0.5f, 0f);
+    [Tooltip("Siła obrotu łuski.")]
+    public Vector3 ejectionTorque = new Vector3(10f, 5f, 20f);
+
+    // 🔹 NOWE: Parametr dziedziczenia prędkości
+    [Tooltip("Jak bardzo łuska dziedziczy prędkość ruchu broni (0 = wcale, 1 = w pełni).")]
+    [Range(0f, 1f)]
+    public float velocityInheritance = 1.0f;
 
     [Header("Dane broni")]
     public string caliber = "5.56x45";
@@ -44,15 +59,21 @@ public class WeaponControllerBase : MonoBehaviour
 
     protected AmmoPoolManager ammoPool;
     protected BulletPoolManager bulletPool;
+    protected CasingPoolManager casingPool;
+
+    // 🔹 NOWE: Zmienne do obliczania prędkości broni
+    protected Vector3 lastFramePosition;
+    protected Vector3 currentGunVelocity;
 
     protected virtual void Awake()
     {
-        // Pobieramy oba menedżery
         ammoPool = AmmoPoolManager.Instance;
         bulletPool = BulletPoolManager.Instance;
+        casingPool = CasingPoolManager.Instance;
 
         if (ammoPool == null) Debug.LogError("Nie znaleziono AmmoPoolManager!", this);
         if (bulletPool == null) Debug.LogError("Nie znaleziono BulletPoolManager!", this);
+        if (casingPool == null) Debug.LogError("Nie znaleziono CasingPoolManager!", this);
 
         if (fireSelector != null)
             fireSelector.weaponController = this;
@@ -60,15 +81,29 @@ public class WeaponControllerBase : MonoBehaviour
         if (chargingHandle != null)
         {
             chargingHandle.OnBoltPulled.AddListener(OnBoltPulled);
-            chargingHandle.OnBoltReleased.AddListener(() => ReleaseBoltAction(false));
+            chargingHandle.OnBoltReleased.AddListener(OnChargingHandleReleased);
         }
 
         if (weaponGrab != null)
             weaponGrab.weaponController = this;
     }
 
+    protected virtual void Start()
+    {
+        // 🔹 NOWE: Inicjalizacja pozycji startowej
+        lastFramePosition = transform.position;
+    }
+
     protected virtual void Update()
     {
+        // 🔹 NOWE: Obliczanie prędkości broni w każdej klatce
+        // Robimy to ręcznie, bo Rigidbody w VR (Kinematic) często zwraca 0.
+        if (Time.deltaTime > 0)
+        {
+            currentGunVelocity = (transform.position - lastFramePosition) / Time.deltaTime;
+            lastFramePosition = transform.position;
+        }
+
         HandleBurstLogic();
         HandleAutoFire();
     }
@@ -78,21 +113,15 @@ public class WeaponControllerBase : MonoBehaviour
         if (weaponGrab != null && !weaponGrab.IsGripHeld) return;
         switch (currentFireMode)
         {
-            case FireMode.Safe:
-                break;
+            case FireMode.Safe: break;
             case FireMode.Semi:
-                if (pressed && !triggerPressed)
-                    FireOnce();
+                if (pressed && !triggerPressed) FireOnce();
                 break;
             case FireMode.Burst:
-                if (pressed && !triggerPressed && burstShotsRemaining == 0)
-                    burstShotsRemaining = burstCount;
+                if (pressed && !triggerPressed && burstShotsRemaining == 0) burstShotsRemaining = burstCount;
                 break;
             case FireMode.BoltAction:
-                if (pressed && !triggerPressed)
-                    HandleBoltActionFire();
-                break;
-            case FireMode.Auto:
+                if (pressed && !triggerPressed) HandleBoltActionFire();
                 break;
         }
         triggerPressed = pressed;
@@ -104,15 +133,8 @@ public class WeaponControllerBase : MonoBehaviour
         if (burstShotsRemaining <= 0) return;
         if (Time.time - lastFireTime >= burstDelay)
         {
-            if (FireOnce())
-            {
-                burstShotsRemaining--;
-                lastFireTime = Time.time;
-            }
-            else
-            {
-                burstShotsRemaining = 0;
-            }
+            if (FireOnce()) { burstShotsRemaining--; lastFireTime = Time.time; }
+            else { burstShotsRemaining = 0; }
         }
     }
 
@@ -122,181 +144,164 @@ public class WeaponControllerBase : MonoBehaviour
         if (!triggerPressed) return;
         if (Time.time >= lastFireTime + fireRate)
         {
-            if (FireOnce())
-                lastFireTime = Time.time;
+            if (FireOnce()) lastFireTime = Time.time;
         }
     }
 
-    // -------------------------- FUNKCJA BALISTYKI --------------------------
-
-    /// <summary>
-    /// Główna logika balistyczna. Pobiera dane z naboju, oblicza trajektorię
-    /// i wystrzeliwuje pocisk(i) z puli.
-    /// </summary>
-    /// <param name="ammoData">Komponent 'Bullet' z instancji naboju w komorze.</param>
     protected virtual void SpawnProjectile(Bullet ammoData)
     {
-        // 1. Sprawdź, czy mamy czym strzelać
-        if (universalProjectilePrefab == null)
-        {
-            Debug.LogError("Brak 'universalProjectilePrefab' na broni!", this);
-            return;
-        }
+        if (universalProjectilePrefab == null) { Debug.LogError("Brak 'universalProjectilePrefab'!", this); return; }
 
-        // 2. Oblicz prędkość wylotową i pobierz dane
         float muzzleVelocity = Mathf.Sqrt((2f * ammoData.muzzleEnergy) / ammoData.mass) * velocityMultiplier;
-        float drag = ammoData.dragCoefficient;
-        int count = ammoData.projectileCount; // Dla śrutu
+        // ... reszta parametrów bez zmian ...
 
-        // 🔹 NOWOŚĆ: Pobierz dane do rykoszetu z amunicji
-        // (Zakładam, że dodałeś te pola do klasy 'Bullet')
-        float ammoRicochetAngle = ammoData.ricochetAngle;
-        int ammoMaxRicochets = ammoData.maxRicochets;
-        float ammoBounciness = ammoData.ricochetBounciness;
-        float ammoFriction = ammoData.ricochetFriction;
-        float ammoPenetrationPower = ammoData.penetrationPower;
-
-
-        // 3. Wystrzel wymaganą liczbę pocisków
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < ammoData.projectileCount; i++)
         {
-            // 4. Pobierz instancję POCISKU z puli pocisków
             GameObject projectileInstance = bulletPool.GetBullet(universalProjectilePrefab);
-
             projectileInstance.transform.position = muzzleTransform.position;
             projectileInstance.transform.rotation = muzzleTransform.rotation;
-
-            // --- (Opcjonalny TODO: Jeśli count > 1, dodaj tutaj logikę rozrzutu, 
-            // ---  np. lekko modyfikując projectileInstance.transform.rotation 
-            // ---  lub wektor 'projectileInstance.transform.forward' przed przekazaniem) ---
-
             Projectile projectileLogic = projectileInstance.GetComponent<Projectile>();
             if (projectileLogic != null)
             {
-                // 🔹 ZMIANA: Wywołaj nową, rozszerzoną funkcję Launch
                 projectileLogic.Launch(
                     projectileInstance.transform.forward * muzzleVelocity,
-                    drag,
-                    ammoRicochetAngle,
-                    ammoMaxRicochets,
-                    ammoBounciness,
-                    ammoFriction,
-                    ammoPenetrationPower
+                    ammoData.dragCoefficient, ammoData.ricochetAngle, ammoData.maxRicochets,
+                    ammoData.ricochetBounciness, ammoData.ricochetFriction, ammoData.penetrationPower
                 );
             }
         }
     }
 
+    // -------------------------- FIZYKA WYRZUTU --------------------------
+
+    protected virtual void PhysicallyEjectObject(GameObject objToEject)
+    {
+        if (objToEject == null) return;
+        objToEject.transform.SetParent(null);
+
+        Rigidbody rb = objToEject.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+
+            if (ejectionPort != null)
+            {
+                objToEject.transform.position = ejectionPort.position;
+                objToEject.transform.rotation = ejectionPort.rotation;
+
+                // 🔹 NOWE: Dodajemy prędkość broni do łuski
+                // Najpierw ustawiamy bazową prędkość (dziedziczoną od broni)
+                rb.linearVelocity = currentGunVelocity * velocityInheritance;
+
+                rb.angularVelocity = Vector3.zero;
+
+                // Potem dodajemy siłę wyrzutu (lokalną przekształconą na światową)
+                Vector3 worldForce = ejectionPort.TransformDirection(ejectionForce);
+                Vector3 worldTorque = ejectionPort.TransformDirection(ejectionTorque);
+
+                rb.AddForce(worldForce, ForceMode.Impulse);
+                rb.AddTorque(worldTorque, ForceMode.Impulse);
+            }
+            else
+            {
+                Debug.LogError($"Brak 'ejectionPort' w {name}! Łuska spada na (0,0,0).", this);
+            }
+        }
+
+        Casing casingScript = objToEject.GetComponent<Casing>();
+        if (casingScript != null) casingScript.enabled = true;
+    }
+
+    protected virtual GameObject SpawnAndChamberCasing(GameObject casingPrefab)
+    {
+        if (casingPool == null || casingPrefab == null) return null;
+        GameObject casingInstance = casingPool.GetCasing(casingPrefab);
+
+        if (chamberTransform != null)
+        {
+            casingInstance.transform.position = chamberTransform.position; // Fix pozycji
+            casingInstance.transform.rotation = chamberTransform.rotation;
+            casingInstance.transform.SetParent(chamberTransform);
+        }
+
+        Rigidbody rb = casingInstance.GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = true;
+        Casing casingScript = casingInstance.GetComponent<Casing>();
+        if (casingScript != null) casingScript.enabled = false;
+
+        return casingInstance;
+    }
+
     protected virtual Bullet GetChamberedBulletData()
     {
-        if (chamberedRound == null)
-        {
-            OnDryFire?.Invoke(); // Pusta komora
-            return null;
-        }
-
+        if (chamberedRound == null) { OnDryFire?.Invoke(); return null; }
         Bullet ammoData = chamberedRound.GetComponent<Bullet>();
-        if (ammoData == null)
-        {
-            // Krytyczny błąd - obiekt w komorze nie ma danych
-            Debug.LogError("Nabój w komorze nie ma komponentu Bullet!", this);
-
-            // Zwróć zły obiekt do puli, żeby posprzątać
-            if (ammoPool != null)
-                ammoPool.ReturnRound(chamberedRound);
-            else
-                Destroy(chamberedRound);
-
-            chamberedRound = null;
-            OnDryFire?.Invoke();
-            return null;
-        }
-
+        if (ammoData == null) { OnDryFire?.Invoke(); return null; }
         return ammoData;
     }
+
     protected virtual bool FireOnce()
     {
-        // 1. Sprawdź warunki broni (np. zamek)
-        if (isBoltLockedBack || !bolt.IsBoltForward)
-        {
-            OnDryFire?.Invoke();
-            return false;
-        }
-
-        // 2. 🔹 UPROSZCZENIE: Pobierz dane (funkcja sama obsłuży błędy i OnDryFire)
+        if (isBoltLockedBack || !bolt.IsBoltForward) { OnDryFire?.Invoke(); return false; }
         Bullet ammoData = GetChamberedBulletData();
-        if (ammoData == null)
-        {
-            return false; // Błąd został już obsłużony w GetChamberedBulletData
-        }
+        if (ammoData == null) return false;
 
-        // 3. Wystrzel
         SpawnProjectile(ammoData);
         OnFire?.Invoke();
 
-        // 4. Zwróć zużytą amunicję
-        if (ammoPool != null)
-            ammoPool.ReturnRound(chamberedRound);
-        else
-            Destroy(chamberedRound);
-
+        GameObject casingPrefab = ammoData.casingPrefab;
+        if (ammoPool != null) ammoPool.ReturnRound(chamberedRound);
+        else Destroy(chamberedRound);
         chamberedRound = null;
 
-        // 5. Przeładuj (dla semi-auto)
+        if (casingPool != null && casingPrefab != null)
+        {
+            GameObject casingInstance = casingPool.GetCasing(casingPrefab);
+            PhysicallyEjectObject(casingInstance);
+        }
+
         TryChamberFromMagazine();
         return true;
     }
 
     protected virtual void HandleBoltActionFire()
     {
-        // 1. Sprawdź warunki broni
-        if (chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f)
-        {
-            OnDryFire?.Invoke();
-            return;
-        }
-
-        // 2. 🔹 UPROSZCZENIE: Pobierz dane
+        if (chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f) { OnDryFire?.Invoke(); return; }
         Bullet ammoData = GetChamberedBulletData();
-        if (ammoData == null)
-        {
-            return; // Błąd obsłużony
-        }
+        if (ammoData == null) return;
 
-        // 3. Wystrzel
         SpawnProjectile(ammoData);
         OnFire?.Invoke();
 
-        // 4. Zwróć zużytą amunicję
-        if (ammoPool != null)
-            ammoPool.ReturnRound(chamberedRound);
-        else
-            Destroy(chamberedRound);
-
+        GameObject casingPrefab = ammoData.casingPrefab;
+        if (ammoPool != null) ammoPool.ReturnRound(chamberedRound);
+        else Destroy(chamberedRound);
         chamberedRound = null;
-    }
 
-    // -------------------------- ZAMEK (BEZ ZMIAN) --------------------------
+        chamberedRound = SpawnAndChamberCasing(casingPrefab);
+    }
 
     public virtual void OnBoltPulled()
     {
         if (chamberedRound != null)
         {
             OnRoundEjected?.Invoke();
-
-            if (ammoPool != null)
-                ammoPool.ReturnRound(chamberedRound);
-            else
-                Destroy(chamberedRound);
-
+            PhysicallyEjectObject(chamberedRound);
             chamberedRound = null;
         }
+        isBoltLockedBack = false;
+    }
+
+    protected virtual void OnChargingHandleReleased()
+    {
+        isBoltLockedBack = false;
+        TryChamberFromMagazine();
+        OnBoltReleasedEvent?.Invoke();
     }
 
     public virtual void ReleaseBoltAction(bool force = false)
     {
         if (!force && !CanReleaseBolt()) return;
-
         TryChamberFromMagazine();
         isBoltLockedBack = false;
         OnBoltReleasedEvent?.Invoke();
@@ -305,34 +310,30 @@ public class WeaponControllerBase : MonoBehaviour
     public virtual bool TryChamberFromMagazine()
     {
         if (chamberedRound != null) return true;
-
-        if (ammoSocket == null)
-            return false;
+        if (ammoSocket == null) return false;
 
         GameObject roundToChamber = ammoSocket.TryTakeRound();
-
-        if (roundToChamber == null)
-        {
-            Debug.Log("Magazynek Jest pusty, podczas próby załadowania naboju");
-            return false;
-        }
+        if (roundToChamber == null) return false;
 
         Bullet bulletData = roundToChamber.GetComponent<Bullet>();
-        if (bulletData == null)
-        {
-            Debug.LogError("Pobrany nabój (instancja) nie ma komponentu 'Bullet'!", this);
-            Destroy(roundToChamber);
-            return false;
-        }
+        if (bulletData == null) { Destroy(roundToChamber); return false; }
 
         if (bulletData.caliber != this.caliber)
         {
-            Debug.LogWarning($"Próba załadowania złego kalibru! Broń: {this.caliber}, Nabój: {bulletData.caliber}", this);
-            Destroy(roundToChamber);
+            if (ammoPool != null) ammoPool.ReturnRound(roundToChamber);
+            else Destroy(roundToChamber);
             return false;
         }
 
         chamberedRound = roundToChamber;
+        if (chamberTransform != null)
+        {
+            chamberedRound.transform.position = chamberTransform.position; // Fix pozycji
+            chamberedRound.transform.rotation = chamberTransform.rotation;
+            chamberedRound.transform.SetParent(chamberTransform);
+            Rigidbody rb = chamberedRound.GetComponent<Rigidbody>();
+            if (rb != null) rb.isKinematic = true;
+        }
         OnRoundChambered?.Invoke();
         return true;
     }
