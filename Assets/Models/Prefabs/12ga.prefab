@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   caliber: 12x76
-  casingPrefab: {fileID: 0}
+  casingPrefab: {fileID: 6868290369986214037, guid: 7d2663d160012514c80cb799f52c42f6, type: 3}
   muzzleEnergy: 1750
   mass: 0.004
   dragCoefficient: 0.0005
@@ -289,4 +289,4 @@ MonoBehaviour:
   maxRicochets: 1
   ricochetBounciness: 0.2
   ricochetFriction: 0.3
-  amount: 1
+  defaultScale: {x: 0, y: 0, z: 0}

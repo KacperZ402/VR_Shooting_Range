@@ -278,8 +278,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   caliber: 7.62x39
+  casingPrefab: {fileID: 6861320499288486473, guid: 004c5663ae12be249b5765e5b5eae79d, type: 3}
   muzzleEnergy: 1750
   mass: 0.004
   dragCoefficient: 0.0005
   projectileCount: 1
+  penetrationPower: 20
+  ricochetAngle: 70
+  maxRicochets: 1
+  ricochetBounciness: 0.2
+  ricochetFriction: 0.3
   amount: 1

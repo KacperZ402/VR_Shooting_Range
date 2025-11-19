@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3621994580724709676}
   - component: {fileID: 8646831629410257841}
   - component: {fileID: 2392606264291287663}
-  - component: {fileID: 1414242296108951326}
   - component: {fileID: 1771539586890801257}
+  - component: {fileID: 2320390999349514758}
   m_Layer: 0
   m_Name: 12gaShell
   m_TagString: Casing_12
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 4925556345581841958, guid: 797612dbd0a222f47923001387c26730, type: 3}
-  - {fileID: 4905954516922301406, guid: 797612dbd0a222f47923001387c26730, type: 3}
+  - {fileID: -3879677021169264542, guid: 797612dbd0a222f47923001387c26730, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -117,22 +117,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1414242296108951326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6868290369986214037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8fdb9242ee96bb4c9c91874651bb40e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolTag: Casing_12
-  lifeTime: 4
-  ejectionForce: {x: 1.5, y: 0.5, z: 0}
-  torqueAmount: 5
 --- !u!65 &1771539586890801257
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -154,3 +138,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.016228328, y: 0.04903557, z: 0.016228328}
   m_Center: {x: 0, y: 0.0018612433, z: 4.6566123e-10}
+--- !u!114 &2320390999349514758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6868290369986214037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc4594538c52ea94b9ff77e7d5b8c375, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifetime: 5
+  defaultScale: {x: 0, y: 0, z: 0}

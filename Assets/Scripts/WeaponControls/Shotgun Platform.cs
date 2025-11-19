@@ -10,9 +10,6 @@ public enum MagazineLoadType
 public class ShotgunPlatform : WeaponControllerBase
 {
     [Header("Strzelba typu pump-action")]
-    [Tooltip("Czy po cofnięciu zamka wyrzuca pustą łuskę?")]
-    public bool ejectOnPump = true;
-
     [Header("Logika Magazynka")]
     [Tooltip("Definiuje, kiedy collider magazynka (do ładowania) jest aktywny.")]
     public MagazineLoadType magazineLoadLogic = MagazineLoadType.PumpAction_LoadForward;
@@ -25,7 +22,11 @@ public class ShotgunPlatform : WeaponControllerBase
 
     protected override void Awake()
     {
-        base.Awake(); // To już pobiera 'ammoPool' i 'bulletPool'
+        base.Awake(); // Pobiera menedżery
+
+        // Strzelby nie mają osobnego rygla, używają pompki (ChargingHandle)
+        bolt = null;
+
         if (magazine != null)
             magCollider = magazine.GetComponent<Collider>();
 
@@ -37,29 +38,29 @@ public class ShotgunPlatform : WeaponControllerBase
 
     protected override bool FireOnce()
     {
-        // 1. Warunki wstępne (specyficzne dla strzelby)
-        if (isBoltLockedBack)
+        // 1. Warunki wstępne (Pompka musi być z przodu)
+        if (chargingHandle != null &&
+            chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f)
         {
-            OnDryFire?.Invoke();
-            return false;
-        }
-        if (chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f)
-        {
-            return false;
+            return false; // Niezaryglowana
         }
 
-        // 2. 🔹 UPROSZCZENIE: Pobierz dane (funkcja bazowa obsługuje błędy)
+        // 2. Pobierz dane
         Bullet ammoData = GetChamberedBulletData();
         if (ammoData == null)
         {
-            return false; // Błąd został już obsłużony
+            return false; // Pusta komora
         }
 
         // 3. Wystrzel pocisk
         SpawnProjectile(ammoData);
         OnFire?.Invoke();
 
-        // 4. Zwróć zużytą amunicję do puli
+        // 4. 🔹 PODMIANA NA ŁUSKĘ 🔹
+        // W strzelbie po strzale łuska ZOSTAJE w komorze.
+        GameObject casingPrefab = ammoData.casingPrefab;
+
+        // Zwróć żywy nabój do puli
         if (ammoPool != null)
             ammoPool.ReturnRound(chamberedRound);
         else
@@ -67,21 +68,25 @@ public class ShotgunPlatform : WeaponControllerBase
 
         chamberedRound = null;
 
-        // Logika specyficzna dla strzelby: Brak automatycznego przeładowania
+        // Wstaw łuskę do komory (używając funkcji pomocniczej z klasy bazowej)
+        // Ta łuska będzie siedzieć w komorze, dopóki gracz nie pociągnie pompki.
+        chamberedRound = SpawnAndChamberCasing(casingPrefab);
+
+        // Logika specyficzna dla strzelby: 
+        // NIE wywołujemy tu TryChamberFromMagazine(). Czekamy na ruch pompki.
         return true;
     }
 
-    // Zwolnienie zamka (pchnięcie pompki)
-    public override void ReleaseBoltAction(bool force = false)
-    {
-        TryChamberFromMagazine();
-        isBoltLockedBack = false;
-        OnBoltReleasedEvent?.Invoke();
-    }
+    // Nie musimy nadpisywać OnBoltPulled.
+    // W klasie bazowej OnBoltPulled robi dokładnie to co trzeba: 
+    // "PhysicallyEjectObject(chamberedRound)" -> Wyrzuca łuskę, którą wstawiliśmy w FireOnce.
 
-    // Logika Update pozostaje BEZ ZMIAN
+    // -------------------------- LOGIKA COLLIDERA MAGAZYNKA --------------------------
+
     protected override void Update()
     {
+        base.Update(); // WAŻNE: Zachowaj logikę fizyki łusek z bazy!
+
         if (weaponGrab == null || !weaponGrab.IsGripHeld)
         {
             if (magCollider != null && lastEnabledState == true)
@@ -103,10 +108,12 @@ public class ShotgunPlatform : WeaponControllerBase
         switch (magazineLoadLogic)
         {
             case MagazineLoadType.PumpAction_LoadForward:
+                // Ładowanie możliwe tylko gdy pompka jest z przodu
                 shouldBeEnabled = Mathf.Abs(currentY - chargingHandle.minLocalY) < 0.001f;
                 break;
 
             case MagazineLoadType.BoltAction_LoadBack:
+                // Ładowanie możliwe tylko gdy pompka jest z tyłu
                 shouldBeEnabled = Mathf.Abs(currentY - chargingHandle.maxLocalY) < 0.001f;
                 break;
         }

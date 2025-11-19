@@ -1,67 +1,68 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Platforma HK: Automatycznie ładuje kolejny nabój.
-/// Zamek nigdy nie blokuje się automatycznie.
-/// Wersja zrefaktoryzowana (używa GetChamberedBulletData).
+/// Platforma HK (MP5, G3, itp.): 
+/// - Automatycznie wyrzuca łuskę i ładuje kolejny nabój po strzale.
+/// - Zamek NIGDY nie blokuje się automatycznie po ostatnim strzale (tylko ręcznie).
+/// Wersja dostosowana do systemu 'Klasycznego' (z wyrzutem łusek).
 /// </summary>
 public class HKPlatform : WeaponControllerBase
 {
-    // Awake() jest dziedziczone z WeaponControllerBase,
-    // więc automatycznie pobiera 'ammoPool' i 'bulletPool'.
+    // Awake jest dziedziczone, więc setup menedżerów dzieje się automatycznie.
 
     protected override bool FireOnce()
     {
         // 1. Warunki wstępne
+        // Sprawdzamy, czy zamek nie jest zablokowany w tylnym położeniu (HK Slap notch)
+        // oraz czy rygiel jest z przodu.
         if (isBoltLockedBack || !bolt.IsBoltForward)
         {
             OnDryFire?.Invoke();
             return false;
         }
 
-        // 2. 🔹 UPROSZCZENIE: Pobierz dane (funkcja bazowa obsługuje błędy)
+        // 2. Pobierz dane
         Bullet ammoData = GetChamberedBulletData();
         if (ammoData == null)
         {
-            return false; // Błąd został już obsłużony
+            return false; // Błąd obsłużony (pusta komora)
         }
 
         // 3. Wystrzel pocisk
         SpawnProjectile(ammoData);
         OnFire?.Invoke();
 
-        // 4. Zwróć zużytą amunicję do puli
+        // 4. 🔹 WAŻNE: Pobierz prefab łuski ZANIM zwrócimy nabój do puli
+        GameObject casingPrefab = ammoData.casingPrefab;
+
+        // 5. Zwróć zużytą amunicję (nabój) do puli
         if (ammoPool != null)
             ammoPool.ReturnRound(chamberedRound);
         else
             Destroy(chamberedRound);
 
         chamberedRound = null;
-        // 5. Logika specyficzna dla HK: Automatyczne przeładowanie
+
+        // 6. 🔹 WAŻNE: Wyrzuć łuskę fizycznie
+        // HK słyną z energicznego wyrzutu, więc używamy PhysicallyEjectObject
+        if (casingPool != null && casingPrefab != null)
+        {
+            GameObject casingInstance = casingPool.GetCasing(casingPrefab);
+            PhysicallyEjectObject(casingInstance);
+        }
+
+        // 7. Logika specyficzna dla HK: Natychmiastowe przeładowanie
+        // HK nie blokuje się na pustym, więc zawsze próbujemy załadować.
+        // Jeśli magazynek jest pusty, komora po prostu zostanie pusta (klik przy następnym strzale).
         TryChamberFromMagazine();
 
         return true;
     }
 
-    public override void ReleaseBoltAction(bool force = false)
-    {
-        // Ta metoda jest już w 100% kompatybilna,
-        // nie modyfikuje 'chamberedRound'.
-
-        isBoltLockedBack = false;
-
-        if (ammoSocket != null && ammoSocket.currentMagazine != null)
-        {
-            if (TryChamberFromMagazine())
-            {
-                Debug.Log("[HKPlatform] Nabój załadowany po zwolnieniu zamka.");
-            }
-            else
-            {
-                Debug.Log("[HKPlatform] Mag pusty — brak naboju do chamberowania.");
-            }
-        }
-
-        OnBoltReleasedEvent?.Invoke();
-    }
+    // UWAGA: Usunąłem nadpisanie ReleaseBoltAction().
+    // Logika w nowym WeaponControllerBase jest identyczna i idealna dla HK:
+    // - isBoltLockedBack = false
+    // - TryChamberFromMagazine()
+    // - OnBoltReleasedEvent
+    // To obsłuży "HK Slap" automatycznie.
 }

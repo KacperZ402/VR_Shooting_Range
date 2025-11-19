@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors; // Dodaj ten using
 
@@ -6,14 +6,14 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors; // Dodaj ten using
 public class ChargingHandleLocking : AnimatedBoltHandle
 {
     [Header("Blokowanie przy pustym magazynku")]
-    [Tooltip("Czy automatycznie blokowaæ zamek po pustym magazynku?")]
+    [Tooltip("Czy automatycznie blokowaÃ¦ zamek po pustym magazynku?")]
     public bool enableAutoLockOnEmptyMag = true;
 
     private bool simpleLocked = false;
 
     protected override void Awake()
     {
-        // Wywo³aj Awake() z klasy bazowej (AnimatedBoltHandle -> ChargingHandle)
+        // WywoÂ³aj Awake() z klasy bazowej (AnimatedBoltHandle -> ChargingHandle)
         base.Awake();
 
         if (weaponControllerBase != null)
@@ -27,7 +27,7 @@ public class ChargingHandleLocking : AnimatedBoltHandle
         if (weaponControllerBase != null)
             weaponControllerBase.OnBoltLockedBack.RemoveListener(OnBoltLockedBackFromWeapon);
 
-        // Wywo³aj OnDestroy() z klasy bazowej
+        // WywoÂ³aj OnDestroy() z klasy bazowej
         base.OnDestroy();
     }
 
@@ -56,10 +56,10 @@ public class ChargingHandleLocking : AnimatedBoltHandle
         rb.isKinematic = false;
     }
 
-    // 2. ZMIANA: Nadpisujemy OnGrab, aby uwzglêdniæ logikê blokady ORAZ animacji
+    // 2. ZMIANA: Nadpisujemy OnGrab, aby uwzglÃªdniÃ¦ logikÃª blokady ORAZ animacji
     protected override void OnGrab(SelectEnterEventArgs args)
     {
-        // Nie mo¿na chwyciæ, jeœli siê animuje (odziedziczone z AnimatedBoltHandle)
+        // Nie moÂ¿na chwyciÃ¦, jeÅ“li siÃª animuje (odziedziczone z AnimatedBoltHandle)
         if (isAnimating) return;
 
         var mag = weaponControllerBase?.ammoSocket?.currentMagazine;
@@ -79,11 +79,11 @@ public class ChargingHandleLocking : AnimatedBoltHandle
             }
         }
 
-        // Wywo³aj oryginaln¹ logikê OnGrab z klasy bazowej (ChargingHandle)
+        // WywoÂ³aj oryginalnÂ¹ logikÃª OnGrab z klasy bazowej (ChargingHandle)
         base.OnGrab(args);
     }
 
-    // 3. ZMIANA: Nadpisujemy LateUpdate, aby uwzglêdniæ WSZYSTKIE stany
+    // 3. ZMIANA: Nadpisujemy LateUpdate, aby uwzglÃªdniÃ¦ WSZYSTKIE stany
     protected override void LateUpdate()
     {
         if (weaponControllerBase.weaponGrab == null || !weaponControllerBase.weaponGrab.IsGripHeld)
@@ -92,10 +92,10 @@ public class ChargingHandleLocking : AnimatedBoltHandle
         }
         if (isAnimating)
         {
-            // Nie rób nic, pozwól animacji dzia³aæ
+            // Nie rÃ³b nic, pozwÃ³l animacji dziaÂ³aÃ¦
             return;
         }
-        
+
 
         var mag = weaponControllerBase?.ammoSocket?.currentMagazine;
 
@@ -116,8 +116,8 @@ public class ChargingHandleLocking : AnimatedBoltHandle
             return;
         }
 
-        // Stan 3: Normalne dzia³anie (ani animacja, ani blokada)
-        // Wywo³aj LateUpdate() z klasy bazowej (ChargingHandle)
+        // Stan 3: Normalne dziaÂ³anie (ani animacja, ani blokada)
+        // WywoÂ³aj LateUpdate() z klasy bazowej (ChargingHandle)
         grabInteractable.enabled = true;
         base.LateUpdate();
     }

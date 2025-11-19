@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Skrypt dla prefabu ³uski. Automatycznie wraca do puli po czasie.
-/// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class Casing : MonoBehaviour
 {
@@ -10,23 +7,29 @@ public class Casing : MonoBehaviour
     private float lifeTimer;
     private CasingPoolManager poolManager;
 
+    //  NOWE: Zapamiêtywanie skali
+    [HideInInspector] public Vector3 defaultScale;
+
+    void Awake()
+    {
+        // Zapisz skalê prefabu
+        defaultScale = transform.localScale;
+    }
+
     void OnEnable()
     {
-        if (poolManager == null)
-            poolManager = CasingPoolManager.Instance;
-
+        if (poolManager == null) poolManager = CasingPoolManager.Instance;
         lifeTimer = lifetime;
     }
 
+    // ... Update() bez zmian ...
     void Update()
     {
         lifeTimer -= Time.deltaTime;
         if (lifeTimer <= 0)
         {
-            if (poolManager != null)
-                poolManager.ReturnCasing(gameObject);
-            else
-                Destroy(gameObject); // Fallback
+            if (poolManager != null) poolManager.ReturnCasing(gameObject);
+            else Destroy(gameObject);
         }
     }
 }

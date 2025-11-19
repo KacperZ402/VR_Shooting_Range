@@ -174,34 +174,82 @@ public class WeaponControllerBase : MonoBehaviour
 
     // -------------------------- FIZYKA WYRZUTU --------------------------
 
+    /// <summary>
+    /// Tworzy instancję łuski i umieszcza ją w komorze (kinematycznie).
+    /// Używane przez Bolt-Action i Shotguny (gdzie łuska zostaje w środku).
+    /// </summary>
+    protected virtual GameObject SpawnAndChamberCasing(GameObject casingPrefab)
+    {
+        if (casingPool == null || casingPrefab == null) return null;
+
+        GameObject casingInstance = casingPool.GetCasing(casingPrefab);
+
+        // Pobieramy komponent, żeby znać skalę
+        Casing casingScript = casingInstance.GetComponent<Casing>();
+
+        if (chamberTransform != null)
+        {
+            casingInstance.transform.position = chamberTransform.position;
+            casingInstance.transform.rotation = chamberTransform.rotation;
+            casingInstance.transform.SetParent(chamberTransform);
+
+            // 🔹 ZMIANA: Przywróć oryginalną skalę
+            if (casingScript != null)
+            {
+                casingInstance.transform.localScale = casingScript.defaultScale;
+            }
+            else
+            {
+                // Fallback, jeśli zapomniałeś dodać skrypt Casing
+                casingInstance.transform.localScale = casingPrefab.transform.localScale;
+            }
+        }
+
+        Collider col = casingInstance.GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        Rigidbody rb = casingInstance.GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = true;
+
+        if (casingScript != null) casingScript.enabled = false;
+
+        casingInstance.SetActive(true);
+        return casingInstance;
+    }
+
+    /// <summary>
+    /// Fizycznie wyrzuca obiekt z portu (dla łuski lub naboju).
+    /// </summary>
     protected virtual void PhysicallyEjectObject(GameObject objToEject)
     {
         if (objToEject == null) return;
+
         objToEject.transform.SetParent(null);
 
+        // 🔹 ZMIANA: Upewnij się, że po odczepieniu skala wraca do normy
+        // Sprawdzamy czy to nabój czy łuska
+        Bullet b = objToEject.GetComponent<Bullet>();
+        Casing c = objToEject.GetComponent<Casing>();
+
+        if (b != null) objToEject.transform.localScale = b.defaultScale;
+        else if (c != null) objToEject.transform.localScale = c.defaultScale;
+        // Jeśli nie ma żadnego skryptu, zostawiamy taką jaka jest (lub Vector3.one jako ostateczność)
+
         Collider col = objToEject.GetComponent<Collider>();
-        if (col != null)
-        {
-            col.enabled = true; // Włącz kolizje z otoczeniem
-        }
+        if (col != null) col.enabled = true;
 
         Rigidbody rb = objToEject.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.isKinematic = false;
-
             if (ejectionPort != null)
             {
                 objToEject.transform.position = ejectionPort.position;
                 objToEject.transform.rotation = ejectionPort.rotation;
 
-                // 🔹 NOWE: Dodajemy prędkość broni do łuski
-                // Najpierw ustawiamy bazową prędkość (dziedziczoną od broni)
                 rb.linearVelocity = currentGunVelocity * velocityInheritance;
-
                 rb.angularVelocity = Vector3.zero;
 
-                // Potem dodajemy siłę wyrzutu (lokalną przekształconą na światową)
                 Vector3 worldForce = ejectionPort.TransformDirection(ejectionForce);
                 Vector3 worldTorque = ejectionPort.TransformDirection(ejectionTorque);
 
@@ -210,32 +258,11 @@ public class WeaponControllerBase : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"Brak 'ejectionPort' w {name}! Łuska spada na (0,0,0).", this);
+                rb.WakeUp();
             }
         }
 
-        Casing casingScript = objToEject.GetComponent<Casing>();
-        if (casingScript != null) casingScript.enabled = true;
-    }
-
-    protected virtual GameObject SpawnAndChamberCasing(GameObject casingPrefab)
-    {
-        if (casingPool == null || casingPrefab == null) return null;
-        GameObject casingInstance = casingPool.GetCasing(casingPrefab);
-
-        if (chamberTransform != null)
-        {
-            casingInstance.transform.position = chamberTransform.position; // Fix pozycji
-            casingInstance.transform.rotation = chamberTransform.rotation;
-            casingInstance.transform.SetParent(chamberTransform);
-        }
-
-        Rigidbody rb = casingInstance.GetComponent<Rigidbody>();
-        if (rb != null) rb.isKinematic = true;
-        Casing casingScript = casingInstance.GetComponent<Casing>();
-        if (casingScript != null) casingScript.enabled = false;
-
-        return casingInstance;
+        if (c != null) c.enabled = true;
     }
 
     protected virtual Bullet GetChamberedBulletData()
@@ -332,20 +359,29 @@ public class WeaponControllerBase : MonoBehaviour
         }
 
         chamberedRound = roundToChamber;
+
         if (chamberTransform != null)
         {
-            chamberedRound.transform.position = chamberTransform.position; // Fix pozycji
+            chamberedRound.transform.position = chamberTransform.position;
             chamberedRound.transform.rotation = chamberTransform.rotation;
             chamberedRound.transform.SetParent(chamberTransform);
+
+            // 🔹 ZMIANA: Przywróć oryginalną skalę z prefabu
+            chamberedRound.transform.localScale = bulletData.defaultScale;
+
             Rigidbody rb = chamberedRound.GetComponent<Rigidbody>();
             if (rb != null) rb.isKinematic = true;
+
             Collider col = chamberedRound.GetComponent<Collider>();
-            if (col != null)
-            {
-                col.enabled = false; // Wyłączamy kolizje, żeby nie gryzło się z bronią
-            }
+            if (col != null) col.enabled = false;
+
             chamberedRound.SetActive(true);
         }
+        else
+        {
+            Debug.LogError("Brak 'chamberTransform'!", this);
+        }
+
         OnRoundChambered?.Invoke();
         return true;
     }

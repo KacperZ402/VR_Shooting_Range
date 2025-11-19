@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7241471929856520715}
   - component: {fileID: 3583556299265212991}
   - component: {fileID: 2293149379462966945}
-  - component: {fileID: 6025496633025438816}
   - component: {fileID: 182601272447936840}
+  - component: {fileID: 7134911853875537074}
   m_Layer: 0
   m_Name: 9x19mmShell
   m_TagString: Cassing_9
@@ -116,22 +116,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6025496633025438816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6459848294147698091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8fdb9242ee96bb4c9c91874651bb40e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolTag: Casing_9
-  lifeTime: 4
-  ejectionForce: {x: 1.5, y: 0.5, z: 0}
-  torqueAmount: 5
 --- !u!65 &182601272447936840
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -153,3 +137,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.008137702, y: 0.019145397, z: 0.0084869545}
   m_Center: {x: 0.0001797746, y: 0.0000368976, z: 0.00014162435}
+--- !u!114 &7134911853875537074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459848294147698091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc4594538c52ea94b9ff77e7d5b8c375, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifetime: 5
