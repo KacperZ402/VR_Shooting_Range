@@ -152,16 +152,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   caliber: 7.62x51
   casingPrefab: {fileID: 5598113562636677015, guid: a3e3e7f6c749bd1429e3fd146284dcab, type: 3}
+  defaultScale: {x: 0, y: 0, z: 0}
   muzzleEnergy: 1750
   mass: 0.004
   dragCoefficient: 0.0005
   projectileCount: 1
+  spreadAngle: 1.01
   penetrationPower: 20
   ricochetAngle: 70
   maxRicochets: 1
   ricochetBounciness: 0.2
   ricochetFriction: 0.3
-  amount: 1
 --- !u!114 &-843223226963430450
 MonoBehaviour:
   m_ObjectHideFlags: 0

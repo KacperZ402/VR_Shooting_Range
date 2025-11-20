@@ -279,13 +279,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   caliber: 9x19
   casingPrefab: {fileID: 6459848294147698091, guid: d41aaa8ca5fbfb74aa7fbe2af4946115, type: 3}
+  defaultScale: {x: 0, y: 0, z: 0}
   muzzleEnergy: 500
   mass: 0.008
   dragCoefficient: 0.002
   projectileCount: 1
+  spreadAngle: 1.06
   penetrationPower: 20
   ricochetAngle: 70
   maxRicochets: 1
   ricochetBounciness: 0.2
   ricochetFriction: 0.3
-  amount: 1

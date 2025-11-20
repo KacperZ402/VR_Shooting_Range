@@ -111,6 +111,10 @@ public class WeaponControllerBase : MonoBehaviour
     public virtual void FireInput(bool pressed)
     {
         if (weaponGrab != null && !weaponGrab.IsGripHeld) return;
+        if (!pressed)
+        {
+            burstShotsRemaining = 0;
+        }
         switch (currentFireMode)
         {
             case FireMode.Safe: break;
@@ -134,7 +138,6 @@ public class WeaponControllerBase : MonoBehaviour
         if (Time.time - lastFireTime >= burstDelay)
         {
             if (FireOnce()) { burstShotsRemaining--; lastFireTime = Time.time; }
-            else { burstShotsRemaining = 0; }
         }
     }
 
@@ -153,13 +156,30 @@ public class WeaponControllerBase : MonoBehaviour
         if (universalProjectilePrefab == null) { Debug.LogError("Brak 'universalProjectilePrefab'!", this); return; }
 
         float muzzleVelocity = Mathf.Sqrt((2f * ammoData.muzzleEnergy) / ammoData.mass) * velocityMultiplier;
-        // ... reszta parametrów bez zmian ...
 
         for (int i = 0; i < ammoData.projectileCount; i++)
         {
             GameObject projectileInstance = bulletPool.GetBullet(universalProjectilePrefab);
             projectileInstance.transform.position = muzzleTransform.position;
-            projectileInstance.transform.rotation = muzzleTransform.rotation;
+
+            // 🔹 NOWOŚĆ: Obliczanie rozrzutu (Spread)
+            Quaternion finalRotation = muzzleTransform.rotation;
+
+            if (ammoData.spreadAngle > 0)
+            {
+                // Random.insideUnitCircle daje punkt w kole o promieniu 1.
+                // Mnożymy przez spreadAngle, żeby uzyskać odchylenie w stopniach.
+                Vector2 deviation = Random.insideUnitCircle * ammoData.spreadAngle;
+
+                // Tworzymy rotację odchylającą (X to góra/dół, Y to lewo/prawo)
+                Quaternion spreadRot = Quaternion.Euler(deviation.x, deviation.y, 0);
+
+                // Łączymy rotację lufy z losowym odchyleniem
+                finalRotation = muzzleTransform.rotation * spreadRot;
+            }
+
+            projectileInstance.transform.rotation = finalRotation;
+
             Projectile projectileLogic = projectileInstance.GetComponent<Projectile>();
             if (projectileLogic != null)
             {

@@ -279,8 +279,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   caliber: 5.56x45
   casingPrefab: {fileID: 1810596719827917129, guid: 2e00dec2ed078fd47b97066ad961dc48, type: 3}
+  defaultScale: {x: 0, y: 0, z: 0}
   muzzleEnergy: 1650
   mass: 0.006
   dragCoefficient: 0.001
   projectileCount: 1
-  amount: 1
+  spreadAngle: 1.02
+  penetrationPower: 15
+  ricochetAngle: 60
+  maxRicochets: 1
+  ricochetBounciness: 0.2
+  ricochetFriction: 0.3
