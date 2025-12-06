@@ -129,13 +129,10 @@ public class Projectile : MonoBehaviour
 
         if (isRicochet)
         {
-            // ... (Logika rykoszetu, 'wygładzanie' itp.) ...
             Debug.Log($"[Projectile] RYKOSZET!");
             currentPenetrationPower *= 0.5f;
             return;
         }
-
-        // --- 2. SPRAWDŹ PENETRACJĘ ---
         PenetrableMaterial surface = collision.gameObject.GetComponent<PenetrableMaterial>();
 
         if (surface != null)
@@ -145,24 +142,16 @@ public class Projectile : MonoBehaviour
                 Debug.Log($"[Projectile] PENETRACJA! ({collision.gameObject.name})");
                 currentPenetrationPower -= surface.stoppingPower;
 
-                // 🔹 🔹 🔹 KLUCZOWA ZMIANA JEST TUTAJ 🔹 🔹 🔹
-
-                // 1. Oblicz nową prędkość
                 Vector3 penetrationVelocity = velocityBeforeImpact * (1.0f - surface.dragOnPenetration);
 
-                // 2. Uruchom Coroutine, która zrobi resztę
                 StartCoroutine(PerformPenetration(collision.collider, penetrationVelocity));
 
                 return; // Pozwól pociskowi lecieć dalej (w Coroutine)
             }
         }
-
-        // --- 3. ZATRZYMANIE ---
         Debug.Log($"[Projectile] Trafiono: {collision.gameObject.name} (Stop)");
         ReturnToPool();
     }
-
-    // 🔹 🔹 🔹 NOWA, POPRAWIONA COROUTINE 🔹 🔹 🔹
     private IEnumerator PerformPenetration(Collider wallCollider, Vector3 penetrationVelocity)
     {
         // 1. Wyłącz kolizję, aby pocisk nie "utknął"
@@ -197,7 +186,7 @@ public class Projectile : MonoBehaviour
 
     void ReturnToPool()
     {
-        // ... (bez zmian) ...
+        // ... 
         isLaunched = false;
         StopAllCoroutines();
         if (bulletPool != null)
