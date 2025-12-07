@@ -280,7 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48e8dab867da65a46bb53abf376d7324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  caliber: 12 Gauge
+  caliber: 12x76
   casingPrefab: {fileID: 6868290369986214037, guid: 7d2663d160012514c80cb799f52c42f6, type: 3}
   defaultScale: {x: 0, y: 0, z: 0}
   muzzleEnergy: 2500
@@ -288,7 +288,7 @@ MonoBehaviour:
   dragCoefficient: 0.01
   projectileCount: 9
   spreadAngle: 5
-  penetrationPower: 15
+  penetrationPower: 10
   ricochetAngle: 60
   maxRicochets: 1
   ricochetBounciness: 0.2
