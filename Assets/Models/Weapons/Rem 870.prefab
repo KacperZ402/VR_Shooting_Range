@@ -117,7 +117,7 @@ Transform:
   m_GameObject: {fileID: 1029311557555818073}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.36, y: -1.582, z: 0}
+  m_LocalPosition: {x: -2.656, y: 0.863, z: -1.21249}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -325,7 +325,7 @@ MonoBehaviour:
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}
   velocityInheritance: 1
-  caliber: 12x76
+  caliber: 12Ga
   chamberedRound: {fileID: 0}
   isBoltLockedBack: 0
   currentFireMode: 0
@@ -993,7 +993,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   capacity: 4
-  caliber: 12x76
+  caliber: 12Ga
   OnInsertedToSocket:
     m_PersistentCalls:
       m_Calls: []
