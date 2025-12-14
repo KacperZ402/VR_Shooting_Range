@@ -59,27 +59,30 @@ public class ChargingHandleLocking : AnimatedBoltHandle
     // 2. ZMIANA: Nadpisujemy OnGrab, aby uwzglêdniæ logikê blokady ORAZ animacji
     protected override void OnGrab(SelectEnterEventArgs args)
     {
-        // Nie mo¿na chwyciæ, jeœli siê animuje (odziedziczone z AnimatedBoltHandle)
         if (isAnimating) return;
 
-        var mag = weaponControllerBase?.ammoSocket?.currentMagazine;
-
-        // Logika odblokowania (Twoja logika)
+        // --- NAPRAWA WYRZUCANIA NABOJU PRZY ŁAPANIU ---
         if (simpleLocked)
         {
-            if (mag == null || mag.currentRounds > 0)
+            var mag = weaponControllerBase?.ammoSocket?.currentMagazine;
+            bool magIsReallyEmpty = (mag != null && mag.currentRounds == 0);
+
+            // Pozwalamy odblokować fizykę, jeśli jest po co (naboje lub brak maga)
+            if (!magIsReallyEmpty)
             {
                 UnlockSimpleLock();
-                weaponControllerBase.ReleaseBoltAction(true);
+
+                // UWAGA: USUNĄŁEM TU LINJKĘ "ReleaseBoltAction"!
+                // Dzięki temu broń nie załaduje naboju w momencie chwytu,
+                // tylko dopiero jak puścisz zamek.
             }
             else
             {
-                // mag pusty -> grab zablokowany
-                return;
+                return; // Jak pusty magazynek, nie dajemy ruszyć
             }
         }
+        // ---------------------------------------------
 
-        // Wywo³aj oryginaln¹ logikê OnGrab z klasy bazowej (ChargingHandle)
         base.OnGrab(args);
     }
 

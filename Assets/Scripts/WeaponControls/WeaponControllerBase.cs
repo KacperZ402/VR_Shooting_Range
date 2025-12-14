@@ -31,6 +31,7 @@ public class WeaponControllerBase : MonoBehaviour
     public string caliber = "5.56x45";
 
     [Header("Stan broni")]
+    public bool isHammerCocked = true;
     public GameObject chamberedRound;
     public bool isBoltLockedBack = false;
     public FireMode currentFireMode = FireMode.Safe;
@@ -314,6 +315,7 @@ public class WeaponControllerBase : MonoBehaviour
         }
 
         TryChamberFromMagazine();
+
         return true;
     }
 

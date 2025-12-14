@@ -326,7 +326,6 @@ Transform:
   - {fileID: 8499442104378168500}
   - {fileID: 1473674645063352814}
   - {fileID: 4693007305594142047}
-  - {fileID: 6770192122804944664}
   - {fileID: 7702098211390172351}
   - {fileID: 9175983638116650230}
   - {fileID: 5550249376307760588}
@@ -395,7 +394,8 @@ Transform:
   m_LocalPosition: {x: 0.00079995394, y: -0.43409976, z: 0.14549999}
   m_LocalScale: {x: 0.8, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6770192122804944664}
   m_Father: {fileID: 294433864318826274}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1491408843970897427
@@ -617,11 +617,11 @@ Transform:
   m_GameObject: {fileID: 6048509439870901764}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.00079995394, y: -0.28392982, z: 0.11550003}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.15016997, z: -0.029999956}
+  m_LocalScale: {x: 1.25, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 294433864318826274}
+  m_Father: {fileID: 4693007305594142047}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6448395335157793019
 GameObject:
@@ -845,10 +845,34 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8905060708154620374}
+        m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8905060708154620374}
+        m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []

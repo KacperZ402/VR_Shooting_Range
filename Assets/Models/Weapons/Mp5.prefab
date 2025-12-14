@@ -63,7 +63,6 @@ Transform:
   - {fileID: 5352942442024327208}
   - {fileID: 2665300460614517873}
   - {fileID: 2944283611603803634}
-  - {fileID: 7796177412412324227}
   - {fileID: 8623787722236913897}
   - {fileID: 2952149053239104330}
   - {fileID: 359413353683196110}
@@ -757,7 +756,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.1203, z: 0.1042}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7796177412412324227}
   m_Father: {fileID: 3179187604520936592}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6103334973507701871
@@ -825,7 +825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54c36f31d90dd174c8934a2d97a75213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chargingHandle: {fileID: 1560508635524350807}
+  chargingHandle: {fileID: 2886165860831362961}
   weaponController: {fileID: 9006155653156742098}
   yEpsilon: 0.0001
   lockedBackY: -0.0442
@@ -862,7 +862,7 @@ Transform:
   m_GameObject: {fileID: 4835045896647164468}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.481, y: -1.615, z: 0}
+  m_LocalPosition: {x: -1.5199039, y: 0.889, z: -1.188319}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -966,10 +966,34 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8096261949237802725}
+        m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8096261949237802725}
+        m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -1061,7 +1085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammoSocket: {fileID: 1196275743660043545}
-  chargingHandle: {fileID: 0}
+  chargingHandle: {fileID: 1187617975284755688}
   bolt: {fileID: 320327156335715660}
   fireSelector: {fileID: 6292226902047459728}
   weaponGrab: {fileID: 6859929503773241644}
@@ -1261,11 +1285,11 @@ Transform:
   m_GameObject: {fileID: 8121676463178586647}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0006145835, y: -0.17157161, z: 0.09389995}
+  m_LocalPosition: {x: -0.0006145901, y: -0.05127164, z: -0.010300018}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3179187604520936592}
+  m_Father: {fileID: 2944283611603803634}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8939124163115157302
 GameObject:
