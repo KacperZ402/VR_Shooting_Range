@@ -31,8 +31,8 @@ public class WeaponControllerBase : MonoBehaviour
     public string caliber = "5.56x45";
 
     [Header("Stan broni")]
-    public bool isHammerCocked = true;
     public GameObject chamberedRound;
+    public bool isHammerCocked = false;
     public bool isBoltLockedBack = false;
     public FireMode currentFireMode = FireMode.Safe;
 
@@ -97,7 +97,10 @@ public class WeaponControllerBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        // 🔹 NOWE: Obliczanie prędkości broni w każdej klatce
+        if (!weaponGrab.IsGripHeld) {
+            return;
+        }
+        // Obliczanie prędkości broni w każdej klatce
         // Robimy to ręcznie, bo Rigidbody w VR (Kinematic) często zwraca 0.
         if (Time.deltaTime > 0)
         {
@@ -112,23 +115,64 @@ public class WeaponControllerBase : MonoBehaviour
     public virtual void FireInput(bool pressed)
     {
         if (weaponGrab != null && !weaponGrab.IsGripHeld) return;
+
         if (!pressed)
         {
             burstShotsRemaining = 0;
+            triggerPressed = false;
+            return;
         }
-        switch (currentFireMode)
+
+        // Reagujemy tylko na naciśnięcie (Semi/Burst)
+        if (pressed && !triggerPressed)
         {
-            case FireMode.Safe: break;
-            case FireMode.Semi:
-                if (pressed && !triggerPressed) FireOnce();
-                break;
-            case FireMode.Burst:
-                if (pressed && !triggerPressed && burstShotsRemaining == 0) burstShotsRemaining = burstCount;
-                break;
-            case FireMode.BoltAction:
-                if (pressed && !triggerPressed) HandleBoltActionFire();
-                break;
+            // 1. Sprawdzamy czy iglica jest napięta
+            if (!isHammerCocked)
+            {
+                // Iglica nienapięta -> Spust jest martwy, nic nie rób
+                return;
+            }
+
+            // 2. Jeśli jest napięta -> zwalniamy ją (klik!)
+            // Chyba że to Safe, wtedy nie zwalniamy
+            if (currentFireMode == FireMode.Safe) return;
+
+            // Zrzucamy iglicę
+            isHammerCocked = false;
+
+            // 3. Teraz sprawdzamy czy w ogóle możemy strzelić (czy jest nabój)
+            // Jeśli nie ma naboju, robimy DryFire (Klik)
+            Bullet ammoData = GetChamberedBulletData();
+            if (ammoData == null)
+            {
+                OnDryFire?.Invoke();
+                return; // Koniec, słychać tylko klik
+            }
+
+            // 4. Jeśli jest nabój -> Strzelamy normalnie
+            // (FireOnce w środku sam sobie znowu napnie iglicę po strzale)
+            switch (currentFireMode)
+            {
+                case FireMode.Semi:
+                    FireOnce();
+                    break;
+                case FireMode.Burst:
+                    burstShotsRemaining = burstCount;
+                    if (burstShotsRemaining > 0) { FireOnce(); burstShotsRemaining--; lastFireTime = Time.time; }
+                    break;
+                case FireMode.BoltAction:
+                    HandleBoltActionFire();
+                    break;
+            }
         }
+
+        // Auto ogień ma trochę inną logikę (trzymasz spust)
+        if (currentFireMode == FireMode.Auto && pressed)
+        {
+            // W auto iglica musi być napięta, żeby zacząć serię
+            if (!isHammerCocked) return;
+        }
+
         triggerPressed = pressed;
     }
 
@@ -296,7 +340,7 @@ public class WeaponControllerBase : MonoBehaviour
 
     protected virtual bool FireOnce()
     {
-        if (isBoltLockedBack || !bolt.IsBoltForward) { OnDryFire?.Invoke(); return false; }
+        if (isBoltLockedBack || !bolt.IsBoltForward) { return false; }
         Bullet ammoData = GetChamberedBulletData();
         if (ammoData == null) return false;
 
@@ -315,7 +359,7 @@ public class WeaponControllerBase : MonoBehaviour
         }
 
         TryChamberFromMagazine();
-
+        isHammerCocked = true;
         return true;
     }
 
@@ -338,6 +382,7 @@ public class WeaponControllerBase : MonoBehaviour
 
     public virtual void OnBoltPulled()
     {
+        isHammerCocked = true;
         if (chamberedRound != null)
         {
             OnRoundEjected?.Invoke();

@@ -75,7 +75,7 @@ public class AKPlatform : WeaponControllerBase
 
         // 7. Logika specyficzna dla AK: Automatyczne przeładowanie (System gazowy)
         TryChamberFromMagazine();
-
+        isHammerCocked = true;
         return true;
     }
 

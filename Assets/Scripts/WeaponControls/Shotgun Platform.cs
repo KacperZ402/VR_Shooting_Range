@@ -85,16 +85,13 @@ public class ShotgunPlatform : WeaponControllerBase
 
     protected override void Update()
     {
-        base.Update(); // WAŻNE: Zachowaj logikę fizyki łusek z bazy!
+        base.Update(); 
 
-        if (weaponGrab == null || !weaponGrab.IsGripHeld)
+        if (weaponGrab == null || !weaponGrab.IsGripHeld) {return;}
+        if (magCollider != null && lastEnabledState == true)
         {
-            if (magCollider != null && lastEnabledState == true)
-            {
-                magCollider.enabled = false;
-                lastEnabledState = false;
-            }
-            return;
+            magCollider.enabled = false;
+            lastEnabledState = false;
         }
 
         if (magCollider == null || chargingHandle == null)

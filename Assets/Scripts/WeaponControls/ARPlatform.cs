@@ -13,7 +13,7 @@ public class ARPlatform : WeaponControllerBase
     protected override bool FireOnce()
     {
         // 1. Sprawdzenie warunków (z bazy)
-        if (isBoltLockedBack || !bolt.IsBoltForward)
+        if ((isBoltLockedBack || !bolt.IsBoltForward) && isHammerCocked)
         {
             OnDryFire?.Invoke();
             return false;
@@ -60,7 +60,7 @@ public class ARPlatform : WeaponControllerBase
             OnBoltLockedBack?.Invoke();
         }
         // 🔹 KONIEC LOGIKI AR 🔹
-
+        isHammerCocked = true;
         return true;
     }
 

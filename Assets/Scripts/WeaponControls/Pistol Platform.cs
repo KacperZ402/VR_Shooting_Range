@@ -57,7 +57,7 @@ public class PistolPlatform : WeaponControllerBase
             isBoltLockedBack = true;
             OnBoltLockedBack?.Invoke();
         }
-
+        isHammerCocked = true;
         return true;
     }
 

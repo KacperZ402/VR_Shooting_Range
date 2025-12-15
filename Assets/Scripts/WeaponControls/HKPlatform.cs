@@ -17,7 +17,6 @@ public class HKPlatform : WeaponControllerBase
         // oraz czy rygiel jest z przodu.
         if (isBoltLockedBack || !bolt.IsBoltForward)
         {
-            OnDryFire?.Invoke();
             return false;
         }
 
@@ -55,7 +54,7 @@ public class HKPlatform : WeaponControllerBase
         // HK nie blokuje się na pustym, więc zawsze próbujemy załadować.
         // Jeśli magazynek jest pusty, komora po prostu zostanie pusta (klik przy następnym strzale).
         TryChamberFromMagazine();
-
+        isHammerCocked = true;
         return true;
     }
 
