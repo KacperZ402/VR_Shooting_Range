@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   caliber: 12Ga
-  casingPrefab: {fileID: 6868290369986214037, guid: 7d2663d160012514c80cb799f52c42f6, type: 3}
+  casingPrefab: {fileID: 5218414273700352253, guid: 3d44b3526d9c96d489b5e63dd9ee43f6, type: 3}
   defaultScale: {x: 0, y: 0, z: 0}
   muzzleEnergy: 2500
   mass: 0.03

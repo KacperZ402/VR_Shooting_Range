@@ -498,7 +498,7 @@ GameObject:
   - component: {fileID: 6980539425084714421}
   - component: {fileID: 1187617975284755688}
   - component: {fileID: 8096261949237802725}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ChargingHandle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -623,7 +623,7 @@ MonoBehaviour:
   m_StartingInteractionStrengthFilters: []
   m_AttachTransform: {fileID: 0}
   m_SecondaryAttachTransform: {fileID: 0}
-  m_UseDynamicAttach: 0
+  m_UseDynamicAttach: 1
   m_MatchAttachPosition: 1
   m_MatchAttachRotation: 1
   m_SnapToColliderVolume: 1
@@ -862,7 +862,7 @@ Transform:
   m_GameObject: {fileID: 4835045896647164468}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -1.5199039, y: 0.889, z: -1.188319}
+  m_LocalPosition: {x: -1.5199039, y: 0.8898, z: -1.186}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -960,12 +960,6 @@ MonoBehaviour:
       m_Calls: []
   m_FirstSelectEntered:
     m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8096261949237802725}
         m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
@@ -979,7 +973,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  m_SelectExited:
+  m_LastSelectExited:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8096261949237802725}
@@ -994,6 +988,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -1096,6 +1096,7 @@ MonoBehaviour:
   velocityInheritance: 1
   caliber: 9x19
   chamberedRound: {fileID: 0}
+  isHammerCocked: 0
   isBoltLockedBack: 0
   currentFireMode: 0
   burstCount: 3

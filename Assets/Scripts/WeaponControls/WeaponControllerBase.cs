@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 [RequireComponent(typeof(XRGrabInteractable))]
 public class WeaponControllerBase : MonoBehaviour
@@ -138,7 +140,9 @@ public class WeaponControllerBase : MonoBehaviour
             if (currentFireMode == FireMode.Safe) return;
 
             // Zrzucamy iglicę
+
             isHammerCocked = false;
+
 
             // 3. Teraz sprawdzamy czy w ogóle możemy strzelić (czy jest nabój)
             // Jeśli nie ma naboju, robimy DryFire (Klik)
@@ -165,14 +169,6 @@ public class WeaponControllerBase : MonoBehaviour
                     break;
             }
         }
-
-        // Auto ogień ma trochę inną logikę (trzymasz spust)
-        if (currentFireMode == FireMode.Auto && pressed)
-        {
-            // W auto iglica musi być napięta, żeby zacząć serię
-            if (!isHammerCocked) return;
-        }
-
         triggerPressed = pressed;
     }
 
@@ -458,5 +454,60 @@ public class WeaponControllerBase : MonoBehaviour
         bool magExists = ammoSocket != null && ammoSocket.currentMagazine != null;
         bool magHasRounds = magExists && ammoSocket.currentMagazine.currentRounds > 0;
         return isBoltLockedBack && (!magExists || magHasRounds);
+    }
+    public virtual void EjectMagazine()
+    {
+        // 1. Sprawdzamy czy mamy podpięty AmmoSocket
+        if (ammoSocket == null)
+        {
+            Debug.LogError("[WeaponController] Brak przypisanego AmmoSocket!");
+            return;
+        }
+
+        // 2. Pobieramy XRSocketInteractora bezpośrednio z obiektu, na którym jest AmmoSocket
+        var socketInteractor = ammoSocket.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor>();
+
+        if (socketInteractor == null)
+        {
+            Debug.LogError("[WeaponController] Obiekt AmmoSocket nie ma komponentu XRSocketInteractor!");
+            return;
+        }
+
+        // 3. Sprawdzamy czy w sockecie w ogóle coś jest
+        if (socketInteractor.hasSelection)
+        {
+            Debug.Log("[WeaponController] Procedura zrzutu magazynka rozpoczęta.");
+
+            // Pobieramy obiekt magazynka
+            var interactable = socketInteractor.interactablesSelected.Count > 0 ?
+                               socketInteractor.interactablesSelected[0] as MonoBehaviour : null;
+
+            StartCoroutine(EjectRoutine(socketInteractor, interactable));
+        }
+    }
+
+    // Musiałem lekko zmienić parametry Coroutine, żeby przyjmowała znaleziony socket
+    private IEnumerator EjectRoutine(UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor socket, MonoBehaviour magInteractable)
+    {
+        // Wyłączamy przyciąganie
+        socket.socketActive = false;
+
+        // Fizyczne wypchnięcie
+        if (magInteractable != null)
+        {
+            Rigidbody rb = magInteractable.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.WakeUp();
+                // Pchamy w dół względem socketa
+                rb.AddForce(-socket.transform.up * 2f, ForceMode.Impulse);
+            }
+        }
+
+        // Czekamy
+        yield return new WaitForSeconds(0.5f);
+
+        // Włączamy z powrotem
+        socket.socketActive = true;
     }
 }
