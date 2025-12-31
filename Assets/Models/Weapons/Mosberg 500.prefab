@@ -182,10 +182,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1048571007449725529}
-  - component: {fileID: 9216660903028431440}
   - component: {fileID: 70439542820171920}
-  - component: {fileID: 3025117227173838946}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: TubeMag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,30 +202,10 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.1, z: -0.0205}
   m_LocalScale: {x: 0.7692308, y: 0.7692309, z: 0.7692309}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7017137442389047561}
   m_Father: {fileID: 4900729717213603517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &9216660903028431440
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1679705849915147020}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02, y: 0.01, z: 0.08}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &70439542820171920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,35 +229,10 @@ MonoBehaviour:
   OnRoundRemoved:
     m_PersistentCalls:
       m_Calls: []
+  OnRoundInserted:
+    m_PersistentCalls:
+      m_Calls: []
   bulletPrefabForFilling: {fileID: 0}
-  bulletTag: Bullet
---- !u!54 &3025117227173838946
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1679705849915147020}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &2151210472820623647
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,7 +383,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 7825467561776784055}
   m_InteractionLayers:
     m_Bits: 1
   m_DistanceCalculationMode: 1
@@ -507,7 +461,7 @@ MonoBehaviour:
   m_SmoothPosition: 0
   m_SmoothPositionAmount: 8
   m_TightenPosition: 0.1
-  m_TrackRotation: 1
+  m_TrackRotation: 0
   m_SmoothRotation: 0
   m_SmoothRotationAmount: 8
   m_TightenRotation: 0.1
@@ -515,7 +469,7 @@ MonoBehaviour:
   m_SmoothScale: 0
   m_SmoothScaleAmount: 8
   m_TightenScale: 0.1
-  m_ThrowOnDetach: 1
+  m_ThrowOnDetach: 0
   m_ThrowSmoothingDuration: 0.25
   m_ThrowSmoothingCurve:
     serializedVersion: 2
@@ -589,7 +543,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.11746645, y: 0.18938729, z: 0.08281625}
   m_Center: {x: -0.007690668, y: -0.262671, z: -0.041375186}
@@ -678,6 +632,74 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7364593565946976993}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4352968905596344693
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7017137442389047561}
+  - component: {fileID: 7672103074141323649}
+  - component: {fileID: 4338775626467552838}
+  m_Layer: 11
+  m_Name: BulletTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7017137442389047561
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4352968905596344693}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1048571007449725529}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7672103074141323649
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4352968905596344693}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.02, y: 0.01, z: 0.08}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4338775626467552838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4352968905596344693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6671f7ad3cab84fb613a74bb3fae08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentMagazine: {fileID: 70439542820171920}
+  bulletTag: Bullet
 --- !u!1 &5130263359570415484
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,7 +1016,7 @@ MonoBehaviour:
   - {fileID: 5583440366825894558}
   m_InteractionLayers:
     m_Bits: 1
-  m_DistanceCalculationMode: 1
+  m_DistanceCalculationMode: 2
   m_SelectMode: 1
   m_FocusMode: 1
   m_CustomReticle: {fileID: 0}
@@ -1019,12 +1041,6 @@ MonoBehaviour:
       m_Calls: []
   m_FirstSelectEntered:
     m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7825467561776784055}
         m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
@@ -1038,7 +1054,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  m_SelectExited:
+  m_LastSelectExited:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7825467561776784055}
@@ -1053,6 +1069,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -1155,6 +1177,7 @@ MonoBehaviour:
   velocityInheritance: 1
   caliber: 12Ga
   chamberedRound: {fileID: 0}
+  isHammerCocked: 0
   isBoltLockedBack: 0
   currentFireMode: 0
   burstCount: 3
@@ -1181,8 +1204,11 @@ MonoBehaviour:
   OnBoltReleasedEvent:
     m_PersistentCalls:
       m_Calls: []
+  pumpHandleScript: {fileID: 2046697043711868638}
+  recoilPivot: {fileID: 6063382366347316870}
+  aimRotationOffset: {x: 0, y: 0, z: 0}
   magazineLoadLogic: 0
-  magazine: {fileID: 70439542820171920}
+  magLoader: {fileID: 4338775626467552838}
 --- !u!114 &3344521818098688027
 MonoBehaviour:
   m_ObjectHideFlags: 0

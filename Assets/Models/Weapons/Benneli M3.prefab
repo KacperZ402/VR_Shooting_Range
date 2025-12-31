@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1511338236364866110}
-  - component: {fileID: 154079595252744706}
   - component: {fileID: 601946828981590004}
   - component: {fileID: 4219920104153088696}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: TubeMag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,30 +30,10 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.16170004, z: 0.018799994}
   m_LocalScale: {x: 0.7692308, y: 0.7692309, z: 0.7692309}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2074325552643819208}
   m_Father: {fileID: 1403266860724702970}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &154079595252744706
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 327621186050160251}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.02, y: 0.01, z: 0.08}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &601946828981590004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,8 +57,10 @@ MonoBehaviour:
   OnRoundRemoved:
     m_PersistentCalls:
       m_Calls: []
+  OnRoundInserted:
+    m_PersistentCalls:
+      m_Calls: []
   bulletPrefabForFilling: {fileID: 0}
-  bulletTag: Bullet
 --- !u!54 &4219920104153088696
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -794,7 +775,7 @@ MonoBehaviour:
   - {fileID: 3850456220557732139}
   m_InteractionLayers:
     m_Bits: 1
-  m_DistanceCalculationMode: 1
+  m_DistanceCalculationMode: 2
   m_SelectMode: 1
   m_FocusMode: 1
   m_CustomReticle: {fileID: 0}
@@ -1305,7 +1286,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.035792112, y: 0.028298318, z: 0.013358744}
   m_Center: {x: 0.03241408, y: -0.0038710276, z: 0.0036139754}
@@ -1669,3 +1650,71 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8912600290776902921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2074325552643819208}
+  - component: {fileID: 9219204709955282979}
+  - component: {fileID: 3635010760171515265}
+  m_Layer: 11
+  m_Name: BulletTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2074325552643819208
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8912600290776902921}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1511338236364866110}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &9219204709955282979
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8912600290776902921}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.02, y: 0.01, z: 0.08}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3635010760171515265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8912600290776902921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6671f7ad3cab84fb613a74bb3fae08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentMagazine: {fileID: 601946828981590004}
+  bulletTag: Bullet

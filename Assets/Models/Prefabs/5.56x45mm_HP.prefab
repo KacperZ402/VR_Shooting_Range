@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5388355301091965967}
   - component: {fileID: -336203845682575739}
   - component: {fileID: -1500874292739637676}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: 5.56x45mm_HP
   m_TagString: Bullet
   m_Icon: {fileID: 0}

@@ -788,9 +788,8 @@ GameObject:
   - component: {fileID: 972179000585836520}
   - component: {fileID: 4550017734686388898}
   - component: {fileID: 3375100875545799288}
-  - component: {fileID: 6408850679207581346}
   - component: {fileID: 2367936576616947724}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: MagPull
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -840,6 +839,7 @@ Transform:
   - {fileID: 7437619216753537006}
   - {fileID: 7666248289027108120}
   - {fileID: 694101946156330491}
+  - {fileID: 7396353219945388324}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8245354948740839023
@@ -993,7 +993,7 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6408850679207581346}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -1008,7 +1008,7 @@ MonoBehaviour:
   m_SelectExited:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6408850679207581346}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -1096,27 +1096,6 @@ MonoBehaviour:
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
---- !u!65 &6408850679207581346
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2535566651391905790}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.022992162, y: 0.0708166, z: 0.010237173}
-  m_Center: {x: 0.0000018747523, y: 0.007853452, z: 0.03}
 --- !u!114 &2367936576616947724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1140,8 +1119,10 @@ MonoBehaviour:
   OnRoundRemoved:
     m_PersistentCalls:
       m_Calls: []
+  OnRoundInserted:
+    m_PersistentCalls:
+      m_Calls: []
   bulletPrefabForFilling: {fileID: 0}
-  bulletTag: Bullet
 --- !u!1 &2583312898864829590
 GameObject:
   m_ObjectHideFlags: 0
@@ -1572,6 +1553,74 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &3581478413136967042
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7396353219945388324}
+  - component: {fileID: 7139023759489766725}
+  - component: {fileID: 8897906531171642649}
+  m_Layer: 11
+  m_Name: BulletTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7396353219945388324
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581478413136967042}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2493625524125710235}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7139023759489766725
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581478413136967042}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.022992162, y: 0.0708166, z: 0.010237173}
+  m_Center: {x: 0.0000018747523, y: 0.007853452, z: 0.03}
+--- !u!114 &8897906531171642649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581478413136967042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6671f7ad3cab84fb613a74bb3fae08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentMagazine: {fileID: 2367936576616947724}
+  bulletTag: Bullet
 --- !u!1 &4001644129772974732
 GameObject:
   m_ObjectHideFlags: 0

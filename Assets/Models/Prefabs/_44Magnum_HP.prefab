@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6317721143060378207}
   - component: {fileID: -8423603629202194617}
   - component: {fileID: 1435604516088131699}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: _44Magnum_HP
   m_TagString: Bullet
   m_Icon: {fileID: 0}

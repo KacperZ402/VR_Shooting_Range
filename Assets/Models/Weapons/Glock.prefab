@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 7576345399425310863}
   - component: {fileID: 4997123112937347553}
   - component: {fileID: 54226554879775500}
-  m_Layer: 14
+  m_Layer: 8
   m_Name: MagSocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,8 +331,8 @@ Transform:
   m_GameObject: {fileID: 3574204430675151036}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.0064, z: 0.0649}
-  m_LocalScale: {x: 1.8199999, y: 1.8200004, z: 1.8200004}
+  m_LocalPosition: {x: -0.0001525879, y: -0.006083379, z: 0.05529999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4259841083025079488}
@@ -424,8 +424,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.02, y: 0.02, z: 0.01}
-  m_Center: {x: 0, y: 0.01, z: -0.06}
+  m_Size: {x: 0.02, y: 0.04938758, z: 0.00972812}
+  m_Center: {x: 0, y: 0.024694102, z: -0.09446762}
 --- !u!1 &3733108429830405507
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,6 +440,7 @@ GameObject:
   - component: {fileID: 8371866053438671252}
   - component: {fileID: 5948433182849734206}
   - component: {fileID: 3743986128307548623}
+  - component: {fileID: 7293579280964348516}
   m_Layer: 7
   m_Name: Glock
   m_TagString: Untagged
@@ -456,7 +457,7 @@ Transform:
   m_GameObject: {fileID: 3733108429830405507}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -1.9499453, y: 0.831, z: -0.88734376}
+  m_LocalPosition: {x: 17.225853, y: -0.364, z: 10.2432165}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -529,7 +530,7 @@ MonoBehaviour:
   - {fileID: 6726299509225406793}
   m_InteractionLayers:
     m_Bits: 1
-  m_DistanceCalculationMode: 1
+  m_DistanceCalculationMode: 2
   m_SelectMode: 0
   m_FocusMode: 1
   m_CustomReticle: {fileID: 0}
@@ -554,12 +555,6 @@ MonoBehaviour:
       m_Calls: []
   m_FirstSelectEntered:
     m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5398468191319334554}
         m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
@@ -573,7 +568,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  m_SelectExited:
+  m_LastSelectExited:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5398468191319334554}
@@ -588,6 +583,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -635,7 +636,7 @@ MonoBehaviour:
   m_SmoothScale: 0
   m_SmoothScaleAmount: 8
   m_TightenScale: 0.1
-  m_ThrowOnDetach: 1
+  m_ThrowOnDetach: 0
   m_ThrowSmoothingDuration: 0.25
   m_ThrowSmoothingCurve:
     serializedVersion: 2
@@ -750,6 +751,21 @@ MonoBehaviour:
   returnSpeed: 10
   hapticAmplitude: 0.8
   hapticDuration: 0.1
+--- !u!114 &7293579280964348516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3733108429830405507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c64b7a71b1278b4f94f07b238d99295, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponGrab: {fileID: 8371866053438671252}
+  gripPoint: {fileID: 8423190344666716909}
+  weaponController: {fileID: 5948433182849734206}
 --- !u!1 &6799440938700326829
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,7 +929,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 5398468191319334554}
   m_InteractionLayers:
     m_Bits: 1
   m_DistanceCalculationMode: 1
@@ -998,7 +1015,7 @@ MonoBehaviour:
   m_SmoothScale: 0
   m_SmoothScaleAmount: 8
   m_TightenScale: 0.1
-  m_ThrowOnDetach: 1
+  m_ThrowOnDetach: 0
   m_ThrowSmoothingDuration: 0.25
   m_ThrowSmoothingCurve:
     serializedVersion: 2
@@ -1075,7 +1092,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.022329126, y: 0.17479189, z: 0.020247696}
   m_Center: {x: -0.000000022351742, y: -0.054183573, z: 0.016554743}

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-// Definicja typu ładowania magazynka (bez zmian)
 public enum MagazineLoadType
 {
     PumpAction_LoadForward,
@@ -9,116 +11,141 @@ public enum MagazineLoadType
 
 public class ShotgunPlatform : WeaponControllerBase
 {
-    [Header("Strzelba typu pump-action")]
+    [Header("Komponenty Strzelby")]
+    public ShotgunPump pumpHandleScript;
+    private XRGrabInteractable pumpInteractable;
+
+    [Header("System Celowania")]
+    [Tooltip("Obiekt wewnątrz broni, który znajduje się w miejscu głównego chwytu (Pivot). Wokół niego będziemy obracać broń.")]
+    public Transform recoilPivot;
+
+    // Usunięto muzzleAxis - teraz jest na sztywno "Down Negative Y"
+
+    [Tooltip("Dodatkowa korekta rotacji (Roll/Pitch).")]
+    public Vector3 aimRotationOffset = Vector3.zero;
+
     [Header("Logika Magazynka")]
-    [Tooltip("Definiuje, kiedy collider magazynka (do ładowania) jest aktywny.")]
     public MagazineLoadType magazineLoadLogic = MagazineLoadType.PumpAction_LoadForward;
 
-    [Tooltip("Referencja do magazynka (dla collidera)")]
-    public Magazine magazine;
-
-    private bool lastEnabledState;
-    private Collider magCollider;
+    // 🔹 ZMIANA: Używamy Loadera zamiast Collidera
+    [SerializeField] private MagazineLoader magLoader; // [SerializeField] pozwoli Ci przypisać go ręcznie
+    private bool lastLoaderActiveState;
 
     protected override void Awake()
     {
-        base.Awake(); // Pobiera menedżery
-
-        // Strzelby nie mają osobnego rygla, używają pompki (ChargingHandle)
+        base.Awake();
         bolt = null;
 
-        if (magazine != null)
-            magCollider = magazine.GetComponent<Collider>();
+        if (pumpHandleScript != null)
+            pumpInteractable = pumpHandleScript.GetComponent<XRGrabInteractable>();
 
-        if (magCollider != null)
+        // 🔹 ZMIANA: Szukamy Loadera w dzieciach całej broni (jeśli nie przypisany ręcznie)
+
+        if (magLoader != null)
         {
-            lastEnabledState = magCollider.enabled;
+            lastLoaderActiveState = magLoader.gameObject.activeSelf;
         }
     }
 
-    protected override bool FireOnce()
+    protected void LateUpdate()
     {
-        // 1. Warunki wstępne (Pompka musi być z przodu)
-        if (chargingHandle != null &&
-            chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f)
+        if (!weaponGrab.IsGripHeld) return;
+
+        bool isTwoHanded = (pumpInteractable != null && pumpInteractable.isSelected);
+
+        if (isTwoHanded)
         {
-            return false; // Niezaryglowana
+            weaponGrab.trackRotation = false;
+            StabilizeAim();
         }
-
-        // 2. Pobierz dane
-        Bullet ammoData = GetChamberedBulletData();
-        if (ammoData == null)
-        {
-            return false; // Pusta komora
-        }
-
-        // 3. Wystrzel pocisk
-        SpawnProjectile(ammoData);
-        OnFire?.Invoke();
-
-        // 4. 🔹 PODMIANA NA ŁUSKĘ 🔹
-        // W strzelbie po strzale łuska ZOSTAJE w komorze.
-        GameObject casingPrefab = ammoData.casingPrefab;
-
-        // Zwróć żywy nabój do puli
-        if (ammoPool != null)
-            ammoPool.ReturnRound(chamberedRound);
         else
-            Destroy(chamberedRound);
-
-        chamberedRound = null;
-
-        // Wstaw łuskę do komory (używając funkcji pomocniczej z klasy bazowej)
-        // Ta łuska będzie siedzieć w komorze, dopóki gracz nie pociągnie pompki.
-        chamberedRound = SpawnAndChamberCasing(casingPrefab);
-
-        // Logika specyficzna dla strzelby: 
-        // NIE wywołujemy tu TryChamberFromMagazine(). Czekamy na ruch pompki.
-        return true;
+        {
+            weaponGrab.trackRotation = true;
+        }
     }
 
-    // Nie musimy nadpisywać OnBoltPulled.
-    // W klasie bazowej OnBoltPulled robi dokładnie to co trzeba: 
-    // "PhysicallyEjectObject(chamberedRound)" -> Wyrzuca łuskę, którą wstawiliśmy w FireOnce.
+    private void StabilizeAim()
+    {
+        if (weaponGrab.interactorsSelecting.Count == 0 || pumpInteractable.interactorsSelecting.Count == 0) return;
 
-    // -------------------------- LOGIKA COLLIDERA MAGAZYNKA --------------------------
+        Transform mainHand = weaponGrab.interactorsSelecting[0].transform;
+        Transform pumpHand = pumpInteractable.interactorsSelecting[0].transform;
+
+        Vector3 direction = pumpHand.position - mainHand.position;
+
+        if (direction.sqrMagnitude > 0.05f)
+        {
+            // 1. Obliczamy bazową rotację
+            Quaternion targetRotation = Quaternion.LookRotation(direction, mainHand.up);
+
+            // 2. KOREKTA DLA "DOWN NEGATIVE Y" (Na sztywno -90 stopni na osi X)
+            // To odpowiada Twojemu poprzedniemu ustawieniu: WeaponFacingAxis.Down_NegativeY
+            Quaternion correction = Quaternion.Euler(-90, 0, 0);
+
+            Quaternion manualOffset = Quaternion.Euler(aimRotationOffset);
+
+            // 3. Łączymy rotacje
+            targetRotation = targetRotation * correction * manualOffset;
+            transform.rotation = targetRotation;
+
+            // 4. Pivot Fix (dociągnięcie gripu do dłoni)
+            Vector3 localGripPos = Vector3.zero;
+            if (weaponGrab.attachTransform != null)
+            {
+                localGripPos = weaponGrab.attachTransform.localPosition;
+            }
+
+            Vector3 rotatedGripOffset = transform.rotation * localGripPos;
+            transform.position = mainHand.position - rotatedGripOffset;
+        }
+    }
 
     protected override void Update()
     {
-        base.Update(); 
+        base.Update();
+        HandleMagazineLoaderLogic();
+    }
 
-        if (weaponGrab == null || !weaponGrab.IsGripHeld) {return;}
-        if (magCollider != null && lastEnabledState == true)
-        {
-            magCollider.enabled = false;
-            lastEnabledState = false;
-        }
+    private void HandleMagazineLoaderLogic()
+    {
+        if (magLoader == null || chargingHandle == null) return;
 
-        if (magCollider == null || chargingHandle == null)
-        {
-            return;
-        }
-
-        bool shouldBeEnabled = false;
+        bool shouldBeActive = false;
         float currentY = chargingHandle.transform.localPosition.y;
 
         switch (magazineLoadLogic)
         {
             case MagazineLoadType.PumpAction_LoadForward:
-                // Ładowanie możliwe tylko gdy pompka jest z przodu
-                shouldBeEnabled = Mathf.Abs(currentY - chargingHandle.minLocalY) < 0.001f;
+                // Włączony tylko gdy pompka jest z przodu (zamknięta)
+                shouldBeActive = Mathf.Abs(currentY - chargingHandle.minLocalY) < 0.001f;
                 break;
-
             case MagazineLoadType.BoltAction_LoadBack:
-                // Ładowanie możliwe tylko gdy pompka jest z tyłu
-                shouldBeEnabled = Mathf.Abs(currentY - chargingHandle.maxLocalY) < 0.001f;
+                // Włączony tylko gdy zamek jest z tyłu
+                shouldBeActive = Mathf.Abs(currentY - chargingHandle.maxLocalY) < 0.001f;
                 break;
         }
 
-        if (shouldBeEnabled != lastEnabledState)
+        if (shouldBeActive != lastLoaderActiveState)
         {
-            magCollider.enabled = shouldBeEnabled;
-            lastEnabledState = shouldBeEnabled;
+            magLoader.gameObject.SetActive(shouldBeActive);
+            lastLoaderActiveState = shouldBeActive;
         }
+    }
+    protected override bool FireOnce()
+    {
+        if (chargingHandle != null && chargingHandle.transform.localPosition.y > chargingHandle.minLocalY + 0.001f) return false;
+
+        Bullet ammoData = GetChamberedBulletData();
+        if (ammoData == null) return false;
+
+        SpawnProjectile(ammoData);
+        OnFire?.Invoke();
+
+        GameObject casingPrefab = ammoData.casingPrefab;
+        if (ammoPool != null) ammoPool.ReturnRound(chamberedRound); else Destroy(chamberedRound);
+        chamberedRound = null;
+
+        chamberedRound = SpawnAndChamberCasing(casingPrefab);
+        return true;
     }
 }

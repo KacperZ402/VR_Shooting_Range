@@ -216,7 +216,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 6123136758355399473}
   m_InteractionLayers:
     m_Bits: 1
   m_DistanceCalculationMode: 1
@@ -301,7 +302,7 @@ MonoBehaviour:
   m_SmoothScale: 0
   m_SmoothScaleAmount: 8
   m_TightenScale: 0.1
-  m_ThrowOnDetach: 1
+  m_ThrowOnDetach: 0
   m_ThrowSmoothingDuration: 0.25
   m_ThrowSmoothingCurve:
     serializedVersion: 2
@@ -347,7 +348,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.06143596, y: 0.03537478, z: 0.018365903}
   m_Center: {x: -0.00034221634, y: 0.16739278, z: 0.058702286}
@@ -391,7 +392,7 @@ GameObject:
   - component: {fileID: 6577736011382555551}
   - component: {fileID: 7446421746854564029}
   - component: {fileID: 2366614839899407446}
-  m_Layer: 14
+  m_Layer: 8
   m_Name: MagSocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1172,12 +1173,6 @@ MonoBehaviour:
       m_Calls: []
   m_FirstSelectEntered:
     m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6123136758355399473}
         m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
@@ -1191,7 +1186,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  m_SelectExited:
+  m_LastSelectExited:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6123136758355399473}
@@ -1206,6 +1201,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -1330,6 +1331,7 @@ MonoBehaviour:
   velocityInheritance: 1
   caliber: 5.56x45
   chamberedRound: {fileID: 0}
+  isHammerCocked: 0
   isBoltLockedBack: 0
   currentFireMode: 0
   burstCount: 3

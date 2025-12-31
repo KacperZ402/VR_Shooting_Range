@@ -278,7 +278,7 @@ GameObject:
   - component: {fileID: 7336915745273012151}
   - component: {fileID: 3664591588630505359}
   - component: {fileID: 2675381840691573999}
-  m_Layer: 14
+  m_Layer: 8
   m_Name: MagSocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -635,8 +635,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 0.02034482, y: 0.21682073, z: 0.013353335}
-  m_Center: {x: -0.00016260892, y: -0.09307948, z: 0.10815671}
+  m_Size: {x: 0.02034482, y: 0.21682073, z: 0.019215235}
+  m_Center: {x: -0.00016260892, y: -0.09307985, z: 0.10522614}
 --- !u!54 &2509308232631449735
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1014,7 +1014,7 @@ MonoBehaviour:
   - {fileID: 4744632403373556155}
   m_InteractionLayers:
     m_Bits: 1
-  m_DistanceCalculationMode: 1
+  m_DistanceCalculationMode: 2
   m_SelectMode: 1
   m_FocusMode: 1
   m_CustomReticle: {fileID: 0}

@@ -89,13 +89,12 @@ public class ChargingHandleLocking : AnimatedBoltHandle
     // 3. ZMIANA: Nadpisujemy LateUpdate, aby uwzglêdniæ WSZYSTKIE stany
     protected override void LateUpdate()
     {
-        if (weaponControllerBase.weaponGrab == null || !weaponControllerBase.weaponGrab.IsGripHeld)
+        if (!weaponControllerBase.weaponGrab.IsGripHeld)
         {
             return;
         }
         if (isAnimating)
         {
-            // Nie rób nic, pozwól animacji dzia³aæ
             return;
         }
 

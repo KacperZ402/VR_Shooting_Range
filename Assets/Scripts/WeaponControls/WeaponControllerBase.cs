@@ -400,6 +400,7 @@ public class WeaponControllerBase : MonoBehaviour
         if (!force && !CanReleaseBolt()) return;
         TryChamberFromMagazine();
         isBoltLockedBack = false;
+        isHammerCocked = true;
         OnBoltReleasedEvent?.Invoke();
     }
 
@@ -466,12 +467,6 @@ public class WeaponControllerBase : MonoBehaviour
 
         // 2. Pobieramy XRSocketInteractora bezpośrednio z obiektu, na którym jest AmmoSocket
         var socketInteractor = ammoSocket.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor>();
-
-        if (socketInteractor == null)
-        {
-            Debug.LogError("[WeaponController] Obiekt AmmoSocket nie ma komponentu XRSocketInteractor!");
-            return;
-        }
 
         // 3. Sprawdzamy czy w sockecie w ogóle coś jest
         if (socketInteractor.hasSelection)

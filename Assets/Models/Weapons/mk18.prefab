@@ -793,6 +793,7 @@ GameObject:
   - component: {fileID: 2027785144137629293}
   - component: {fileID: 7770654631779760758}
   - component: {fileID: 4214863076152484566}
+  - component: {fileID: 2154998701731911954}
   m_Layer: 7
   m_Name: mk18
   m_TagString: Untagged
@@ -809,7 +810,7 @@ Transform:
   m_GameObject: {fileID: 7648970213368926722}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: -0.9401457, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -860,7 +861,7 @@ MonoBehaviour:
   - {fileID: 4790868977463618918}
   m_InteractionLayers:
     m_Bits: 1
-  m_DistanceCalculationMode: 1
+  m_DistanceCalculationMode: 2
   m_SelectMode: 1
   m_FocusMode: 1
   m_CustomReticle: {fileID: 0}
@@ -885,12 +886,6 @@ MonoBehaviour:
       m_Calls: []
   m_FirstSelectEntered:
     m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6357524985834481720}
         m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
@@ -904,7 +899,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  m_SelectExited:
+  m_LastSelectExited:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6357524985834481720}
@@ -919,6 +914,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -1043,6 +1044,7 @@ MonoBehaviour:
   velocityInheritance: 1
   caliber: 5.56x45
   chamberedRound: {fileID: 0}
+  isHammerCocked: 0
   isBoltLockedBack: 0
   currentFireMode: 0
   burstCount: 3
@@ -1109,6 +1111,21 @@ MonoBehaviour:
   availableModes: 000000000100000003000000
   rotationStep: 90
   positionStep: {x: 0, y: 0, z: 0}
+--- !u!114 &2154998701731911954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7648970213368926722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c64b7a71b1278b4f94f07b238d99295, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponGrab: {fileID: 7159066168573395065}
+  gripPoint: {fileID: 1675250285665158966}
+  weaponController: {fileID: 2027785144137629293}
 --- !u!1 &8354065254512775384
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,7 +1256,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 6357524985834481720}
   m_InteractionLayers:
     m_Bits: 1
   m_DistanceCalculationMode: 1
@@ -1324,7 +1342,7 @@ MonoBehaviour:
   m_SmoothScale: 0
   m_SmoothScaleAmount: 8
   m_TightenScale: 0.1
-  m_ThrowOnDetach: 1
+  m_ThrowOnDetach: 0
   m_ThrowSmoothingDuration: 0.25
   m_ThrowSmoothingCurve:
     serializedVersion: 2
@@ -1531,7 +1549,7 @@ GameObject:
   - component: {fileID: 8968215198495411537}
   - component: {fileID: 3944078986314571342}
   - component: {fileID: 5906614364927026067}
-  m_Layer: 14
+  m_Layer: 8
   m_Name: MagSocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}

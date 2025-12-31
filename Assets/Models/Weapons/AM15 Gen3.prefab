@@ -378,7 +378,7 @@ GameObject:
   - component: {fileID: 5692981258337871751}
   - component: {fileID: 4695205329832647651}
   - component: {fileID: 5454564446807184601}
-  m_Layer: 14
+  m_Layer: 8
   m_Name: MagSocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -696,7 +696,7 @@ MonoBehaviour:
   m_SmoothScale: 0
   m_SmoothScaleAmount: 8
   m_TightenScale: 0.1
-  m_ThrowOnDetach: 1
+  m_ThrowOnDetach: 0
   m_ThrowSmoothingDuration: 0.25
   m_ThrowSmoothingCurve:
     serializedVersion: 2
@@ -883,6 +883,7 @@ GameObject:
   - component: {fileID: 692364106646793442}
   - component: {fileID: 7690609058196586760}
   - component: {fileID: 5427426713405897955}
+  - component: {fileID: 4568350873282214264}
   m_Layer: 7
   m_Name: AM15 Gen3
   m_TagString: Untagged
@@ -972,7 +973,7 @@ MonoBehaviour:
   - {fileID: 6048607282985578150}
   m_InteractionLayers:
     m_Bits: 1
-  m_DistanceCalculationMode: 1
+  m_DistanceCalculationMode: 2
   m_SelectMode: 1
   m_FocusMode: 1
   m_CustomReticle: {fileID: 0}
@@ -997,12 +998,6 @@ MonoBehaviour:
       m_Calls: []
   m_FirstSelectEntered:
     m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1646903527078714140}
         m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
@@ -1016,7 +1011,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  m_SelectExited:
+  m_LastSelectExited:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1646903527078714140}
@@ -1031,6 +1026,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -1133,6 +1134,7 @@ MonoBehaviour:
   velocityInheritance: 1
   caliber: 5.56x45
   chamberedRound: {fileID: 0}
+  isHammerCocked: 0
   isBoltLockedBack: 0
   currentFireMode: 0
   burstCount: 3
@@ -1199,6 +1201,21 @@ MonoBehaviour:
   returnSpeed: 10
   hapticAmplitude: 0.8
   hapticDuration: 0.1
+--- !u!114 &4568350873282214264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6594691401010933163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c64b7a71b1278b4f94f07b238d99295, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponGrab: {fileID: 2660264770763318675}
+  gripPoint: {fileID: 6470516386906212097}
+  weaponController: {fileID: 692364106646793442}
 --- !u!1 &6947254767325299554
 GameObject:
   m_ObjectHideFlags: 0

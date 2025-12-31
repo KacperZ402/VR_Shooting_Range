@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using System.Collections.Generic; // Potrzebne dla Stosu (Stack)
+using System.Collections.Generic;
 
 public class Magazine : MonoBehaviour
 {
@@ -13,119 +13,85 @@ public class Magazine : MonoBehaviour
 
     private Stack<GameObject> rounds = new Stack<GameObject>();
 
-    public int currentRounds
-    {
-        get { return rounds.Count; }
-    }
+    public int currentRounds => rounds.Count;
+
+    // Helper dla skryptu dziecka
+    public bool IsFull => rounds.Count >= capacity;
 
     [Header("Eventy")]
     public UnityEvent OnInsertedToSocket;
     public UnityEvent OnRemovedFromSocket;
     public UnityEvent OnRoundRemoved;
+    public UnityEvent OnRoundInserted; // Dodatkowy event dla feedbacku
 
     [Header("Debug")]
-    [Tooltip("Prefab pocisku (z komponentem Bullet) do napełnienia magazynka w trybie testowym.")]
     public GameObject bulletPrefabForFilling;
-
-    private AmmoPoolManager ammoPool; // Referencja do puli
+    private AmmoPoolManager ammoPool;
 
     void Awake()
     {
-        ammoPool = AmmoPoolManager.Instance; // Pobierz Singleton
-
-        if (bulletPrefabForFilling != null && rounds.Count == 0)
-        {
-            RefillWithPrefab();
-        }
+        // Jeśli masz Singletona, to jest ok
+        if (AmmoPoolManager.Instance != null)
+            ammoPool = AmmoPoolManager.Instance;
     }
 
-    /// <summary>
-    /// Napełnia magazynek instancjami z puli (do testów).
-    /// </summary>
-    private void RefillWithPrefab()
+    // --- LOGIKA PRZYJMOWANIA NABOJU (wywoływana przez Dziecko/Loader) ---
+    public bool TryInsertRound(GameObject bulletInstance)
     {
-        if (ammoPool == null)
+        if (IsFull) return false;
+
+        // Sprawdzamy kaliber (logika przeniesiona tutaj, żeby dziecko było tylko detektorem)
+        Bullet bulletScript = bulletInstance.GetComponent<Bullet>();
+        if (bulletScript != null && bulletScript.caliber != this.caliber)
         {
-            Debug.LogError("AmmoPoolManager nie znaleziony! Nie można napełnić magazynka.", this);
-            return;
+            Debug.Log("Zły kaliber!");
+            return false;
         }
 
-        rounds.Clear();
-        for (int i = 0; i < capacity; i++)
-        {
-            // 🔹 ZMIANA: Zamiast Instantiate(), pobieramy z puli
-            GameObject newRound = ammoPool.GetRound(bulletPrefabForFilling);
+        // Deaktywacja naboju i dodanie na stos
+        bulletInstance.SetActive(false);
 
-            if (newRound != null)
-            {
-                newRound.SetActive(false); // Dezaktywuj instancję
-                // TODO: Ustawić parent na magazynek
-                rounds.Push(newRound); // Dodaj na stos
-            }
-        }
-        Debug.Log($"[Magazine] Napełniono magazynek {capacity} nabojami (z puli).");
+        // Ustawienie parenta na magazynek (dla porządku w hierarchii)
+        bulletInstance.transform.SetParent(this.transform);
+
+        rounds.Push(bulletInstance);
+
+        OnRoundInserted?.Invoke(); // Np. odtwórz dźwięk ładowania
+        return true;
     }
 
+    // --- LOGIKA WYJMOWANIA NABOJU (dla Broni) ---
     public GameObject ExtractRound()
     {
-        if (rounds.Count <= 0)
-        {
-            return null;
-        }
+        if (rounds.Count <= 0) return null;
 
         OnRoundRemoved?.Invoke();
-        GameObject round = rounds.Pop(); // Zdejmij instancję ze stosu
+        GameObject round = rounds.Pop();
 
-        // (Opcjonalnie) usuń parenta, aby obiekt nie był już dzieckiem magazynka
-        // if(round != null) round.transform.SetParent(null); 
+        // Ważne: Odpinamy parenta przy wyjmowaniu, żeby nabój nie "ciągnął" magazynka
+        if (round != null) round.transform.SetParent(null);
 
-        return round; // Zwróć ją
+        return round;
     }
 
-    // 🔹 POPRAWIONA METODA
-    public bool OnInsertedBullet(GameObject bulletInstance)
-    {
-        if (rounds.Count < capacity)
-        {
-            // TODO: Ustawić parent na transform magazynka dla porządku
-            // bulletInstance.transform.SetParent(this.transform);
-
-            // 🔹 POPRAWKA: Chowamy obiekt, zamiast go niszczyć
-            bulletInstance.SetActive(false);
-
-            rounds.Push(bulletInstance); // Włóż na stos
-            return true;
-        }
-        return false; // Magazynek pełny
-    }
-
-    public void Refill()
-    {
-        RefillWithPrefab();
-    }
-
+    // --- Obsługa Socketów ---
     public void NotifyInserted() => OnInsertedToSocket?.Invoke();
     public void NotifyRemoved() => OnRemovedFromSocket?.Invoke();
 
-    [Header("Trigger nabojów")]
-    [Tooltip("Tag obiektów nabojów akceptowanych przez magazyn")]
-    public string bulletTag = "Bullet";
-
-    private void OnTriggerEnter(Collider other)
+    // --- Debug / Refill ---
+    public void Refill()
     {
-        if (!other.CompareTag(bulletTag)) return;
-
-        Bullet bullet = other.GetComponent<Bullet>();
-        if (bullet == null || bullet.caliber != caliber) return;
-
-        // Przekazujemy 'other.gameObject', OnInsertedBullet zajmie się resztą
-        if (OnInsertedBullet(other.gameObject))
+        if (ammoPool == null) return;
+        rounds.Clear();
+        for (int i = 0; i < capacity; i++)
         {
-            Debug.Log("[Magazine] Nabój dodany do magazynka.");
-        }
-        else
-        {
-            Debug.Log("[Magazine] Magazynek pełny.");
+            GameObject newRound = ammoPool.GetRound(bulletPrefabForFilling);
+            if (newRound != null)
+            {
+                newRound.SetActive(false);
+                newRound.transform.SetParent(this.transform);
+                rounds.Push(newRound);
+            }
         }
     }
 }

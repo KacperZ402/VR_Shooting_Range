@@ -602,6 +602,74 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6629048239579462672
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1319360572999361548}
+  - component: {fileID: 6382644537829119508}
+  - component: {fileID: 8979096322033531035}
+  m_Layer: 11
+  m_Name: BulletTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1319360572999361548
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6629048239579462672}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7592260759175197999}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6382644537829119508
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6629048239579462672}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.011609793, y: 0.081144884, z: 0.006521032}
+  m_Center: {x: -0.0004528761, y: 0.020985903, z: 0.039755497}
+--- !u!114 &8979096322033531035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6629048239579462672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6671f7ad3cab84fb613a74bb3fae08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentMagazine: {fileID: 7717867298360438159}
+  bulletTag: Bullet
 --- !u!1 &6666814811357933277
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,8 +685,7 @@ GameObject:
   - component: {fileID: 8505919204370461007}
   - component: {fileID: 2488098040619802422}
   - component: {fileID: 7717867298360438159}
-  - component: {fileID: 3423118486479073865}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: MagDragonov
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -647,6 +714,7 @@ Transform:
   - {fileID: 5411211765525293338}
   - {fileID: 1539368634034559020}
   - {fileID: 6491699409099042109}
+  - {fileID: 1319360572999361548}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3382218955497580221
@@ -902,29 +970,10 @@ MonoBehaviour:
   OnRoundRemoved:
     m_PersistentCalls:
       m_Calls: []
+  OnRoundInserted:
+    m_PersistentCalls:
+      m_Calls: []
   bulletPrefabForFilling: {fileID: 0}
-  bulletTag: Bullet
---- !u!65 &3423118486479073865
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6666814811357933277}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.011609793, y: 0.081144884, z: 0.006521032}
-  m_Center: {x: -0.0004528761, y: 0.020985903, z: 0.039755497}
 --- !u!1 &7225143002938441975
 GameObject:
   m_ObjectHideFlags: 0

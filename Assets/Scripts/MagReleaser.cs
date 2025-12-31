@@ -109,8 +109,6 @@ public class MagazineReleaseSimple : MonoBehaviour
     {
         if (weaponController != null)
         {
-            Debug.Log("[MagRelease] Przycisk wciśnięty -> Zrzut magazynka!");
-            // Upewnij się, że masz tę metodę w WeaponControllerBase
             weaponController.EjectMagazine();
         }
     }

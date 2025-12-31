@@ -26,20 +26,20 @@ TagManager:
   - UI
   - WeaponPart
   - Weapon
-  - StanagMag
-  - C3A3Mag
-  - Ak47Mag
-  - GlockMag
-  - BerretaMag
-  - ColtMag
   - Socket
   - SocketInteractable
-  - 
-  - 
-  - 
-  - 
-  - 
   - Bullet
+  - BulletTrigger
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

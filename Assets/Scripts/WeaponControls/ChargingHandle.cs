@@ -103,7 +103,7 @@ public class ChargingHandle : MonoBehaviour
     // Zmieniono na 'virtual', aby klasa pochodna mogła ją nadpisać
     protected virtual void LateUpdate()
     {
-        if (weaponControllerBase.weaponGrab == null || !weaponControllerBase.weaponGrab.IsGripHeld)
+        if (!weaponControllerBase.weaponGrab.IsGripHeld)
         {
             return;
         }

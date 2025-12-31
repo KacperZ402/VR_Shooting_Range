@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2026299037614541205}
   - component: {fileID: 1401792409205292510}
   - component: {fileID: 977538576601759137}
-  m_Layer: 14
+  m_Layer: 8
   m_Name: MagSocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +269,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.037901163, y: 0.020408722, z: 0.02022213}
   m_Center: {x: 0.032556176, y: -0.105202146, z: 0.0730378}
@@ -313,7 +313,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 2427893267589702618}
   m_InteractionLayers:
     m_Bits: 1
   m_DistanceCalculationMode: 1
@@ -859,7 +860,7 @@ MonoBehaviour:
   - {fileID: 8249789321188911959}
   m_InteractionLayers:
     m_Bits: 1
-  m_DistanceCalculationMode: 1
+  m_DistanceCalculationMode: 2
   m_SelectMode: 1
   m_FocusMode: 1
   m_CustomReticle: {fileID: 0}
@@ -1020,6 +1021,7 @@ MonoBehaviour:
   velocityInheritance: 1
   caliber: 7.62x54
   chamberedRound: {fileID: 0}
+  isHammerCocked: 0
   isBoltLockedBack: 0
   currentFireMode: 0
   burstCount: 3

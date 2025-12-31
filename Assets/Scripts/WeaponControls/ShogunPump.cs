@@ -4,7 +4,7 @@ public class ShotgunPump : ChargingHandle
 {
     protected override void LateUpdate()
     {
-        if (weaponControllerBase.weaponGrab == null || !weaponControllerBase.weaponGrab.IsGripHeld)
+        if (!weaponControllerBase.weaponGrab.IsGripHeld)
         {
             return;
         }

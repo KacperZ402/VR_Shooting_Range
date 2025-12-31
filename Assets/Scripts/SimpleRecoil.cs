@@ -48,7 +48,7 @@ public class WeaponRecoilSystem : MonoBehaviour
 
     private void Update()
     {
-        if (weaponController.weaponGrab.IsGripHeld == false) return;
+        if (!weaponController.weaponGrab.IsGripHeld) return;
 
         // 1. Interpolacja celu do zera
         targetRecoilPos = Vector3.Lerp(targetRecoilPos, Vector3.zero, returnSpeed * Time.deltaTime);

@@ -46,10 +46,10 @@ public class BoltFollower : MonoBehaviour
 
     void LateUpdate()
     {
-        if (isAnimating)
-            return;
+        if (isAnimating) return;
 
-        // 🔹 Normalne zachowanie (AR / HK)
+        if (!weaponController.weaponGrab.IsGripHeld) return;
+
         float targetY = (weaponController != null && weaponController.isBoltLockedBack)
             ? lockedBackY
             : chargingHandle.localPosition.y;
@@ -63,8 +63,7 @@ public class BoltFollower : MonoBehaviour
     // 🔹 Animacja strzału
     public void StartKickbackAnimation(float lockedBackY, int holdFrames, int returnFrames)
     {
-        if (effectCoroutine != null)
-            StopCoroutine(effectCoroutine);
+        if (effectCoroutine != null) StopCoroutine(effectCoroutine);
 
         effectCoroutine = StartCoroutine(KickBackAndReturn(lockedBackY, holdFrames, returnFrames));
     }

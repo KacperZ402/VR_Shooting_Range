@@ -20,7 +20,6 @@ public class WeaponGrabInteractable : XRGrabInteractable
         if (GetAttachTransform(args.interactorObject) == gripAttachPoint)
         {
             gripInteractor = args.interactorObject;
-            Debug.Log($"[WeaponGrab] GripInteractor ustawiony: {((gripInteractor as MonoBehaviour)?.name ?? gripInteractor.ToString())}");
         }
     }
 
@@ -38,13 +37,9 @@ public class WeaponGrabInteractable : XRGrabInteractable
                 if (GetAttachTransform(ix) == gripAttachPoint)
                 {
                     gripInteractor = ix;
-                    Debug.Log($"[WeaponGrab] GripInteractor przejęty przez inną rękę: {((gripInteractor as MonoBehaviour)?.name ?? gripInteractor.ToString())}");
                     break;
                 }
             }
-
-            if (gripInteractor == null)
-                Debug.Log("[WeaponGrab] GripInteractor zwolniony, brak aktywnej ręki na gripa.");
         }
     }
 

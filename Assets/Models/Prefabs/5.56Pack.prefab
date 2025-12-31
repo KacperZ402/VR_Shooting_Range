@@ -30,9 +30,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 477053405664228328}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.029722229, y: -0.0042312667, z: 5.4333906}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.029722229, y: 0.0346, z: 5.4333906}
+  m_LocalScale: {x: 2, y: 2, z: 1.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -293,4 +293,4 @@ MonoBehaviour:
   ammoPrefab: {fileID: 4333032272131557393, guid: 42f3996daef76414f99dac1253623c83, type: 3}
   gridColumns: 10
   gridRows: 2
-  gridSpacing: 0.05
+  gridSpacing: 0.02

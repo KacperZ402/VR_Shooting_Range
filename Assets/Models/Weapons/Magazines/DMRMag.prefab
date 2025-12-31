@@ -1302,11 +1302,10 @@ GameObject:
   - component: {fileID: 5258915696041563548}
   - component: {fileID: 4859527953948718883}
   - component: {fileID: 5478281401814502273}
-  - component: {fileID: 2407414106466482686}
   - component: {fileID: 707485102021651211}
   - component: {fileID: 5349193109364657018}
   - component: {fileID: 3177577302267546307}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: DMRMag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1347,6 +1346,7 @@ Transform:
   - {fileID: 6052595992964935105}
   - {fileID: 5785916584554457871}
   - {fileID: 7656232068638719726}
+  - {fileID: 102164202686713626}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5258915696041563548
@@ -1424,27 +1424,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7378567492778099593, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
---- !u!65 &2407414106466482686
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5658831072902109719}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.022992162, y: 0.08122278, z: 0.010237173}
-  m_Center: {x: 0.0000018747523, y: 0.013056542, z: 0.0400004}
 --- !u!54 &707485102021651211
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1623,7 +1602,77 @@ MonoBehaviour:
   OnRoundRemoved:
     m_PersistentCalls:
       m_Calls: []
+  OnRoundInserted:
+    m_PersistentCalls:
+      m_Calls: []
   bulletPrefabForFilling: {fileID: 0}
+--- !u!1 &5825928201974409047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 102164202686713626}
+  - component: {fileID: 2929137205199912792}
+  - component: {fileID: 275827324944509937}
+  m_Layer: 11
+  m_Name: BulletTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &102164202686713626
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5825928201974409047}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7541479575983448256}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2929137205199912792
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5825928201974409047}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.022992162, y: 0.08122278, z: 0.010237173}
+  m_Center: {x: 0.0000018747523, y: 0.013056542, z: 0.0400004}
+--- !u!114 &275827324944509937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5825928201974409047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6671f7ad3cab84fb613a74bb3fae08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentMagazine: {fileID: 3177577302267546307}
   bulletTag: Bullet
 --- !u!1 &5858781462191299384
 GameObject:

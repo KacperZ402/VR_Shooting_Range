@@ -39,6 +39,8 @@ public class BoltActionHandle : ChargingHandle
 
     protected override void LateUpdate()
     {
+        if (!weaponControllerBase.weaponGrab.IsGripHeld) return;
+
         if (isGrabbed)
         {
             // Odczytujemy aktualne wartości (ustawione przez XR Interactor)
