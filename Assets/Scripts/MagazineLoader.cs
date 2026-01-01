@@ -1,39 +1,45 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
+// Odkomentuj w Unity 6 / XR Toolkit 3.0+:
+// using UnityEngine.XR.Interaction.Toolkit.Interactables; 
+
 public class MagazineLoader : MonoBehaviour
 {
-    [Header("Konfiguracja")]
-    [Tooltip("Podepnij tutaj skrypt Magazine z obiektu rodzica")]
-    public Magazine parentMagazine;
-
-    [Tooltip("Tag naboju")]
-    public string bulletTag = "Bullet";
+    [SerializeField] private Magazine parentMagazine;
 
     private void Awake()
     {
-        // Automatyczne znalezienie rodzica, je�li zapomnisz przypisa� w inspektorze
-        if (parentMagazine == null)
-        {
-            parentMagazine = GetComponentInParent<Magazine>();
-        }
+        if (parentMagazine == null) parentMagazine = GetComponentInParent<Magazine>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // 1. Szybkie odrzucenie po Tagu
-        if (!other.CompareTag(bulletTag)) return;
+        // 1. Sprawdzamy, czy to nabój i czy magazynek ma miejsce
+        if (!other.CompareTag("Bullet")) return;
+        if (parentMagazine != null && parentMagazine.IsFull) return;
 
-        // 2. Sprawdzenie czy magazynek istnieje i nie jest pe�ny
-        if (parentMagazine == null || parentMagazine.IsFull) return;
+        // 2. Pobieramy komponent Interactable z naboju
+        var bulletInteractable = other.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
 
-        // 3. Pr�ba dodania naboju
-        // Przekazujemy obiekt do rodzica -> Rodzic decyduje czy kaliber pasuje
-        bool success = parentMagazine.TryInsertRound(other.gameObject);
-
-        if (success)
+        // 3. 🔥 WARUNEK ANULOWANIA GRABA 🔥
+        // Sprawdzamy, czy nabój jest aktualnie trzymany przez rękę (isSelected)
+        if (bulletInteractable != null && bulletInteractable.isSelected)
         {
-            // Opcjonalnie: Tutaj mo�esz doda� efekt wizualny na samym wlocie (iskra/b�ysk)
+            // Pobieramy menedżera interakcji
+            var interactionManager = bulletInteractable.interactionManager;
+
+            // JEŚLI RĘKA TRZYMA -> ZMUŚ JĄ DO PUSZCZENIA
+            if (interactionManager != null)
+            {
+                // To jest ta linijka, która "anuluje garb"
+                interactionManager.SelectExit(bulletInteractable.interactorsSelecting[0], bulletInteractable);
+            }
+        }
+
+        // 4. Teraz, gdy nabój jest już wolny (lub zaraz będzie), wkładamy go do magazynka
+        if (parentMagazine != null)
+        {
+            parentMagazine.TryInsertRound(other.gameObject);
         }
     }
 }

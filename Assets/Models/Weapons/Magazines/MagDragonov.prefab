@@ -528,7 +528,7 @@ GameObject:
   - component: {fileID: 6501913571399491359}
   - component: {fileID: 4643672213533324017}
   m_Layer: 0
-  m_Name: 7.62x54mm.005
+  m_Name: 7.62x54mm.000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -544,7 +544,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -5.4230622e-36, y: -5.5957718e-18, z: 9.691356e-19, w: 1}
   m_LocalPosition: {x: 0.0015217066, y: 0.011549234, z: 0.03851843}
-  m_LocalScale: {x: 1.7142856, y: 1.6709532, z: 1.7142859}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7592260759175197999}
@@ -669,7 +669,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentMagazine: {fileID: 7717867298360438159}
-  bulletTag: Bullet
 --- !u!1 &6666814811357933277
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,11 +704,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6961999589397505077}
   - {fileID: 2703142915449322219}
   - {fileID: 6792536755559877816}
   - {fileID: 8807136596514169303}
   - {fileID: 5490391169445678754}
-  - {fileID: 6961999589397505077}
   - {fileID: 1165697363698060701}
   - {fileID: 5411211765525293338}
   - {fileID: 1539368634034559020}
@@ -867,10 +866,34 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6382644537829119508}
+        m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6382644537829119508}
+        m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -961,6 +984,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capacity: 10
   caliber: 7.62x54
+  showVisualAmmo: 1
+  ammoSlots:
+  - {fileID: 6961999589397505077}
+  - {fileID: 2703142915449322219}
+  - {fileID: 6792536755559877816}
+  - {fileID: 8807136596514169303}
+  - {fileID: 5490391169445678754}
+  - {fileID: 1165697363698060701}
+  - {fileID: 5411211765525293338}
+  - {fileID: 1539368634034559020}
+  - {fileID: 6491699409099042109}
   OnInsertedToSocket:
     m_PersistentCalls:
       m_Calls: []
