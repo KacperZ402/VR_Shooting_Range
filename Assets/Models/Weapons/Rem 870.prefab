@@ -632,7 +632,7 @@ MonoBehaviour:
   m_SmoothPosition: 0
   m_SmoothPositionAmount: 8
   m_TightenPosition: 0.1
-  m_TrackRotation: 1
+  m_TrackRotation: 0
   m_SmoothRotation: 0
   m_SmoothRotationAmount: 8
   m_TightenRotation: 0.1
@@ -989,7 +989,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentMagazine: {fileID: 8023342707681235497}
-  bulletTag: Bullet
 --- !u!1 &4969335598691443998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,6 +1067,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capacity: 4
   caliber: 12Ga
+  showVisualAmmo: 0
+  ammoSlots: []
   OnInsertedToSocket:
     m_PersistentCalls:
       m_Calls: []

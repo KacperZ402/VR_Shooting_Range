@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Interactables; // XR Toolkit 3.x
+// Odkomentuj dla Unity 6 / XR Toolkit 3.0+:
+// using UnityEngine.XR.Interaction.Toolkit.Interactables; 
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class WeaponRecoilSystem : MonoBehaviour
 {
@@ -8,26 +10,31 @@ public class WeaponRecoilSystem : MonoBehaviour
     public WeaponControllerBase weaponController;
     public Transform recoilTransform;
 
-    [Header("Parametry Odrzutu")]
-    public float recoilPositionKick = -0.05f;
-    public float recoilRotationKick = 10f;
-    public float sideRecoilRandomness = 2f;
+    [Header("Logika Oburęczności")]
+    [Tooltip("Mnożnik odrzutu, gdy broń trzyma tylko jedna ręka.")]
+    public float oneHandMultiplier = 2.0f;
+
+    [Header("Odrzut w osi Y (Tył/Przód)")]
+    public float recoilKickY = -0.05f;
+    public float positionRandomness = 0.002f;
+
+    [Header("Odrzut Rotacyjny (Podrzut)")]
+    public float rotationKickX = 10f;
+    public float rotationRandomY = 2f;
 
     [Header("Dynamika")]
-    public float snappiness = 6f;
-    public float returnSpeed = 2f;
+    public float snappiness = 20f;
+    public float returnSpeed = 10f;
 
-    [Header("Haptyka VR")]
+    [Header("Haptyka")]
     public float hapticAmplitude = 0.8f;
     public float hapticDuration = 0.1f;
 
-    // Zmienne wewnętrzne do obliczeń
+    // Zmienne wewnętrzne
     private Vector3 currentRecoilPos;
     private Vector3 targetRecoilPos;
     private Vector3 currentRecoilRot;
     private Vector3 targetRecoilRot;
-
-    // 🔹 NOWE: Zmienne do zapamiętania pozycji startowej
     private Vector3 initialPos;
     private Quaternion initialRot;
 
@@ -38,7 +45,6 @@ public class WeaponRecoilSystem : MonoBehaviour
             weaponController.OnFire.AddListener(AddRecoil);
         }
 
-        // 🔹 NOWE: Zapamiętujemy, gdzie recoilTransform stał na początku gry
         if (recoilTransform != null)
         {
             initialPos = recoilTransform.localPosition;
@@ -48,32 +54,58 @@ public class WeaponRecoilSystem : MonoBehaviour
 
     private void Update()
     {
-        if (!weaponController.weaponGrab.IsGripHeld) return;
+        // Optymalizacja (Sleep)
+        if (targetRecoilPos == Vector3.zero && currentRecoilPos.sqrMagnitude < 0.000001f &&
+            targetRecoilRot == Vector3.zero && currentRecoilRot.sqrMagnitude < 0.000001f)
+        {
+            return;
+        }
 
-        // 1. Interpolacja celu do zera
+        // Interpolacja
         targetRecoilPos = Vector3.Lerp(targetRecoilPos, Vector3.zero, returnSpeed * Time.deltaTime);
         targetRecoilRot = Vector3.Lerp(targetRecoilRot, Vector3.zero, returnSpeed * Time.deltaTime);
 
-        // 2. Interpolacja obecnej pozycji
         currentRecoilPos = Vector3.Lerp(currentRecoilPos, targetRecoilPos, snappiness * Time.deltaTime);
         currentRecoilRot = Vector3.Lerp(currentRecoilRot, targetRecoilRot, snappiness * Time.deltaTime);
 
-        // 3. Aplikowanie transformacji
         if (recoilTransform != null)
         {
-            // 🔹 ZMIANA: Dodajemy odrzut do pozycji startowej (zamiast nadpisywać)
             recoilTransform.localPosition = initialPos + currentRecoilPos;
-
-            // 🔹 ZMIANA: Mnożymy rotację startową przez rotację odrzutu
             recoilTransform.localRotation = initialRot * Quaternion.Euler(currentRecoilRot);
         }
     }
 
     public void AddRecoil()
     {
-        targetRecoilPos += Vector3.forward * recoilPositionKick;
-        float randomY = Random.Range(-sideRecoilRandomness, sideRecoilRandomness);
-        targetRecoilRot += new Vector3(-recoilRotationKick, randomY, 0f);
+        // 1. SPRAWDZENIE: Ile rąk trzyma GŁÓWNY chwyt?
+        // Pobieramy to bezpośrednio z WeaponGrabInteractable
+        int handCount = 0;
+
+        if (weaponController != null && weaponController.weaponGrab != null)
+        {
+            // To jest ta lista, o którą Ci chodziło
+            handCount = weaponController.weaponGrab.interactorsSelecting.Count;
+        }
+
+        // 2. LOGIKA: Jeśli 2 lub więcej rąk -> Mnożnik 1.0. Jeśli mniej -> Mnożnik 2.0
+        float multiplier = (handCount >= 2) ? 1.0f : oneHandMultiplier;
+
+
+        // 3. APLIKACJA SIŁY
+        Vector3 kickVector = new Vector3(
+            Random.Range(-positionRandomness, positionRandomness),
+            recoilKickY + Random.Range(-positionRandomness, positionRandomness),
+            Random.Range(-positionRandomness, positionRandomness)
+        );
+
+        targetRecoilPos += kickVector * multiplier;
+
+        float randomY = Random.Range(-rotationRandomY, rotationRandomY);
+        float randomZ = Random.Range(-rotationRandomY / 2f, rotationRandomY / 2f);
+
+        targetRecoilRot += new Vector3(-rotationKickX, randomY, randomZ) * multiplier;
+
+        // 4. WIBRACJE (Dla wszystkich rąk trzymających TEN obiekt)
         TriggerHaptics();
     }
 
@@ -84,10 +116,12 @@ public class WeaponRecoilSystem : MonoBehaviour
 
         if (interactable.isSelected)
         {
-            var interactor = interactable.interactorsSelecting[0];
-            if (interactor is UnityEngine.XR.Interaction.Toolkit.Interactors.XRBaseInputInteractor inputInteractor)
+            foreach (var interactor in interactable.interactorsSelecting)
             {
-                inputInteractor.SendHapticImpulse(hapticAmplitude, hapticDuration);
+                if (interactor is XRBaseInputInteractor inputInteractor)
+                {
+                    inputInteractor.SendHapticImpulse(hapticAmplitude, hapticDuration);
+                }
             }
         }
     }

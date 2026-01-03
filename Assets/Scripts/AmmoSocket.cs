@@ -42,8 +42,6 @@ public class AmmoSocket : MonoBehaviour
         var mag = args.interactableObject.transform.GetComponentInParent<Magazine>();
         if (mag != null)
         {
-            // TODO: W przyszłości można dodać tu sprawdzanie kalibru i odrzucanie magazynka
-            // np. sprawdzając kaliber broni (GetComponentInParent<WeaponControllerBase>().caliber)
 
             currentMagazine = mag;
             currentMagazine.NotifyInserted();

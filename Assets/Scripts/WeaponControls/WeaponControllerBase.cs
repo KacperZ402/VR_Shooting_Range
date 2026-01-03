@@ -1,8 +1,8 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
-using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 [RequireComponent(typeof(XRGrabInteractable))]
 public class WeaponControllerBase : MonoBehaviour
@@ -15,6 +15,8 @@ public class WeaponControllerBase : MonoBehaviour
     public WeaponGrabInteractable weaponGrab;
     [Tooltip("Transform (pusty GameObject) reprezentujący pozycję komory nabojowej.")]
     public Transform chamberTransform;
+    // Kolzije Magazynka (aby je wyłączyć podczas podpiecia do gniazda)
+    private List<Collider> internalGunParts = new List<Collider>();
 
     [Header("Wyrzut Łuski")]
     [Tooltip("Transform (pusty GameObject) w miejscu, z którego wylatuje łuska.")]
@@ -68,6 +70,8 @@ public class WeaponControllerBase : MonoBehaviour
     protected Vector3 lastFramePosition;
     protected Vector3 currentGunVelocity;
 
+    private GameObject _cachedMagazine;
+
     protected virtual void Awake()
     {
         ammoPool = AmmoPoolManager.Instance;
@@ -89,6 +93,7 @@ public class WeaponControllerBase : MonoBehaviour
 
         if (weaponGrab != null)
             weaponGrab.weaponController = this;
+        BuildCollisionList();
     }
 
     protected virtual void Start()
@@ -504,5 +509,100 @@ public class WeaponControllerBase : MonoBehaviour
 
         // Włączamy z powrotem
         socket.socketActive = true;
+    }
+    private void BuildCollisionList()
+    {
+        internalGunParts.Clear();
+        // Zbieramy wszystko z broni
+        internalGunParts.AddRange(GetComponentsInChildren<Collider>(true));
+
+        // Dodajemy Zamek (Charging Handle)
+        if (chargingHandle != null)
+        {
+            var handleCols = chargingHandle.GetComponentsInChildren<Collider>(true);
+            foreach (var col in handleCols)
+            {
+                if (!internalGunParts.Contains(col)) internalGunParts.Add(col);
+            }
+        }
+
+        // Logujemy ile znaleźliśmy części (jeśli wyjdzie 0, to tu jest błąd)
+        Debug.Log($"[WeaponCollision] Zbudowano listę koliderów broni. Znaleziono: {internalGunParts.Count} części.");
+    }
+
+    // --- FUNKCJE DLA EVENTÓW (BEZ ARGUMENTÓW) ---
+    // Podepnij to pod OnMagazineInserted (nie wymaga parametru!)
+    public void OnMagazineInsertedEvent()
+    {
+        // 1. Upewnij się, że mamy listę części broni
+        if (internalGunParts.Count == 0) BuildCollisionList();
+
+        if (ammoSocket == null) return;
+
+        var socket = ammoSocket.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor>();
+
+        // Sprawdzamy co weszło
+        if (socket != null && socket.hasSelection)
+        {
+            var magInteractable = socket.interactablesSelected[0] as MonoBehaviour;
+            if (magInteractable != null)
+            {
+                // ZAPAMIĘTUJEMY MAGAZYNEK!
+                _cachedMagazine = magInteractable.gameObject;
+
+                // Wyłączamy kolizję (TRUE)
+                SetMagCollision(_cachedMagazine, true);
+
+                Debug.Log($"[WeaponCollision] Włożono magazynek: {_cachedMagazine.name}. Kolizje wyłączone.");
+            }
+        }
+    }
+
+    // Podepnij to pod OnMagazineRemoved
+    public void OnMagazineRemovedEvent()
+    {
+        // Tutaj socket jest już pusty, więc nie możemy z niego pobrać magazynka.
+        // Ale mamy go zapisanego w zmiennej _cachedMagazine!
+
+        if (_cachedMagazine != null)
+        {
+            // Przywracamy kolizję (FALSE)
+            SetMagCollision(_cachedMagazine, false);
+
+            Debug.Log($"[WeaponCollision] Wyjęto magazynek: {_cachedMagazine.name}. Kolizje przywrócone.");
+
+            // Czyścimy zmienną, bo magazynek już wyszedł
+            _cachedMagazine = null;
+        }
+        else
+        {
+            Debug.LogWarning("[WeaponCollision] Próba przywrócenia kolizji, ale nie znaleziono zapamiętanego magazynka.");
+        }
+    }
+    public void SetMagazineCollisionIgnored(GameObject mag)
+    {
+        if (mag == null) return;
+        Debug.Log($"[WeaponCollision] Manualne wyłączenie dla: {mag.name}");
+        SetMagCollision(mag, true);
+    }
+
+    // --- LOGIKA GŁÓWNA ---
+    private void SetMagCollision(GameObject magazineRoot, bool ignore)
+    {
+        var magColliders = magazineRoot.GetComponentsInChildren<Collider>(true);
+
+        int count = 0;
+        foreach (var gunPart in internalGunParts)
+        {
+            if (gunPart == null || gunPart.isTrigger) continue;
+
+            foreach (var magPart in magColliders)
+            {
+                if (magPart.isTrigger) continue;
+                Physics.IgnoreCollision(gunPart, magPart, ignore);
+                count++;
+            }
+        }
+        Debug.Log($"[WeaponCollision] Zaktualizowano {count} par kolizji (Ignore={ignore}).");
     }
 }

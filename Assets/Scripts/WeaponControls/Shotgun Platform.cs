@@ -53,14 +53,14 @@ public class ShotgunPlatform : WeaponControllerBase
 
         bool isTwoHanded = (pumpInteractable != null && pumpInteractable.isSelected);
 
-        if (isTwoHanded)
+        if (isTwoHanded )
         {
-            weaponGrab.trackRotation = false;
+            if (weaponGrab.trackRotation) weaponGrab.trackRotation = false;
             StabilizeAim();
         }
-        else
+        if(!weaponGrab.trackRotation && !isTwoHanded)
         {
-            weaponGrab.trackRotation = true;
+            if (!weaponGrab.trackRotation) weaponGrab.trackRotation = true;
         }
     }
 
@@ -102,7 +102,8 @@ public class ShotgunPlatform : WeaponControllerBase
 
     protected override void Update()
     {
-        base.Update();
+        if (!weaponGrab.IsGripHeld) return;
+        base.Update(); 
         HandleMagazineLoaderLogic();
     }
 
