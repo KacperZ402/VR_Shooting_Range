@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events; // 🔹 DODANO: Wymagane dla UnityEvent
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -13,17 +14,19 @@ public class FireSelectorSimple : MonoBehaviour
     [Header("Referencje")]
     public XRGrabInteractable weaponGrab;
     public Transform selectorLever;
-    public Transform gripPoint; // attach point uchwytu (punkt, który ma kontrolować selektor)
+    public Transform gripPoint;
     public WeaponControllerBase weaponController;
-
 
     [Header("Tryby ognia")]
     public List<FireMode> availableModes = new List<FireMode> { FireMode.Safe, FireMode.Semi, FireMode.Auto };
     public float rotationStep = 45f;
     public Vector3 positionStep = Vector3.zero;
 
+    [Header("Eventy")]
+    public UnityEvent OnFireModeChanged; // 🔹 DODANO: Miejsce na podpięcie dźwięku
+
     private int fireModeIndex = 0;
-    private XRBaseInteractor activeHand; // ręka trzymająca gripPoint
+    private XRBaseInteractor activeHand;
     private bool lastButtonPressed;
     private float buttonCooldown = 0.2f;
     private float nextButtonTime = 0f;
@@ -33,7 +36,10 @@ public class FireSelectorSimple : MonoBehaviour
     {
         if (!weaponGrab)
             weaponGrab = GetComponent<XRGrabInteractable>();
-        initialPosition = selectorLever.localPosition;
+
+        if (selectorLever)
+            initialPosition = selectorLever.localPosition;
+
         ApplyRotation();
         ApplyMode();
 
@@ -48,11 +54,9 @@ public class FireSelectorSimple : MonoBehaviour
 
         var attach = weaponGrab.GetAttachTransform(interactor);
 
-        // tylko ta ręka, która złapie za gripPoint, może być aktywną
         if (attach == gripPoint)
         {
             activeHand = interactor;
-            Debug.Log($"[FireSelector] Aktywna ręka ustawiona: {activeHand.name}");
         }
     }
 
@@ -61,7 +65,6 @@ public class FireSelectorSimple : MonoBehaviour
         var interactor = args.interactorObject as XRBaseInteractor;
         if (interactor == activeHand)
         {
-            Debug.Log("[FireSelector] Ręka zwolniła gripPoint — reset aktywnej ręki.");
             activeHand = null;
             lastButtonPressed = false;
         }
@@ -69,7 +72,6 @@ public class FireSelectorSimple : MonoBehaviour
 
     void Update()
     {
-        // 🔹 Automatyczna detekcja "przejęcia" chwytu przez drugą rękę
         if (activeHand == null && weaponGrab != null && weaponGrab.interactorsSelecting.Count > 0)
         {
             foreach (var ix in weaponGrab.interactorsSelecting)
@@ -81,12 +83,11 @@ public class FireSelectorSimple : MonoBehaviour
                 if (attach == gripPoint)
                 {
                     activeHand = interactor;
-                    Debug.Log($"[FireSelector] Reacquired active hand: {activeHand.name}");
                     break;
                 }
             }
         }
-        // 🔹 Jeśli nadal nie ma aktywnej ręki — wyjdź
+
         if (activeHand == null) return;
 
         bool pressed = false;
@@ -106,13 +107,9 @@ public class FireSelectorSimple : MonoBehaviour
 
     XRNode GetHandNode(XRBaseInteractor interactor)
     {
-        // prosty, pewny sposób — tagi "LeftHand" i "RightHand"
         string tag = interactor.gameObject.tag;
         if (tag == "LeftHand") return XRNode.LeftHand;
         if (tag == "RightHand") return XRNode.RightHand;
-
-        // fallback — jeśli ktoś zapomni ustawić tagu
-        Debug.LogWarning($"[FireSelector] Interactor '{interactor.name}' nie ma tagu LeftHand/RightHand! Domyślnie: RightHand.");
         return XRNode.RightHand;
     }
 
@@ -123,6 +120,9 @@ public class FireSelectorSimple : MonoBehaviour
         fireModeIndex = (fireModeIndex + 1) % availableModes.Count;
         ApplyRotation();
         ApplyMode();
+
+        // 🔹 DODANO: Odpalamy event (tutaj podepniesz dźwięk)
+        OnFireModeChanged?.Invoke();
 
         Debug.Log($"[FireSelector] Tryb ognia zmieniony na: {availableModes[fireModeIndex]}");
     }

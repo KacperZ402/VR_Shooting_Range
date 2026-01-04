@@ -213,12 +213,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5441474256476507354}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayMagIn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnMagazineRemoved:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 454498386406158940}
         m_TargetAssemblyTypeName: WeaponControllerBase, Assembly-CSharp
         m_MethodName: OnMagazineRemovedEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5441474256476507354}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayMagOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1296,6 +1320,8 @@ GameObject:
   - component: {fileID: 1400836822491292710}
   - component: {fileID: 8881941440324897608}
   - component: {fileID: 4393245904204034214}
+  - component: {fileID: 1714713459897006329}
+  - component: {fileID: 5441474256476507354}
   m_Layer: 7
   m_Name: DMR
   m_TagString: Untagged
@@ -1418,7 +1444,19 @@ MonoBehaviour:
         m_CallState: 2
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5441474256476507354}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayGrab
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -1570,9 +1608,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5441474256476507354}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayFire
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnDryFire:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5441474256476507354}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayDryFire
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnRoundChambered:
     m_PersistentCalls:
       m_Calls: []
@@ -1581,10 +1643,34 @@ MonoBehaviour:
       m_Calls: []
   OnBoltLockedBack:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5441474256476507354}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayBoltPull
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnBoltReleasedEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5441474256476507354}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayBoltRelease
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1400836822491292710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1604,6 +1690,21 @@ MonoBehaviour:
   availableModes: 0000000001000000
   rotationStep: 180
   positionStep: {x: 0, y: 0, z: 0}
+  OnFireModeChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5441474256476507354}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlaySelector
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8881941440324897608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1618,9 +1719,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponController: {fileID: 454498386406158940}
   recoilTransform: {fileID: 626959229229468429}
-  recoilPositionKick: 0
-  recoilRotationKick: 10
-  sideRecoilRandomness: 2
+  oneHandMultiplier: 2
+  recoilKickY: -0.05
+  positionRandomness: 0.002
+  rotationKickX: 10
+  rotationRandomY: 2
   snappiness: 6
   returnSpeed: 10
   hapticAmplitude: 0.8
@@ -1640,3 +1743,120 @@ MonoBehaviour:
   weaponGrab: {fileID: 6988418822004122593}
   gripPoint: {fileID: 8994514116333762595}
   weaponController: {fileID: 454498386406158940}
+--- !u!82 &1714713459897006329
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9181111366301664930}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &5441474256476507354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9181111366301664930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55178e65a7b7f8a4b9e21de5009ba821, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireSound: {fileID: 8300000, guid: 66bd151ffe8440947b32d663904ddd06, type: 3}
+  dryFireSound: {fileID: 8300000, guid: f9bf63f6052e7624aa81cc8c3248ea5d, type: 3}
+  magazineInSound: {fileID: 8300000, guid: d3e5d9cb72b4dec4ca22d453ecf78e97, type: 3}
+  magazineOutSound: {fileID: 8300000, guid: 03622b00ade99fc4b813a393cf9ab3b3, type: 3}
+  boltPullSound: {fileID: 8300000, guid: a60845db4a46b15458efddc990c9ce56, type: 3}
+  boltReleaseSound: {fileID: 8300000, guid: f944ac18898aa704c9209f7dffb32232, type: 3}
+  fireSelectorSound: {fileID: 8300000, guid: fb04b9ae8dddca54f89b3ad1f862f7f6, type: 3}
+  grabSound: {fileID: 8300000, guid: 5011105e29698ec44a7bc0b7ac93c891, type: 3}

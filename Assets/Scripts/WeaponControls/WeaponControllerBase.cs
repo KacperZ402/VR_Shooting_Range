@@ -333,9 +333,9 @@ public class WeaponControllerBase : MonoBehaviour
 
     protected virtual Bullet GetChamberedBulletData()
     {
-        if (chamberedRound == null) { OnDryFire?.Invoke(); return null; }
+        if (chamberedRound == null) {; return null; }
         Bullet ammoData = chamberedRound.GetComponent<Bullet>();
-        if (ammoData == null) { OnDryFire?.Invoke(); return null; }
+        if (ammoData == null) {; return null; }
         return ammoData;
     }
 
@@ -390,7 +390,8 @@ public class WeaponControllerBase : MonoBehaviour
             PhysicallyEjectObject(chamberedRound);
             chamberedRound = null;
         }
-        isBoltLockedBack = false;
+        isBoltLockedBack = true;
+        OnBoltLockedBack?.Invoke();
     }
 
     protected virtual void OnChargingHandleReleased()
@@ -402,13 +403,43 @@ public class WeaponControllerBase : MonoBehaviour
 
     public virtual void ReleaseBoltAction(bool force = false)
     {
+        if (!isBoltLockedBack) return;
         if (!force && !CanReleaseBolt()) return;
         TryChamberFromMagazine();
         isBoltLockedBack = false;
         isHammerCocked = true;
         OnBoltReleasedEvent?.Invoke();
     }
+    /// <summary>
+    /// Metoda do manualnego zrzucenia suwadła/zamka (np. przyciskiem Slide Release w pistolecie).
+    /// Wymusza powrót rączki przeładowania do pozycji zerowej i wprowadza nabój.
+    /// </summary>
+    /// <param name="force">Czy zignorować stan magazynka (np. zrzut na sucho)?</param>
+    public virtual void ReleaseChargingHandle(bool force = false)
+    {
+        // 1. Sprawdzamy, czy w ogóle można zrzucić zamek 
+        // (np. czy jest magazynek z nabojami, chyba że wymuszamy 'force')
+        if (!force && !CanReleaseBolt()) return;
 
+        // 2. Najważniejszy krok: Odblokowujemy flagę.
+        // Twój skrypt ChargingHandle powinien w swoim Update sprawdzać zmienną 'isBoltLockedBack'.
+        // Gdy zmienimy ją na false -> fizyka/sprężyna rączki powinna sama pchnąć ją do przodu.
+        isBoltLockedBack = false;
+
+        // 3. Próbujemy wprowadzić nabój z magazynka
+        TryChamberFromMagazine();
+
+        // 4. Zrzut zamka w 99% broni automatycznie napina kurek
+        isHammerCocked = true;
+
+        // 5. Wywołujemy event (dźwięk klapnięcia zamka, animacje)
+        OnBoltReleasedEvent?.Invoke();
+
+        // 6. Opcjonalne: Jeśli Twój ChargingHandle nie reaguje automatycznie na zmianę flagi isBoltLockedBack,
+        // możesz tu dodać kod wymuszający jego pozycję, np.:
+        // if (chargingHandle != null) chargingHandle.transform.localPosition = Vector3.zero; 
+        // (Ale zazwyczaj lepiej zostawić to fizyce sprężyny w skrypcie Handle).
+    }
     public virtual bool TryChamberFromMagazine()
     {
         if (chamberedRound != null) return true;

@@ -396,7 +396,7 @@ Transform:
   m_GameObject: {fileID: 3706908618759069876}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.0265, y: -0.1751, z: 0.0387}
+  m_LocalPosition: {x: 0.0292, y: -0.1751, z: 0.0387}
   m_LocalScale: {x: 0.01, y: 0.048030008, z: 0.049360007}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -514,7 +514,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7359532122747472792}
         m_TargetAssemblyTypeName: WeaponControllerBase, Assembly-CSharp
-        m_MethodName: ReleaseBoltAction
+        m_MethodName: ReleaseChargingHandle
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1010,9 +1010,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponController: {fileID: 7359532122747472792}
   recoilTransform: {fileID: 1403266860724702970}
-  recoilPositionKick: 0
-  recoilRotationKick: 10
-  sideRecoilRandomness: 2
+  oneHandMultiplier: 2
+  recoilKickY: -0.05
+  positionRandomness: 0.002
+  rotationKickX: 10
+  rotationRandomY: 2
   snappiness: 6
   returnSpeed: 10
   hapticAmplitude: 0.8
