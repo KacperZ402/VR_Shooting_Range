@@ -1,37 +1,56 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 
 public class ShootingRangeManager : MonoBehaviour
 {
-    [Header("Konfiguracja")]
-    public List<ShootingTarget> allTargets;
+    public static ShootingRangeManager Instance;
+
+    [Header("Listy Celów")]
+    public List<ShootingTarget> staticTargets; // Cele do Reflex (stojące)
+    public List<ShootingTarget> movingTargets; // Cele do MovingChallenge (jeżdżące)
+
+    [Header("Ustawienia Gry")]
     public float roundTime = 30f;
-    public int targetsToActivate = 5;
+    [Tooltip("Opóźnienie między zestrzeleniem a pojawieniem się następnego.")]
+    public float respawnDelay = 0.5f;
 
     [Header("UI")]
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI timeText;
+    public TextMeshProUGUI finalResultText;
 
-    private int currentScore = 0;
+    // --- ZMIENNE STANU ---
+    [SerializeField] private int currentScore = 0;
     private float timeRemaining = 0f;
     private bool isGameRunning = false;
+    private bool isMovingMode = false;
+
+    private ShootingTarget lastActiveTarget;
+    private List<ShootingTarget> activeTargetList;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this) Destroy(this);
+        else Instance = this;
+    }
 
     void Start()
     {
-        // 1. Na samym początku tylko przygotowujemy tarcze (reset)
-        // Gra się NIE zaczyna sama.
-        foreach (var target in allTargets)
-        {
-            target.Setup(this);
-            target.FoldDown();
-        }
+        // 🔥🔥🔥 TO JEST TO, CZEGO BRAKOWAŁO:
+        // Musimy powiedzieć celom, że to my jesteśmy Managerem.
+        foreach (var t in staticTargets) if (t) t.Setup(this);
+        foreach (var t in movingTargets) if (t) t.Setup(this);
+
+        // Na starcie wyłączamy wszystko
+        ResetAllTargets();
         UpdateUI();
+        if (finalResultText) finalResultText.text = "";
     }
 
     void Update()
     {
-        // Odliczanie działa tylko, gdy flaga isGameRunning jest true
         if (isGameRunning)
         {
             timeRemaining -= Time.deltaTime;
@@ -44,77 +63,147 @@ public class ShootingRangeManager : MonoBehaviour
         }
     }
 
-    // 🔥 TO JEST EVENT, KTÓRY MUSISZ WYWOŁAĆ PRZYCISKIEM
-    public void StartGame()
-    {
-        if (isGameRunning) return; // Zabezpieczenie przed podwójnym kliknięciem
+    // =========================================================
+    // PRZYCISKI STARTU
+    // =========================================================
 
-        Debug.Log("Gra wystartowała!");
+    public void StartReflexGame()
+    {
+        Debug.Log("[ShootingRange] Start: REFLEX");
+        isMovingMode = false;
+        activeTargetList = staticTargets;
+        StartGameInternal();
+    }
+
+    public void StartMovingChallenge()
+    {
+        Debug.Log("[ShootingRange] Start: MOVING");
+        isMovingMode = true;
+        activeTargetList = movingTargets;
+        StartGameInternal();
+    }
+
+    // =========================================================
+    // LOGIKA
+    // =========================================================
+
+    private void StartGameInternal()
+    {
+        if (isGameRunning) return;
+
         currentScore = 0;
         timeRemaining = roundTime;
         isGameRunning = true;
+        lastActiveTarget = null;
+        if (finalResultText) finalResultText.text = "";
 
-        // Reset wszystkich tarcz
-        foreach (var target in allTargets)
-        {
-            target.FoldDown();
-        }
+        ResetAllTargets(); // Czyścimy pole przed startem
 
-        // Podnieś losowe tarcze
-        ActivateRandomTargets();
+        UpdateUI();
+        ActivateNextTarget();
     }
 
-    public void AddScore()
+    public void EndGame()
+    {
+        isGameRunning = false;
+        float timePlayed = roundTime - timeRemaining;
+        timeRemaining = 0;
+
+        ResetAllTargets();
+
+        float avgTimePerHit = 0f;
+        if (currentScore > 0)
+        {
+            avgTimePerHit = timePlayed / (float)currentScore;
+        }
+
+        string message = $"Hits: {currentScore}\nAvgTime: {avgTimePerHit:F2}s";
+        Debug.Log(message);
+
+        if (finalResultText) finalResultText.text = message;
+    }
+
+    public void RegisterHit(ShootingTarget hitTarget)
     {
         if (!isGameRunning) return;
+
+        // Jeśli trafiliśmy cel ruchomy, zatrzymujemy go
+        if (isMovingMode)
+        {
+            var mover = hitTarget.GetComponent<MovingTarget>();
+            if (mover) mover.isMoving = false;
+        }
+
         currentScore++;
         UpdateUI();
 
-        // Opcjonalnie: Jak zbijesz jedną, kolejna wstaje od razu?
-        // ActivateOneRandomTarget(); 
+        StartCoroutine(WaitAndSpawnNext());
     }
 
-    void ActivateRandomTargets()
-    {
-        List<ShootingTarget> available = new List<ShootingTarget>(allTargets);
-        int count = Mathf.Min(targetsToActivate, available.Count);
+    public void RegisterShot() { }
 
-        for (int i = 0; i < count; i++)
+    private IEnumerator WaitAndSpawnNext()
+    {
+        if (respawnDelay > 0) yield return new WaitForSeconds(respawnDelay);
+        else yield return null;
+
+        if (isGameRunning)
         {
-            int randomIndex = Random.Range(0, available.Count);
-            available[randomIndex].PopUp();
-            available.RemoveAt(randomIndex);
+            ActivateNextTarget();
         }
     }
 
-    /* Opcjonalna metoda do podnoszenia pojedynczej tarczy po trafieniu
-    void ActivateOneRandomTarget()
+    private void ActivateNextTarget()
     {
-        // Znajdź tarcze, które leżą
-        List<ShootingTarget> sleepingTargets = new List<ShootingTarget>();
-        foreach(var t in allTargets) { if(!t.gameObject.activeSelf) sleepingTargets.Add(t); } // Uproszczone
+        if (activeTargetList == null || activeTargetList.Count == 0) return;
 
-        // To wymagałoby sprawdzania stanu w ShootingTarget, 
-        // ale w prostej wersji wystarczy, że po prostu gra się kończy po czasie.
-    }
-    */
+        ShootingTarget newTarget;
 
-    void EndGame()
-    {
-        isGameRunning = false;
-        timeRemaining = 0;
-        UpdateUI();
-
-        // Koniec - kładziemy wszystko
-        foreach (var target in allTargets)
+        if (activeTargetList.Count == 1)
         {
-            target.FoldDown();
+            newTarget = activeTargetList[0];
+        }
+        else
+        {
+            int attempts = 0;
+            do
+            {
+                int randomIndex = Random.Range(0, activeTargetList.Count);
+                newTarget = activeTargetList[randomIndex];
+                attempts++;
+            }
+            while (newTarget == lastActiveTarget && attempts < 10);
+        }
+
+        lastActiveTarget = newTarget;
+        newTarget.PopUp();
+
+        // Jeśli tryb ruchomy, włączamy ruch
+        if (isMovingMode)
+        {
+            var mover = newTarget.GetComponent<MovingTarget>();
+            if (mover) mover.isMoving = true;
+        }
+    }
+
+    private void ResetAllTargets()
+    {
+        foreach (var t in staticTargets) if (t) t.FoldDown();
+
+        foreach (var t in movingTargets)
+        {
+            if (t)
+            {
+                t.FoldDown();
+                var mover = t.GetComponent<MovingTarget>();
+                if (mover) mover.isMoving = false;
+            }
         }
     }
 
     void UpdateUI()
     {
-        if (scoreText) scoreText.text = $"WYNIK: {currentScore}";
-        if (timeText) timeText.text = $"CZAS: {Mathf.Ceil(timeRemaining)}s";
+        if (scoreText) scoreText.text = $"ZDJĘTO: {currentScore}";
+        if (timeText) timeText.text = $"{Mathf.Ceil(timeRemaining)}s";
     }
 }

@@ -21,13 +21,21 @@ public class Projectile : MonoBehaviour
 
     private PhysicsMaterial projectileMaterial;
 
+    [Header("Visual Effects")]
+    public GameObject bulletHolePrefab;
+    public GameObject impactParticlePrefab;
+    public float bulletHoleLifetime = 30f;
+
+    [Header("Visual Effects - Korekta")]
+    [Tooltip("Ustaw to raz, aby dziura patrzyła przodem. Zazwyczaj dla Quada to (0, 180, 0) lub (0,0,0).")]
+    public Vector3 holeRotationOffset = Vector3.zero;
+
     [Header("Debug")]
     public bool showDebugImpact = false;
     public bool showDebugTrajectory = false;
     public float debugImpactLifetime = 5f;
     public float debugImpactSize = 0.05f;
 
-    [Tooltip("Jak bardzo 'nierówne' mają być rykoszety. 0=idealnie, 0.1=10% chaosu.")]
     [Range(0, 0.5f)]
     public float ricochetRandomness = 0.1f;
 
@@ -39,7 +47,6 @@ public class Projectile : MonoBehaviour
 
         if (bulletPool == null) Debug.LogError("Projectile nie może znaleźć BulletPoolManager!");
 
-        // Upewnij się, że nie jest kinematyczny!
         rb.isKinematic = false;
 
         if (col.material != null)
@@ -81,7 +88,7 @@ public class Projectile : MonoBehaviour
         lastKnownVelocity = initialVelocity;
 
         this.dragCoefficient = drag;
-        this.minRicochetAngle = ammoRicochetAngle; 
+        this.minRicochetAngle = ammoRicochetAngle;
         this.maxRicochets = ammoMaxRicochets;
         this.currentRicochets = 0;
         this.currentPenetrationPower = ammoPenetrationPower;
@@ -99,7 +106,6 @@ public class Projectile : MonoBehaviour
     {
         if (!isLaunched || rb.linearVelocity == Vector3.zero) return;
 
-        // Używamy AddForce, bo Rigidbody znowu jest normalne
         Vector3 dragForce = -rb.linearVelocity.normalized * rb.linearVelocity.sqrMagnitude * this.dragCoefficient;
         rb.AddForce(dragForce, ForceMode.Force);
 
@@ -123,50 +129,74 @@ public class Projectile : MonoBehaviour
             CreateDebugMarker(contact.point);
         }
 
-        // --- 1. SPRAWDŹ RYKOSZET ---
+        // --- 1. RYKOSZET ---
         float impactAngle = Vector3.Angle(velocityBeforeImpact.normalized, -contact.normal);
         bool isRicochet = impactAngle > minRicochetAngle && currentRicochets < maxRicochets;
 
         if (isRicochet)
         {
-            Debug.Log($"[Projectile] RYKOSZET!");
+            CreateImpactVisuals(contact, spawnHole: false, spawnParticles: true);
             currentPenetrationPower *= 0.5f;
+            currentRicochets++;
             return;
         }
+
         PenetrableMaterial surface = collision.gameObject.GetComponent<PenetrableMaterial>();
 
+        // --- 2. PENETRACJA ---
         if (surface != null)
         {
             if (currentPenetrationPower >= surface.stoppingPower)
             {
-                Debug.Log($"[Projectile] PENETRACJA! ({collision.gameObject.name})");
+                CreateImpactVisuals(contact, spawnHole: true, spawnParticles: true);
                 currentPenetrationPower -= surface.stoppingPower;
-
                 Vector3 penetrationVelocity = velocityBeforeImpact * (1.0f - surface.dragOnPenetration);
-
                 StartCoroutine(PerformPenetration(collision.collider, penetrationVelocity));
-
-                return; // Pozwól pociskowi lecieć dalej (w Coroutine)
+                return;
             }
         }
-        Debug.Log($"[Projectile] Trafiono: {collision.gameObject.name} (Stop)");
+
+        // --- 3. STOP ---
+        CreateImpactVisuals(contact, spawnHole: true, spawnParticles: true);
         ReturnToPool();
+    }
+
+    private void CreateImpactVisuals(ContactPoint contact, bool spawnHole, bool spawnParticles)
+    {
+        // 1. Particle
+        if (spawnParticles && impactParticlePrefab != null)
+        {
+            Quaternion rot = Quaternion.LookRotation(contact.normal);
+            GameObject particle = Instantiate(impactParticlePrefab, contact.point, rot);
+            Destroy(particle, 2f);
+        }
+
+        // 2. Dziura po kuli
+        if (spawnHole && bulletHolePrefab != null)
+        {
+            // Podstawa: Oś Z wzdłuż normalnej (prostopadle od ściany)
+            Quaternion lookRotation = Quaternion.LookRotation(contact.normal);
+
+            // Stała korekta z inspektora
+            Quaternion manualOffset = Quaternion.Euler(holeRotationOffset);
+
+            Quaternion finalRotation = lookRotation * manualOffset;
+
+            // 🔥 PRZYWRÓCONY OFFSET (0.01f) wzdłuż normalnej
+            Vector3 position = contact.point + (contact.normal * 0.01f);
+
+            GameObject hole = Instantiate(bulletHolePrefab, position, finalRotation);
+
+            hole.transform.SetParent(contact.otherCollider.transform);
+            Destroy(hole, bulletHoleLifetime);
+        }
     }
     private IEnumerator PerformPenetration(Collider wallCollider, Vector3 penetrationVelocity)
     {
-        // 1. Wyłącz kolizję, aby pocisk nie "utknął"
         Physics.IgnoreCollision(col, wallCollider, true);
-
-        // 2. Czekaj JEDNĄ klatkę fizyczną. 
-        // W tym czasie fizyka zdążyła zatrzymać pocisk, ale my to zaraz naprawimy.
         yield return new WaitForFixedUpdate();
-
-        // 3. TERAZ, w nowej klatce, siłą nadpisujemy prędkość.
         rb.linearVelocity = penetrationVelocity;
-
-        // (Włączymy kolizję z powrotem trochę później, by na pewno opuścił obiekt)
         yield return new WaitForSeconds(0.1f);
-
         if (this.gameObject.activeInHierarchy && wallCollider != null)
         {
             Physics.IgnoreCollision(col, wallCollider, false);
@@ -175,7 +205,6 @@ public class Projectile : MonoBehaviour
 
     private void CreateDebugMarker(Vector3 position)
     {
-        // ... (bez zmian) ...
         GameObject debugMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         debugMarker.transform.position = position;
         debugMarker.transform.localScale = Vector3.one * debugImpactSize;
@@ -186,7 +215,6 @@ public class Projectile : MonoBehaviour
 
     void ReturnToPool()
     {
-        // ... 
         isLaunched = false;
         StopAllCoroutines();
         if (bulletPool != null)

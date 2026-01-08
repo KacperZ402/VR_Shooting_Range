@@ -123,9 +123,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6175071335831a341a1564eda4a0442e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLifetime: 10
-  showDebugImpact: 1
-  showDebugTrajectory: 1
+  maxLifetime: 4
+  bulletHolePrefab: {fileID: 3104453696713683777, guid: 2161ad9bb2fd477419933820aa98d0c8, type: 3}
+  impactParticlePrefab: {fileID: 0}
+  bulletHoleLifetime: 20
+  holeRotationOffset: {x: 90, y: 0, z: 0}
+  showDebugImpact: 0
+  showDebugTrajectory: 0
   debugImpactLifetime: 5
   debugImpactSize: 0.05
   ricochetRandomness: 0.1

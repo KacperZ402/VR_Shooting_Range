@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8336714168247129254, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
+  - {fileID: 2100000, guid: 7ee2b4951ab985b44a1cdce8adff0730, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -101,6 +101,9 @@ GameObject:
   - component: {fileID: 1174439275769783382}
   - component: {fileID: 3942099655791839362}
   - component: {fileID: 5117287962028096043}
+  - component: {fileID: 5452569578336450415}
+  - component: {fileID: 6277263093281115116}
+  - component: {fileID: 2856711329653738089}
   m_Layer: 7
   m_Name: Rem 870
   m_TagString: Untagged
@@ -245,7 +248,19 @@ MonoBehaviour:
         m_CallState: 2
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6277263093281115116}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayGrab
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -345,6 +360,7 @@ MonoBehaviour:
   fireSelector: {fileID: 3942099655791839362}
   weaponGrab: {fileID: 5687849600525772322}
   chamberTransform: {fileID: 4156122662267708392}
+  rangeManager: {fileID: 0}
   ejectionPort: {fileID: 5751525337830534221}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}
@@ -362,10 +378,34 @@ MonoBehaviour:
   universalProjectilePrefab: {fileID: 3102821641765768627, guid: 1324ea2a6882f9f458fbb7755457915f, type: 3}
   OnFire:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6277263093281115116}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayFire
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnDryFire:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6277263093281115116}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayDryFire
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnRoundChambered:
     m_PersistentCalls:
       m_Calls: []
@@ -378,7 +418,6 @@ MonoBehaviour:
   OnBoltReleasedEvent:
     m_PersistentCalls:
       m_Calls: []
-  pumpHandleScript: {fileID: 6439129878053021200}
   recoilPivot: {fileID: 3687803650993694467}
   aimRotationOffset: {x: 0, y: 0, z: 0}
   magazineLoadLogic: 0
@@ -402,6 +441,21 @@ MonoBehaviour:
   availableModes: 0000000004000000
   rotationStep: 0
   positionStep: {x: -0.0032, y: 0, z: 0}
+  OnFireModeChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6277263093281115116}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlaySelector
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5117287962028096043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,13 +470,151 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponController: {fileID: 1174439275769783382}
   recoilTransform: {fileID: 8425081807360510864}
-  recoilPositionKick: 0
-  recoilRotationKick: 10
-  sideRecoilRandomness: 2
+  oneHandMultiplier: 2
+  recoilKickY: -0.05
+  positionRandomness: 0.002
+  rotationKickX: 10
+  rotationRandomY: 2
   snappiness: 6
   returnSpeed: 10
   hapticAmplitude: 0.8
   hapticDuration: 0.1
+--- !u!82 &5452569578336450415
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029311557555818073}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.705
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &6277263093281115116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029311557555818073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55178e65a7b7f8a4b9e21de5009ba821, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireSound: {fileID: 8300000, guid: c4356c9f1c7b7644787e2e771e4f94e3, type: 3}
+  dryFireSound: {fileID: 8300000, guid: f9bf63f6052e7624aa81cc8c3248ea5d, type: 3}
+  magazineInSound: {fileID: 0}
+  magazineOutSound: {fileID: 0}
+  boltPullSound: {fileID: 8300000, guid: 64ac1ff9070640f4a9338e76d9e80669, type: 3}
+  boltReleaseSound: {fileID: 8300000, guid: 8bf922b802845774c80d2264b157a331, type: 3}
+  fireSelectorSound: {fileID: 8300000, guid: fb04b9ae8dddca54f89b3ad1f862f7f6, type: 3}
+  grabSound: {fileID: 8300000, guid: 5011105e29698ec44a7bc0b7ac93c891, type: 3}
+--- !u!114 &2856711329653738089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029311557555818073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a199c646bebca74b8e0f40f33193aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClips:
+  - {fileID: 8300000, guid: a74d4a9b760d9c0469b0733bcd881bdb, type: 3}
+  baseVolume: 1
+  pitchRandomness: 0.1
+  playOnCollision: 0
+  minImpactForce: 0.5
+  collisionCooldown: 0.1
 --- !u!1 &1032650380868304811
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,8 +684,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8336714168247129254, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
-  - {fileID: -1444460858095362738, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
+  - {fileID: 2100000, guid: 7ee2b4951ab985b44a1cdce8adff0730, type: 2}
+  - {fileID: 2100000, guid: 3e873fb4eb0fac9409a9ab0c7f3199f8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -693,10 +885,34 @@ MonoBehaviour:
   grabRotationZ: -90
   OnBoltPulled:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6277263093281115116}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayBoltPull
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnBoltReleased:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6277263093281115116}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayBoltRelease
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &6388553574129016385
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -782,8 +998,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -4187724231692053404, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
-  - {fileID: -1444460858095362738, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
+  - {fileID: 2100000, guid: 66eefd916ca37fd44921b09b2b72d3dc, type: 2}
+  - {fileID: 2100000, guid: 3e873fb4eb0fac9409a9ab0c7f3199f8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1080,7 +1296,19 @@ MonoBehaviour:
       m_Calls: []
   OnRoundInserted:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2856711329653738089}
+        m_TargetAssemblyTypeName: UniversalAudioPlayer, Assembly-CSharp
+        m_MethodName: PlayAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   bulletPrefabForFilling: {fileID: 0}
 --- !u!1 &7086831389946524449
 GameObject:

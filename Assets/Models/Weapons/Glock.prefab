@@ -149,7 +149,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -389402008792246631, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
+  - {fileID: 2100000, guid: 591dd97148a99094da9841ad3520e2ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -243,7 +243,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4378139716678641036, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
+  - {fileID: 2100000, guid: 75808295952fd9f4cbe8ebe38d3f06cd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -935,7 +935,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.705
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1095,8 +1095,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4378139716678641036, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
-  - {fileID: -522752127374078131, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
+  - {fileID: 2100000, guid: 75808295952fd9f4cbe8ebe38d3f06cd, type: 2}
+  - {fileID: 2100000, guid: b2912e80e3e12ee409870c101c08c1c9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

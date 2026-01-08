@@ -4,8 +4,8 @@ using System.Collections;
 public class ShootingTarget : MonoBehaviour
 {
     [Header("Ustawienia Rotacji")]
-    public Vector3 uprightRotation = Vector3.zero;      // Pozycja stojąca
-    public Vector3 lieDownRotation = new Vector3(-90f, 0f, 0f); // Pozycja leżąca
+    public Vector3 uprightRotation = Vector3.zero;
+    public Vector3 lieDownRotation = new Vector3(-90f, 0f, 0f);
     public float rotationSpeed = 5f;
 
     [Header("Dźwięk")]
@@ -21,33 +21,34 @@ public class ShootingTarget : MonoBehaviour
         manager = rngManager;
     }
 
-    // 🔥 ZMIANA: Reagujemy na JAKĄKOLWIEK kolizję fizyczną
     void OnCollisionEnter(Collision collision)
     {
-        // Jeśli tarcza jest aktywna (stoi) i coś jej dotknęło -> trafienie
-        if (isActive)
-        {
-            RegisterHit();
-        }
+        // Reagujemy na wszystko co fizyczne (kule)
+        if (isActive) RegisterHit();
     }
 
-    // Opcjonalnie: Reagujemy też na triggery (jeśli pociski są triggerami)
     void OnTriggerEnter(Collider other)
     {
-        if (isActive)
-        {
-            RegisterHit();
-        }
+        // Reagujemy na triggery (jeśli pocisk jest triggerem)
+        if (isActive) RegisterHit();
     }
 
     void RegisterHit()
     {
-        isActive = false; // Blokujemy, żeby nie zaliczyło 2 razy
+        if (!isActive) return; // Zapobiega podwójnym trafieniom
+        isActive = false;
 
+        // 1. Dźwięk
         if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
-        if (manager != null) manager.AddScore();
 
+        // 2. Najpierw chowamy tę tarczę
         MoveToRotation(lieDownRotation);
+
+        // 3. Potem mówimy managerowi (żeby wiedział, że ma odczekać i wystawić nową)
+        if (manager != null)
+        {
+            manager.RegisterHit(this);
+        }
     }
 
     public void PopUp()

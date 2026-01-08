@@ -63,6 +63,5 @@ public class AnimatedBoltHandle : ChargingHandle
         isAnimating = false;
 
         // Dziedziczymy event 'OnBoltReleased'
-        OnBoltReleased?.Invoke();
     }
 }

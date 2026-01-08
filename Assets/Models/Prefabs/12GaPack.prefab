@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7664926520286726573, guid: 87866848dedf0644daf4d8f9690a452b, type: 3}
+  - {fileID: 2100000, guid: 172e09c0227ea5e4693bbcac15d16185, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -293,4 +293,4 @@ MonoBehaviour:
   ammoPrefab: {fileID: 4064609500591028618, guid: 115350ed1581ddf49a20c443ae17e202, type: 3}
   gridColumns: 5
   gridRows: 4
-  gridSpacing: 0.03
+  gridSpacing: 0.02

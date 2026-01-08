@@ -91,6 +91,7 @@ public class PistolPlatform : WeaponControllerBase
             // Zamek wraca do przodu
             isBoltLockedBack = false;
             OnBoltReleasedEvent?.Invoke();
+            isHammerCocked = true;
         }
     }
 }

@@ -26,7 +26,6 @@ public class AKPlatform : WeaponControllerBase
         // W AK puszczenie zamka po prostu próbuje załadować nabój
         TryChamberFromMagazine();
         isBoltLockedBack = false; // Zawsze fałsz dla AK
-        OnBoltReleasedEvent?.Invoke();
     }
 
     /// <summary>

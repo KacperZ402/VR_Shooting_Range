@@ -3,12 +3,187 @@ guid: 87866848dedf0644daf4d8f9690a452b
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 12GaPack
+    second: {fileID: 2100000, guid: 172e09c0227ea5e4693bbcac15d16185, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 45AcpFmjPack
+    second: {fileID: 2100000, guid: 9989174210feacf4dada26a4e261eb3d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 5.45
+    second: {fileID: 2100000, guid: 956eac1613903994d84888f6d59b2af7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 5.56Pack
+    second: {fileID: 2100000, guid: 66dc7508f500dd24ab148dcf4b7bb2b7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 7.62Bullet
+    second: {fileID: 2100000, guid: 5431b46517ac7f146ab8836c88314723, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 762x39SteelCasing
+    second: {fileID: 2100000, guid: d838ff5bea436a24b9337ffc58ca3da9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 762x51Pack
+    second: {fileID: 2100000, guid: 6e8e06f9bcb1ae140a9b8cb18f0caeb3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 9mmFMJPACK
+    second: {fileID: 2100000, guid: 96392ced46469024f819bc3809c9af09, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BlackMetal
+    second: {fileID: 2100000, guid: 66eefd916ca37fd44921b09b2b72d3dc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Brass
+    second: {fileID: 2100000, guid: 3943ab1be97d9b344975e0a8dbdeef53, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Brass.001
+    second: {fileID: 2100000, guid: 28f64ee374f6cad4ea4bebdc5c5275d3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Brass2
+    second: {fileID: 2100000, guid: a98bd59a4e5c0be499e69023d4351afd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Brass762x54
+    second: {fileID: 2100000, guid: d759765f24e61f44cbd18f60ea5f7f63, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bullet556
+    second: {fileID: 2100000, guid: dbe3ace6c7c5d37469a9d3edc4990e50, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bullet556.001
+    second: {fileID: 2100000, guid: e0eb57b916454ba4c8c15c3dcff59104, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: C3A3_Green
+    second: {fileID: 2100000, guid: 332fca86e81268742a31c00d475ea0c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cassing556
+    second: {fileID: 2100000, guid: 44b720f79dfaf4b4ea12a5bc692baf5b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DarkGreyMetal
+    second: {fileID: 2100000, guid: 75808295952fd9f4cbe8ebe38d3f06cd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Grey_AR15
+    second: {fileID: 2100000, guid: 7de429e0d02ecfa4f96efc9bacf6d840, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal_Rough
+    second: {fileID: 2100000, guid: 7ee2b4951ab985b44a1cdce8adff0730, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal_m4
+    second: {fileID: 2100000, guid: 928ceb022bb30f8419aa5d135f28002c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Plastic
+    second: {fileID: 2100000, guid: 591dd97148a99094da9841ad3520e2ea, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Plastic_m4
+    second: {fileID: 2100000, guid: 7da8e69938b84a14d80ec1445a04a45f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Primer
+    second: {fileID: 2100000, guid: 3c685a757d1d4ea438379cddfdaaadb3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Primer.001
+    second: {fileID: 2100000, guid: 40a2d29bb4c78684897f9cccfa3a51ec, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShinyMetal
+    second: {fileID: 2100000, guid: b2912e80e3e12ee409870c101c08c1c9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShotgunAmmoMetal
+    second: {fileID: 2100000, guid: 22e6429d3abaf71439539dedd0b0a4e9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShotgunAmmoPlaticBLUE
+    second: {fileID: 2100000, guid: 10cf4a75d78583a4aa8a01a2b6589724, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShotgunAmmoPlaticRED
+    second: {fileID: 2100000, guid: a02ec742ffaac204d93cef531dda2c24, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShotgunAmmoPlaticWhite
+    second: {fileID: 2100000, guid: 128a4358835fd014c8276cb50c92932b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TanPlastic_AR
+    second: {fileID: 2100000, guid: a1678d0a6052d8444bbe722a01fc5cfc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tan_AR15
+    second: {fileID: 2100000, guid: c4979956b8f93b148be8472c1a44e97a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood
+    second: {fileID: 2100000, guid: 491a851769789a5448c30577fb80dc06, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood2
+    second: {fileID: 2100000, guid: 3e873fb4eb0fac9409a9ab0c7f3199f8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: finish
+    second: {fileID: 2100000, guid: 0cdf37c1bbe95af4ba2c2fa0ea0d8189, type: 2}
   materials:
     materialImportMode: 2
-    materialName: 0
-    materialSearch: 1
-    materialLocation: 1
+    materialName: 1
+    materialSearch: 2
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
