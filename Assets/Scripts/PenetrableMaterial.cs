@@ -1,12 +1,16 @@
 using UnityEngine;
 
-public class PenetrableMaterial : MonoBehaviour
+public class MaterialSurface : MonoBehaviour
 {
-    [Header("Ustawienia Penetracji")]
-    [Tooltip("Ile 'mocy' pocisku jest potrzebne, by przebiæ ten materia³. (np. 10)")]
-    public float stoppingPower = 10f;
+    [Header("Wizualia")]
+    public GameObject bulletHolePrefab; // Zwyk³a dziura
+    public GameObject hitParticles;     // Iskry/Kurz
 
-    [Tooltip("Jak bardzo materia³ spowalnia pocisk (0.1 = 10% spowolnienia, 0.9 = 90%)")]
-    [Range(0, 1)]
-    public float dragOnPenetration = 0.3f; // 30% spowolnienia
+    [Header("DŸwiêk")]
+    public AudioClip[] impactSounds;
+    [Range(0f, 1f)] public float volume = 1f;
+
+    [Header("Fizyka")]
+    public float penetrationResistance = 5f;
+    [Range(0f, 1f)] public float dragOnPenetration = 0.2f;
 }

@@ -12,7 +12,6 @@ public class Projectile : MonoBehaviour
     private bool isLaunched = false;
     private Vector3 lastKnownVelocity;
 
-    // --- Dane specyficzne dla tego pocisku ---
     private float dragCoefficient;
     private float minRicochetAngle;
     private int maxRicochets;
@@ -21,32 +20,25 @@ public class Projectile : MonoBehaviour
 
     private PhysicsMaterial projectileMaterial;
 
-    [Header("Visual Effects")]
-    public GameObject bulletHolePrefab;
-    public GameObject impactParticlePrefab;
-    public float bulletHoleLifetime = 30f;
+    [Header("Default Values")]
+    public GameObject defaultHolePrefab;
+    public GameObject defaultParticles;
+    public AudioClip defaultSound;
 
-    [Header("Visual Effects - Korekta")]
-    [Tooltip("Ustaw to raz, aby dziura patrzyła przodem. Zazwyczaj dla Quada to (0, 180, 0) lub (0,0,0).")]
+    [Header("Settings")]
+    public float bulletHoleLifetime = 30f;
+    [Tooltip("Korekta obrotu dziury (np. 0, 180, 0)")]
     public Vector3 holeRotationOffset = Vector3.zero;
 
     [Header("Debug")]
     public bool showDebugImpact = false;
     public bool showDebugTrajectory = false;
-    public float debugImpactLifetime = 5f;
-    public float debugImpactSize = 0.05f;
-
-    [Range(0, 0.5f)]
-    public float ricochetRandomness = 0.1f;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         bulletPool = BulletPoolManager.Instance;
-
-        if (bulletPool == null) Debug.LogError("Projectile nie może znaleźć BulletPoolManager!");
-
         rb.isKinematic = false;
 
         if (col.material != null)
@@ -58,10 +50,6 @@ public class Projectile : MonoBehaviour
             projectileMaterial.bounceCombine = col.material.bounceCombine;
             projectileMaterial.frictionCombine = col.material.frictionCombine;
             col.material = projectileMaterial;
-        }
-        else
-        {
-            Debug.LogError("Pocisk (Prefab) nie ma 'PhysicsMaterial' na swoim Colliderze!", this);
         }
     }
 
@@ -86,7 +74,6 @@ public class Projectile : MonoBehaviour
     {
         rb.linearVelocity = initialVelocity;
         lastKnownVelocity = initialVelocity;
-
         this.dragCoefficient = drag;
         this.minRicochetAngle = ammoRicochetAngle;
         this.maxRicochets = ammoMaxRicochets;
@@ -105,92 +92,101 @@ public class Projectile : MonoBehaviour
     void FixedUpdate()
     {
         if (!isLaunched || rb.linearVelocity == Vector3.zero) return;
-
         Vector3 dragForce = -rb.linearVelocity.normalized * rb.linearVelocity.sqrMagnitude * this.dragCoefficient;
         rb.AddForce(dragForce, ForceMode.Force);
-
-        if (showDebugTrajectory)
-        {
-            CreateDebugMarker(transform.position);
-        }
-
+        if (showDebugTrajectory) CreateDebugMarker(transform.position);
         lastKnownVelocity = rb.linearVelocity;
     }
 
     void OnCollisionEnter(Collision collision)
     {
         if (!isLaunched) return;
-
         ContactPoint contact = collision.GetContact(0);
-        Vector3 velocityBeforeImpact = lastKnownVelocity;
+        Vector3 incomingVelocity = lastKnownVelocity;
 
-        if (showDebugImpact)
-        {
-            CreateDebugMarker(contact.point);
-        }
+        if (showDebugImpact) CreateDebugMarker(contact.point);
+
+        MaterialSurface matSurface = collision.gameObject.GetComponent<MaterialSurface>();
 
         // --- 1. RYKOSZET ---
-        float impactAngle = Vector3.Angle(velocityBeforeImpact.normalized, -contact.normal);
+        float impactAngle = Vector3.Angle(incomingVelocity.normalized, -contact.normal);
         bool isRicochet = impactAngle > minRicochetAngle && currentRicochets < maxRicochets;
 
         if (isRicochet)
         {
-            CreateImpactVisuals(contact, spawnHole: false, spawnParticles: true);
+            // 🔥 spawnHole = false (Tylko iskry i dźwięk)
+            SpawnVisuals(contact, matSurface, spawnHole: false);
+
             currentPenetrationPower *= 0.5f;
             currentRicochets++;
             return;
         }
 
-        PenetrableMaterial surface = collision.gameObject.GetComponent<PenetrableMaterial>();
+        // --- 2. TRAFIENIE / PRZEBICIE ---
+        // 🔥 spawnHole = true (Stawiamy dziurę)
+        SpawnVisuals(contact, matSurface, spawnHole: true);
 
-        // --- 2. PENETRACJA ---
-        if (surface != null)
+        // Fizyka przebicia
+        float resistance = (matSurface != null) ? matSurface.penetrationResistance : 1000f;
+        float drag = (matSurface != null) ? matSurface.dragOnPenetration : 0.5f;
+
+        if (currentPenetrationPower >= resistance)
         {
-            if (currentPenetrationPower >= surface.stoppingPower)
-            {
-                CreateImpactVisuals(contact, spawnHole: true, spawnParticles: true);
-                currentPenetrationPower -= surface.stoppingPower;
-                Vector3 penetrationVelocity = velocityBeforeImpact * (1.0f - surface.dragOnPenetration);
-                StartCoroutine(PerformPenetration(collision.collider, penetrationVelocity));
-                return;
-            }
+            currentPenetrationPower -= resistance;
+            Vector3 penetrationVelocity = incomingVelocity * (1.0f - drag);
+            StartCoroutine(PerformPenetration(collision.collider, penetrationVelocity));
         }
-
-        // --- 3. STOP ---
-        CreateImpactVisuals(contact, spawnHole: true, spawnParticles: true);
-        ReturnToPool();
+        else
+        {
+            ReturnToPool();
+        }
     }
 
-    private void CreateImpactVisuals(ContactPoint contact, bool spawnHole, bool spawnParticles)
+    private void SpawnVisuals(ContactPoint contact, MaterialSurface mat, bool spawnHole)
     {
-        // 1. Particle
-        if (spawnParticles && impactParticlePrefab != null)
+        // Dobieramy prefaby
+        GameObject holePrefab = (mat != null && mat.bulletHolePrefab != null) ? mat.bulletHolePrefab : defaultHolePrefab;
+        GameObject partPrefab = (mat != null && mat.hitParticles != null) ? mat.hitParticles : defaultParticles;
+
+        AudioClip clipToPlay = defaultSound;
+        float vol = 1f;
+
+        if (mat != null && mat.impactSounds != null && mat.impactSounds.Length > 0)
         {
-            Quaternion rot = Quaternion.LookRotation(contact.normal);
-            GameObject particle = Instantiate(impactParticlePrefab, contact.point, rot);
-            Destroy(particle, 2f);
+            clipToPlay = mat.impactSounds[Random.Range(0, mat.impactSounds.Length)];
+            vol = mat.volume;
         }
 
-        // 2. Dziura po kuli
-        if (spawnHole && bulletHolePrefab != null)
+        // 1. Particle
+        if (partPrefab != null)
+            Instantiate(partPrefab, contact.point, Quaternion.LookRotation(contact.normal));
+
+        // 2. Audio
+        if (clipToPlay != null)
+            AudioSource.PlayClipAtPoint(clipToPlay, contact.point, vol);
+
+        // 3. Dziura (Tylko jeśli spawnHole == true)
+        if (spawnHole && holePrefab != null)
         {
-            // Podstawa: Oś Z wzdłuż normalnej (prostopadle od ściany)
+            // 🔥 CZYSTA GEOMETRIA:
+            // 1. Ustawiamy rotację tak, by oś Z patrzyła prostopadle od ściany.
             Quaternion lookRotation = Quaternion.LookRotation(contact.normal);
 
-            // Stała korekta z inspektora
+            // 2. Dodajemy Twoją stałą korektę (dla Quada zazwyczaj (0, 180, 0) lub (0,0,0)).
             Quaternion manualOffset = Quaternion.Euler(holeRotationOffset);
 
+            // 3. Łączymy to w całość. USUNIĘTO randomZ.
             Quaternion finalRotation = lookRotation * manualOffset;
 
-            // 🔥 PRZYWRÓCONY OFFSET (0.01f) wzdłuż normalnej
-            Vector3 position = contact.point + (contact.normal * 0.01f);
+            // 4. Offset od ściany (0.01f = 1cm), żeby nie znikały w teksturze.
+            Vector3 pos = contact.point + (contact.normal * 0.001f);
 
-            GameObject hole = Instantiate(bulletHolePrefab, position, finalRotation);
-
+            GameObject hole = Instantiate(holePrefab, pos, finalRotation);
             hole.transform.SetParent(contact.otherCollider.transform);
             Destroy(hole, bulletHoleLifetime);
         }
     }
+
     private IEnumerator PerformPenetration(Collider wallCollider, Vector3 penetrationVelocity)
     {
         Physics.IgnoreCollision(col, wallCollider, true);
@@ -207,23 +203,15 @@ public class Projectile : MonoBehaviour
     {
         GameObject debugMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         debugMarker.transform.position = position;
-        debugMarker.transform.localScale = Vector3.one * debugImpactSize;
-        Collider sphereCollider = debugMarker.GetComponent<Collider>();
-        if (sphereCollider != null) sphereCollider.enabled = false;
-        Destroy(debugMarker, debugImpactLifetime);
+        debugMarker.transform.localScale = Vector3.one * 0.05f;
+        Destroy(debugMarker, 5f);
     }
 
     void ReturnToPool()
     {
         isLaunched = false;
         StopAllCoroutines();
-        if (bulletPool != null)
-        {
-            bulletPool.ReturnBullet(this.gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (bulletPool != null) bulletPool.ReturnBullet(this.gameObject);
+        else Destroy(gameObject);
     }
 }

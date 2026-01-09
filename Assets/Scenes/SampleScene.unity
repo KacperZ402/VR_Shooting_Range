@@ -864,6 +864,11 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &123606567 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 122932540175321503, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+  m_PrefabInstance: {fileID: 1043613692357240321}
+  m_PrefabAsset: {fileID: 0}
 --- !u!64 &137375868
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -898,6 +903,7 @@ GameObject:
   - component: {fileID: 149363354}
   - component: {fileID: 149363353}
   - component: {fileID: 149363355}
+  - component: {fileID: 149363356}
   m_Layer: 0
   m_Name: Table (1)
   m_TagString: Untagged
@@ -995,6 +1001,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7366043, y: 1.0805885, z: 0.8635497}
   m_Center: {x: 0, y: 0, z: -0.42387557}
+--- !u!114 &149363356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149363350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 862391983965560669, guid: 3d1614264a3feb544a55ad0bcc556efb, type: 3}
+  hitParticles: {fileID: 123606567}
+  impactSounds:
+  - {fileID: 8300000, guid: a0c29c0ea55c19d41977cb9bea2a7e4f, type: 3}
+  - {fileID: 8300000, guid: 59895e7701756ec48bb2f7cb77757f70, type: 3}
+  volume: 1
+  penetrationResistance: 10
+  dragOnPenetration: 0.2
 --- !u!1 &154992521
 GameObject:
   m_ObjectHideFlags: 0
@@ -1496,85 +1522,6 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!1 &263769384
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 263769387}
-  - component: {fileID: 263769386}
-  - component: {fileID: 263769385}
-  m_Layer: 0
-  m_Name: EventSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &263769385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 263769384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
-  m_MoveRepeatDelay: 0.5
-  m_MoveRepeatRate: 0.1
-  m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_DeselectOnBackgroundClick: 1
-  m_PointerBehavior: 0
-  m_CursorLockBehavior: 0
-  m_ScrollDeltaPerTick: 6
---- !u!114 &263769386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 263769384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 10
---- !u!4 &263769387
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 263769384}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &264475245
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1959,6 +1906,7 @@ GameObject:
   - component: {fileID: 382801539}
   - component: {fileID: 382801538}
   - component: {fileID: 382801537}
+  - component: {fileID: 382801541}
   m_Layer: 0
   m_Name: ShootingTarget.001 (4)
   m_TagString: Untagged
@@ -2073,6 +2021,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 382801535}
   m_Mesh: {fileID: -3752237028215348503, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &382801541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382801535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1001 &405788083
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2793,7 +2761,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stoppingPower: 10
+  bulletHolePrefab: {fileID: 0}
+  hitParticles: {fileID: 0}
+  impactSounds: []
+  volume: 1
+  penetrationResistance: 5
   dragOnPenetration: 0.3
 --- !u!1001 &538180868
 PrefabInstance:
@@ -3109,6 +3081,7 @@ GameObject:
   - component: {fileID: 573019482}
   - component: {fileID: 573019481}
   - component: {fileID: 573019480}
+  - component: {fileID: 573019484}
   m_Layer: 0
   m_Name: ShootingTarget.001 (3)
   m_TagString: Untagged
@@ -3223,6 +3196,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 573019478}
   m_Mesh: {fileID: -3752237028215348503, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &573019484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 573019478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1001 &594258845
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3408,6 +3401,7 @@ GameObject:
   - component: {fileID: 635296652}
   - component: {fileID: 635296655}
   - component: {fileID: 635296656}
+  - component: {fileID: 635296657}
   m_Layer: 0
   m_Name: ShootingTarget (6)
   m_TagString: Untagged
@@ -3537,6 +3531,26 @@ MonoBehaviour:
   speed: 3
   range: 2.2
   isMoving: 1
+--- !u!114 &635296657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635296650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1 &642944409
 GameObject:
   m_ObjectHideFlags: 0
@@ -3550,6 +3564,7 @@ GameObject:
   - component: {fileID: 642944413}
   - component: {fileID: 642944412}
   - component: {fileID: 642944411}
+  - component: {fileID: 642944415}
   m_Layer: 0
   m_Name: ShootingTarget (4)
   m_TagString: Untagged
@@ -3664,6 +3679,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 642944409}
   m_Mesh: {fileID: 1479331547492516956, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &642944415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642944409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!64 &678001974
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4339,6 +4374,7 @@ GameObject:
   - component: {fileID: 798277278}
   - component: {fileID: 798277277}
   - component: {fileID: 798277276}
+  - component: {fileID: 798277280}
   m_Layer: 0
   m_Name: ShootingTarget (1)
   m_TagString: Untagged
@@ -4453,6 +4489,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 798277274}
   m_Mesh: {fileID: 1479331547492516956, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &798277280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798277274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1001 &844693162
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7087,6 +7143,7 @@ GameObject:
   - component: {fileID: 1255373940}
   - component: {fileID: 1255373939}
   - component: {fileID: 1255373944}
+  - component: {fileID: 1255373945}
   m_Layer: 0
   m_Name: ShootingTarget.001 (6)
   m_TagString: Untagged
@@ -7216,6 +7273,26 @@ MonoBehaviour:
   speed: 3
   range: 2.2
   isMoving: 1
+--- !u!114 &1255373945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255373938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!114 &1268394465 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6439129878053021200, guid: 3e5df35bb8faaa74e946fcc74fa768c7, type: 3}
@@ -7348,6 +7425,7 @@ GameObject:
   - component: {fileID: 1284724181}
   - component: {fileID: 1284724180}
   - component: {fileID: 1284724179}
+  - component: {fileID: 1284724183}
   m_Layer: 0
   m_Name: ShootingTarget (2)
   m_TagString: Untagged
@@ -7462,6 +7540,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1284724177}
   m_Mesh: {fileID: 1479331547492516956, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &1284724183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284724177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1 &1284911680
 GameObject:
   m_ObjectHideFlags: 0
@@ -7474,6 +7572,7 @@ GameObject:
   - component: {fileID: 1284911684}
   - component: {fileID: 1284911683}
   - component: {fileID: 1284911685}
+  - component: {fileID: 1284911686}
   m_Layer: 0
   m_Name: Table (4)
   m_TagString: Untagged
@@ -7571,6 +7670,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7366043, y: 1.0805885, z: 0.8635497}
   m_Center: {x: 0, y: 0, z: -0.42387557}
+--- !u!114 &1284911686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284911680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 862391983965560669, guid: 3d1614264a3feb544a55ad0bcc556efb, type: 3}
+  hitParticles: {fileID: 123606567}
+  impactSounds:
+  - {fileID: 8300000, guid: a0c29c0ea55c19d41977cb9bea2a7e4f, type: 3}
+  - {fileID: 8300000, guid: 59895e7701756ec48bb2f7cb77757f70, type: 3}
+  volume: 1
+  penetrationResistance: 10
+  dragOnPenetration: 0.2
 --- !u!4 &1300198599 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5686134208185136530, guid: 1fd3a7c43c8190f4d8c167ebde694364, type: 3}
@@ -7922,6 +8041,7 @@ GameObject:
   - component: {fileID: 1375790132}
   - component: {fileID: 1375790131}
   - component: {fileID: 1375790130}
+  - component: {fileID: 1375790134}
   m_Layer: 0
   m_Name: ShootingTarget.001 (1)
   m_TagString: Untagged
@@ -8036,6 +8156,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375790128}
   m_Mesh: {fileID: -3752237028215348503, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &1375790134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375790128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!64 &1385415885
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8091,7 +8231,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stoppingPower: 10
+  bulletHolePrefab: {fileID: 0}
+  hitParticles: {fileID: 0}
+  impactSounds: []
+  volume: 1
+  penetrationResistance: 5
   dragOnPenetration: 0.3
 --- !u!54 &1396912834
 Rigidbody:
@@ -8708,6 +8852,7 @@ GameObject:
   - component: {fileID: 1479680900}
   - component: {fileID: 1479680899}
   - component: {fileID: 1479680898}
+  - component: {fileID: 1479680901}
   m_Layer: 0
   m_Name: MetalShelf (1)
   m_TagString: Untagged
@@ -8806,6 +8951,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1479680896}
   m_Mesh: {fileID: 979838334635405240, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &1479680901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479680896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1001 &1527227182
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9287,66 +9452,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 972c8b49b0fbcc14b842285ae7af48e6, type: 3}
---- !u!1 &1610588606
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1610588609}
-  - component: {fileID: 1610588608}
-  - component: {fileID: 1610588607}
-  m_Layer: 0
-  m_Name: VisualScripting SceneVariables
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1610588607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1610588606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 765181c9ef4b24d32a4f7cbd2ef370dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1610588608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1610588606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e741851cba3ad425c91ecf922cc6b379, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _data:
-    _json: '{"declarations":{"Kind":"Scene","collection":{"$content":[],"$version":"A"},"$version":"A"}}'
-    _objectReferences: []
---- !u!4 &1610588609
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1610588606}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1617146179
 GameObject:
   m_ObjectHideFlags: 0
@@ -9360,6 +9465,7 @@ GameObject:
   - component: {fileID: 1617146183}
   - component: {fileID: 1617146182}
   - component: {fileID: 1617146181}
+  - component: {fileID: 1617146185}
   m_Layer: 0
   m_Name: ShootingTarget (3)
   m_TagString: Untagged
@@ -9474,6 +9580,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1617146179}
   m_Mesh: {fileID: 1479331547492516956, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &1617146185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617146179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!114 &1618461464 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1883230248363655243, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
@@ -9618,6 +9744,7 @@ GameObject:
   - component: {fileID: 1642026485}
   - component: {fileID: 1642026484}
   - component: {fileID: 1642026486}
+  - component: {fileID: 1642026487}
   m_Layer: 0
   m_Name: Table (3)
   m_TagString: Untagged
@@ -9715,6 +9842,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7366043, y: 1.0805885, z: 0.8635497}
   m_Center: {x: 0, y: 0, z: -0.42387557}
+--- !u!114 &1642026487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642026481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 862391983965560669, guid: 3d1614264a3feb544a55ad0bcc556efb, type: 3}
+  hitParticles: {fileID: 123606567}
+  impactSounds:
+  - {fileID: 8300000, guid: a0c29c0ea55c19d41977cb9bea2a7e4f, type: 3}
+  - {fileID: 8300000, guid: 59895e7701756ec48bb2f7cb77757f70, type: 3}
+  volume: 1
+  penetrationResistance: 10
+  dragOnPenetration: 0.2
 --- !u!64 &1642981742
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -11301,6 +11448,7 @@ GameObject:
   - component: {fileID: 1789983499}
   - component: {fileID: 1789983498}
   - component: {fileID: 1789983497}
+  - component: {fileID: 1789983500}
   m_Layer: 0
   m_Name: MetalShelf (2)
   m_TagString: Untagged
@@ -11399,6 +11547,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1789983495}
   m_Mesh: {fileID: 979838334635405240, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &1789983500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789983495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1001 &1813516846
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11525,6 +11693,7 @@ GameObject:
   - component: {fileID: 1819391151}
   - component: {fileID: 1819391150}
   - component: {fileID: 1819391149}
+  - component: {fileID: 1819391152}
   m_Layer: 0
   m_Name: MetalShelf (3)
   m_TagString: Untagged
@@ -11623,6 +11792,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1819391147}
   m_Mesh: {fileID: 979838334635405240, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &1819391152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819391147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!137 &1836223568 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 7163876590946616089, guid: 27024f5809f4a4347b9cd7f26a1bdf93, type: 3}
@@ -11771,6 +11960,7 @@ GameObject:
   - component: {fileID: 1861590651}
   - component: {fileID: 1861590650}
   - component: {fileID: 1861590649}
+  - component: {fileID: 1861590653}
   m_Layer: 0
   m_Name: ShootingTarget (5)
   m_TagString: Untagged
@@ -11885,6 +12075,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1861590647}
   m_Mesh: {fileID: 1479331547492516956, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &1861590653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861590647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1001 &1884649997
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12425,6 +12635,7 @@ GameObject:
   - component: {fileID: 1964916220}
   - component: {fileID: 1964916219}
   - component: {fileID: 1964916218}
+  - component: {fileID: 1964916222}
   m_Layer: 0
   m_Name: ShootingTarget.001 (5)
   m_TagString: Untagged
@@ -12539,6 +12750,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1964916216}
   m_Mesh: {fileID: -3752237028215348503, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &1964916222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964916216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1001 &1968538725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13201,6 +13432,7 @@ GameObject:
   - component: {fileID: 2102440355}
   - component: {fileID: 2102440354}
   - component: {fileID: 2102440356}
+  - component: {fileID: 2102440357}
   m_Layer: 0
   m_Name: Table (2)
   m_TagString: Untagged
@@ -13298,6 +13530,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7366043, y: 1.0805885, z: 0.8635497}
   m_Center: {x: 0, y: 0, z: -0.42387557}
+--- !u!114 &2102440357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102440351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 862391983965560669, guid: 3d1614264a3feb544a55ad0bcc556efb, type: 3}
+  hitParticles: {fileID: 123606567}
+  impactSounds:
+  - {fileID: 8300000, guid: a0c29c0ea55c19d41977cb9bea2a7e4f, type: 3}
+  - {fileID: 8300000, guid: 59895e7701756ec48bb2f7cb77757f70, type: 3}
+  volume: 1
+  penetrationResistance: 10
+  dragOnPenetration: 0.2
 --- !u!1 &2105466504
 GameObject:
   m_ObjectHideFlags: 0
@@ -13628,6 +13880,7 @@ GameObject:
   - component: {fileID: 2124362210}
   - component: {fileID: 2124362209}
   - component: {fileID: 2124362208}
+  - component: {fileID: 2124362212}
   m_Layer: 0
   m_Name: ShootingTarget.001 (2)
   m_TagString: Untagged
@@ -13742,6 +13995,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2124362206}
   m_Mesh: {fileID: -3752237028215348503, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &2124362212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2124362206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1001 &2126194900
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14614,6 +14887,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1990171893818411259}
   m_Mesh: {fileID: 4136900492399673466, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!1001 &1043613692357240321
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 122932540175321503, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_Name
+      value: WoodSpark (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618581464790613830, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 11.91301
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618581464790613830, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618581464790613830, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618581464790613830, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618581464790613830, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618581464790613830, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618581464790613830, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618581464790613830, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618581464790613830, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618581464790613830, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1cede64a62450364883a9cf9e8f71caf, type: 3}
 --- !u!1 &1189977884444082566
 GameObject:
   m_ObjectHideFlags: 0
@@ -14981,6 +15311,7 @@ GameObject:
   - component: {fileID: 1539737319047606616}
   - component: {fileID: 733162344}
   - component: {fileID: 2129235563}
+  - component: {fileID: 7053686952931482263}
   m_Layer: 0
   m_Name: ShootingTarget
   m_TagString: Untagged
@@ -15301,6 +15632,7 @@ GameObject:
   - component: {fileID: 8217155946477276764}
   - component: {fileID: 268217924564603390}
   - component: {fileID: 1852315504}
+  - component: {fileID: 8217155946477276765}
   m_Layer: 0
   m_Name: ShootingRange.003
   m_TagString: Untagged
@@ -15437,6 +15769,7 @@ GameObject:
   - component: {fileID: 9137910868596179785}
   - component: {fileID: 413513196617835181}
   - component: {fileID: 720355847}
+  - component: {fileID: 9137910868596179786}
   m_Layer: 0
   m_Name: MetalShelf
   m_TagString: Untagged
@@ -15501,6 +15834,7 @@ GameObject:
   - component: {fileID: 144478396845508575}
   - component: {fileID: 2329333509006297312}
   - component: {fileID: 1546820030}
+  - component: {fileID: 3391912089218162554}
   m_Layer: 0
   m_Name: ShootingRange.002
   m_TagString: Untagged
@@ -16441,6 +16775,7 @@ GameObject:
   - component: {fileID: 2881074438910994984}
   - component: {fileID: 3711502204921329822}
   - component: {fileID: 3711502204921329823}
+  - component: {fileID: 3711502204921329824}
   m_Layer: 0
   m_Name: Tables.001
   m_TagString: Untagged
@@ -16525,6 +16860,7 @@ GameObject:
   - component: {fileID: 2041528637050786071}
   - component: {fileID: 4485366693417134116}
   - component: {fileID: 68322914}
+  - component: {fileID: 4485366693417134117}
   m_Layer: 0
   m_Name: ShootingRange
   m_TagString: Untagged
@@ -16573,6 +16909,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 543450652534494221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3391912089218162554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253942855023524280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6132790497229576637, guid: 5ebb93ac9ff492a42851d7a1e7bd235d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 16d91b96935eaf548ba2e66254ecca01, type: 3}
+  - {fileID: 8300000, guid: 05add65bbdeb63441a38230fedb87764, type: 3}
+  volume: 1
+  penetrationResistance: 9999
+  dragOnPenetration: 0.2
 --- !u!4 &3401357339186650814
 Transform:
   m_ObjectHideFlags: 0
@@ -16822,8 +17178,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stoppingPower: 10
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
   dragOnPenetration: 0.3
+--- !u!114 &3711502204921329824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3088330633207458579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 0}
+  hitParticles: {fileID: 0}
+  impactSounds: []
+  volume: 1
+  penetrationResistance: 5
+  dragOnPenetration: 0.2
 --- !u!33 &3728042791451102436
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -16922,6 +17302,7 @@ GameObject:
   - component: {fileID: 7398332257265615333}
   - component: {fileID: 566669695}
   - component: {fileID: 7398332257265615334}
+  - component: {fileID: 7398332257265615335}
   m_Layer: 0
   m_Name: ShootingShield
   m_TagString: Untagged
@@ -17320,6 +17701,26 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4485366693417134117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3313400043258134160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6132790497229576637, guid: 5ebb93ac9ff492a42851d7a1e7bd235d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 16d91b96935eaf548ba2e66254ecca01, type: 3}
+  - {fileID: 8300000, guid: 05add65bbdeb63441a38230fedb87764, type: 3}
+  volume: 1
+  penetrationResistance: 9999
+  dragOnPenetration: 0.2
 --- !u!33 &4574708406795660029
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -17511,6 +17912,7 @@ GameObject:
   - component: {fileID: 747699362863520013}
   - component: {fileID: 2620870634585375744}
   - component: {fileID: 1215006222}
+  - component: {fileID: 4996244514183375044}
   m_Layer: 0
   m_Name: ShootingRange.001
   m_TagString: Untagged
@@ -17518,6 +17920,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
+--- !u!114 &4996244514183375044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4996244514183375043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6132790497229576637, guid: 5ebb93ac9ff492a42851d7a1e7bd235d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 16d91b96935eaf548ba2e66254ecca01, type: 3}
+  - {fileID: 8300000, guid: 05add65bbdeb63441a38230fedb87764, type: 3}
+  volume: 1
+  penetrationResistance: 9999
+  dragOnPenetration: 0.2
 --- !u!33 &5006820081910877609
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -17820,6 +18242,7 @@ GameObject:
   - component: {fileID: 485937413431701610}
   - component: {fileID: 4610022751155569895}
   - component: {fileID: 1649955213}
+  - component: {fileID: 5571017688431928441}
   m_Layer: 0
   m_Name: locker.001
   m_TagString: Untagged
@@ -17827,6 +18250,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
+--- !u!114 &5571017688431928441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5571017688431928440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!4 &5643332285020181138
 Transform:
   m_ObjectHideFlags: 0
@@ -18432,6 +18875,7 @@ GameObject:
   - component: {fileID: 6269947550431156361}
   - component: {fileID: 946902769}
   - component: {fileID: 679639927}
+  - component: {fileID: 6944188907308854586}
   m_Layer: 0
   m_Name: ShootingTarget.001
   m_TagString: Untagged
@@ -18439,6 +18883,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6944188907308854586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6944188907308854585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!4 &6947009176283796253
 Transform:
   m_ObjectHideFlags: 0
@@ -18540,6 +19004,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 543450652534494221}
   m_LocalEulerAnglesHint: {x: -183.534, y: 0, z: 0}
+--- !u!114 &7053686952931482263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551351928371503288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!1 &7079208448632996761
 GameObject:
   m_ObjectHideFlags: 0
@@ -18794,6 +19278,26 @@ MonoBehaviour:
   moveSpeed: 5
   CleanUpInNextToogle: 1
   objectToKeep: {fileID: 1901479679}
+--- !u!114 &7398332257265615335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3803709471379194536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 0}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!23 &7444823863849921036
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -19447,6 +19951,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1999116979812388798}
   m_Mesh: {fileID: 4610912427902315123, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &8217155946477276765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999116979812388798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6132790497229576637, guid: 5ebb93ac9ff492a42851d7a1e7bd235d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 16d91b96935eaf548ba2e66254ecca01, type: 3}
+  - {fileID: 8300000, guid: 05add65bbdeb63441a38230fedb87764, type: 3}
+  volume: 1
+  penetrationResistance: 9999
+  dragOnPenetration: 0.2
 --- !u!4 &8259843181041634353
 Transform:
   m_ObjectHideFlags: 0
@@ -19683,6 +20207,7 @@ GameObject:
   - component: {fileID: 6641363238609777857}
   - component: {fileID: 264475245}
   - component: {fileID: 8565745734264380565}
+  - component: {fileID: 8565745734264380566}
   m_Layer: 0
   m_Name: Tables.007
   m_TagString: Untagged
@@ -19711,6 +20236,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.4165196, y: 0.90920556, z: 1.0913881}
   m_Center: {x: -0.1584251, y: -4.6800876, z: -0.51933205}
+--- !u!114 &8565745734264380566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8565745734264380564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!33 &8613252741042805735
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -19985,6 +20530,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2132203954188350562}
   m_Mesh: {fileID: 979838334635405240, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+--- !u!114 &9137910868596179786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132203954188350562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 6133141446237202735, guid: a8ff04dc1aa852e44aa691bf5e99329d, type: 3}
+  hitParticles: {fileID: 7232944440870805175, guid: 356c321896f97384cbc874afcdd3f0ba, type: 3}
+  impactSounds:
+  - {fileID: 8300000, guid: 4a7b97b5cef736e4db31baa3a37f877e, type: 3}
+  - {fileID: 8300000, guid: 901ae687a97f6984fb19effe60a9e97d, type: 3}
+  volume: 1
+  penetrationResistance: 99
+  dragOnPenetration: 0.2
 --- !u!23 &9147988818866644300
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -20043,6 +20608,7 @@ GameObject:
   - component: {fileID: 8330839514822289498}
   - component: {fileID: 4053793226973051054}
   - component: {fileID: 9152363912578525391}
+  - component: {fileID: 9152363912578525392}
   m_Layer: 0
   m_Name: Table
   m_TagString: Untagged
@@ -20071,6 +20637,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7366043, y: 1.0805885, z: 0.8635497}
   m_Center: {x: 0, y: 0, z: -0.42387557}
+--- !u!114 &9152363912578525392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9152363912578525390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ec8753738c11b4d9f1aed0c81d2389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolePrefab: {fileID: 862391983965560669, guid: 3d1614264a3feb544a55ad0bcc556efb, type: 3}
+  hitParticles: {fileID: 123606567}
+  impactSounds:
+  - {fileID: 8300000, guid: a0c29c0ea55c19d41977cb9bea2a7e4f, type: 3}
+  - {fileID: 8300000, guid: 59895e7701756ec48bb2f7cb77757f70, type: 3}
+  volume: 1
+  penetrationResistance: 10
+  dragOnPenetration: 0.2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -20151,5 +20737,4 @@ SceneRoots:
   - {fileID: 678347516}
   - {fileID: 1977447392834749074}
   - {fileID: 627873235}
-  - {fileID: 1610588609}
-  - {fileID: 263769387}
+  - {fileID: 1043613692357240321}
