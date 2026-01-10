@@ -284,8 +284,8 @@ MonoBehaviour:
   isBoltLockedBack: 0
   currentFireMode: 0
   burstCount: 3
-  fireRate: 0.05
-  burstDelay: 0.08
+  fireRate: 0.04
+  burstDelay: 0
   muzzleTransform: {fileID: 1311730813160684532}
   velocityMultiplier: 1
   universalProjectilePrefab: {fileID: 3102821641765768627, guid: 1324ea2a6882f9f458fbb7755457915f, type: 3}

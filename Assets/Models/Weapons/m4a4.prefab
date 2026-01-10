@@ -446,7 +446,6 @@ MonoBehaviour:
   fireSelector: {fileID: 2723255588555539483}
   weaponGrab: {fileID: 2433302261628981903}
   chamberTransform: {fileID: 5015830799136337821}
-  rangeManager: {fileID: 0}
   ejectionPort: {fileID: 8530965236716893906}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}
@@ -457,7 +456,7 @@ MonoBehaviour:
   isBoltLockedBack: 0
   currentFireMode: 0
   burstCount: 3
-  fireRate: 0.1
+  fireRate: 0.04
   burstDelay: 0.08
   muzzleTransform: {fileID: 8768876409100375758}
   velocityMultiplier: 1
@@ -1774,7 +1773,7 @@ MonoBehaviour:
   yEpsilon: 0.0001
   lockedBackY: -0.06700001
   holdFrames: 1
-  returnFrames: 2
+  returnFrames: 1
 --- !u!1 &8414186692183328176
 GameObject:
   m_ObjectHideFlags: 0

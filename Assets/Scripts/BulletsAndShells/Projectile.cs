@@ -41,6 +41,7 @@ public class Projectile : MonoBehaviour
         bulletPool = BulletPoolManager.Instance;
         rb.isKinematic = false;
 
+        // --- Inicjalizacja PhysicsMaterial ---
         if (col.material != null)
         {
             projectileMaterial = new PhysicsMaterial(col.material.name + "_Instance");
@@ -114,16 +115,13 @@ public class Projectile : MonoBehaviour
 
         if (isRicochet)
         {
-            // 🔥 spawnHole = false (Tylko iskry i dźwięk)
             SpawnVisuals(contact, matSurface, spawnHole: false);
-
             currentPenetrationPower *= 0.5f;
             currentRicochets++;
             return;
         }
 
         // --- 2. TRAFIENIE / PRZEBICIE ---
-        // 🔥 spawnHole = true (Stawiamy dziurę)
         SpawnVisuals(contact, matSurface, spawnHole: true);
 
         // Fizyka przebicia
@@ -144,6 +142,13 @@ public class Projectile : MonoBehaviour
 
     private void SpawnVisuals(ContactPoint contact, MaterialSurface mat, bool spawnHole)
     {
+        // Sprawdź czy manager istnieje (zabezpieczenie)
+        if (ImpactPoolManager.Instance == null)
+        {
+            Debug.LogError("Brak ImpactPoolManager na scenie!");
+            return;
+        }
+
         // Dobieramy prefaby
         GameObject holePrefab = (mat != null && mat.bulletHolePrefab != null) ? mat.bulletHolePrefab : defaultHolePrefab;
         GameObject partPrefab = (mat != null && mat.hitParticles != null) ? mat.hitParticles : defaultParticles;
@@ -157,33 +162,37 @@ public class Projectile : MonoBehaviour
             vol = mat.volume;
         }
 
-        // 1. Particle
+        // 1. Particle (Spawn przez Pool Managera)
+        // Particle żyją krótko, np. 2 sekundy (hardcoded albo dodaj zmienną)
         if (partPrefab != null)
-            Instantiate(partPrefab, contact.point, Quaternion.LookRotation(contact.normal));
+        {
+            ImpactPoolManager.Instance.Spawn(partPrefab, contact.point, Quaternion.LookRotation(contact.normal), 2.0f);
+        }
 
-        // 2. Audio
+        // 2. Audio (AudioSource.PlayClipAtPoint tworzy tymczasowy obiekt, który sam się niszczy - to Unity robi dobrze, nie trzeba poolować, chyba że masz 1000 strzałów/sek)
         if (clipToPlay != null)
+        {
             AudioSource.PlayClipAtPoint(clipToPlay, contact.point, vol);
+        }
 
-        // 3. Dziura (Tylko jeśli spawnHole == true)
+        // 3. Dziura (Spawn przez Pool Managera)
         if (spawnHole && holePrefab != null)
         {
-            // 🔥 CZYSTA GEOMETRIA:
-            // 1. Ustawiamy rotację tak, by oś Z patrzyła prostopadle od ściany.
             Quaternion lookRotation = Quaternion.LookRotation(contact.normal);
-
-            // 2. Dodajemy Twoją stałą korektę (dla Quada zazwyczaj (0, 180, 0) lub (0,0,0)).
             Quaternion manualOffset = Quaternion.Euler(holeRotationOffset);
-
-            // 3. Łączymy to w całość. USUNIĘTO randomZ.
             Quaternion finalRotation = lookRotation * manualOffset;
 
-            // 4. Offset od ściany (0.01f = 1cm), żeby nie znikały w teksturze.
             Vector3 pos = contact.point + (contact.normal * 0.001f);
 
-            GameObject hole = Instantiate(holePrefab, pos, finalRotation);
-            hole.transform.SetParent(contact.otherCollider.transform);
-            Destroy(hole, bulletHoleLifetime);
+            // 🔥 Tu jest zmiana: Spawn z Managera + Auto-Return po czasie bulletHoleLifetime
+            GameObject hole = ImpactPoolManager.Instance.Spawn(holePrefab, pos, finalRotation, bulletHoleLifetime);
+
+            // Przyklejamy do obiektu (ściany)
+            // Manager zresetuje parenta na null, gdy dziura wróci do puli
+            if (hole != null)
+            {
+                hole.transform.SetParent(contact.otherCollider.transform);
+            }
         }
     }
 
@@ -201,6 +210,8 @@ public class Projectile : MonoBehaviour
 
     private void CreateDebugMarker(Vector3 position)
     {
+        // Debug markery to mały pikuś, mogą zostać na Instantiate/Destroy, 
+        // chyba że chcesz być ultra-perfekcyjny, ale to tylko debug.
         GameObject debugMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         debugMarker.transform.position = position;
         debugMarker.transform.localScale = Vector3.one * 0.05f;

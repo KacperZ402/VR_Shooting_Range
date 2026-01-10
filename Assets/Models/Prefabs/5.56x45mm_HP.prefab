@@ -15,8 +15,6 @@ GameObject:
   - component: {fileID: 5388355301091965967}
   - component: {fileID: -336203845682575739}
   - component: {fileID: -1500874292739637676}
-  - component: {fileID: 703974308013522982}
-  - component: {fileID: 3989566925469555795}
   m_Layer: 10
   m_Name: 5.56x45mm_HP
   m_TagString: Bullet
@@ -290,58 +288,8 @@ MonoBehaviour:
   dragCoefficient: 0.01
   projectileCount: 1
   spreadAngle: 1.01
-  penetrationPower: 15
+  penetrationPower: 5
   ricochetAngle: 60
   maxRicochets: 1
   ricochetBounciness: 0.2
   ricochetFriction: 0.3
---- !u!114 &703974308013522982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7360191414025881229}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48e8dab867da65a46bb53abf376d7324, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  caliber: 5.56x45
-  casingPrefab: {fileID: 8177197253499680521, guid: 644698d43afbf494192827793510e71e, type: 3}
-  defaultScale: {x: 0, y: 0, z: 0}
-  muzzleEnergy: 1750
-  mass: 0.04
-  dragCoefficient: 0.005
-  projectileCount: 1
-  spreadAngle: 1.01
-  penetrationPower: 25
-  ricochetAngle: 65
-  maxRicochets: 2
-  ricochetBounciness: 0.2
-  ricochetFriction: 0.4
---- !u!114 &3989566925469555795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7360191414025881229}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48e8dab867da65a46bb53abf376d7324, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  caliber: 5.56x45
-  casingPrefab: {fileID: 8177197253499680521, guid: 644698d43afbf494192827793510e71e, type: 3}
-  defaultScale: {x: 0, y: 0, z: 0}
-  muzzleEnergy: 1750
-  mass: 0.04
-  dragCoefficient: 0.005
-  projectileCount: 1
-  spreadAngle: 1.01
-  penetrationPower: 25
-  ricochetAngle: 65
-  maxRicochets: 2
-  ricochetBounciness: 0.2
-  ricochetFriction: 0.4

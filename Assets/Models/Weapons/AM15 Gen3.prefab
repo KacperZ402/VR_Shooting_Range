@@ -1903,7 +1903,7 @@ MonoBehaviour:
   yEpsilon: 0.0001
   lockedBackY: -0.06700001
   holdFrames: 1
-  returnFrames: 2
+  returnFrames: 1
 --- !u!1 &8594382769752583712
 GameObject:
   m_ObjectHideFlags: 0

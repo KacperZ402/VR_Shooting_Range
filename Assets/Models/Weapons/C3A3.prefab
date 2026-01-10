@@ -469,7 +469,7 @@ MonoBehaviour:
   yEpsilon: 0.0001
   lockedBackY: -0.2452
   holdFrames: 1
-  returnFrames: 2
+  returnFrames: 1
 --- !u!1 &5454537547747206220
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,7 +986,7 @@ MonoBehaviour:
   isBoltLockedBack: 0
   currentFireMode: 0
   burstCount: 3
-  fireRate: 0.1
+  fireRate: 0.09
   burstDelay: 0.08
   muzzleTransform: {fileID: 9175983638116650230}
   velocityMultiplier: 1

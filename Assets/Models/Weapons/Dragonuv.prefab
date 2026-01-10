@@ -505,7 +505,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   holdFrames: 1
-  returnFrames: 2
+  returnFrames: 1
 --- !u!1 &4175349650596956711
 GameObject:
   m_ObjectHideFlags: 0
