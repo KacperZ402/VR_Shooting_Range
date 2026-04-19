@@ -7,11 +7,11 @@ using UnityEngine;
 /// </summary>
 public class AmmoBox : MonoBehaviour
 {
-    [Header("Konfiguracja Pude³ka")]
+    [Header("Box Conf")]
     [Tooltip("Prefab naboju (z komponentem Bullet), który ma zostaæ pobrany z puli.")]
     public GameObject ammoPrefab;
 
-    [Header("Ustawienia Siatki (Grid)")]
+    [Header("Grid settings")]
     [Tooltip("Liczba kolumn w siatce (Oœ X)")]
     public int gridColumns = 5;
 

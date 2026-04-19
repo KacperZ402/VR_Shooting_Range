@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 [RequireComponent(typeof(XRGrabInteractable))]
 public class WeaponControllerBase : MonoBehaviour
 {
-    [Header("Referencje")]
+    [Header("References")]
     public AmmoSocket ammoSocket;
     public ChargingHandle chargingHandle;
     public BoltFollower bolt;
@@ -18,7 +19,7 @@ public class WeaponControllerBase : MonoBehaviour
     // Kolzije Magazynka (aby je wyłączyć podczas podpiecia do gniazda)
     private List<Collider> internalGunParts = new List<Collider>();
 
-    [Header("Wyrzut Łuski")]
+    [Header("Cassing Eject")]
     [Tooltip("Transform (pusty GameObject) w miejscu, z którego wylatuje łuska.")]
     public Transform ejectionPort;
     [Tooltip("Siła wyrzutu łuski.")]
@@ -31,26 +32,26 @@ public class WeaponControllerBase : MonoBehaviour
     [Range(0f, 1f)]
     public float velocityInheritance = 1.0f;
 
-    [Header("Dane broni")]
+    [Header("Ammo")]
     public string caliber = "5.56x45";
 
-    [Header("Stan broni")]
+    [Header("Weapon State")]
     public GameObject chamberedRound;
     public bool isHammerCocked = false;
     public bool isBoltLockedBack = false;
     public FireMode currentFireMode = FireMode.Safe;
 
-    [Header("Parametry trybów ognia")]
+    [Header("FireModes")]
     public int burstCount = 3;
     public float fireRate = 0.1f;
     public float burstDelay = 0.08f;
 
-    [Header("Balistyka")]
+    [Header("Ballistics")]
     public Transform muzzleTransform;
     public float velocityMultiplier = 1.0f;
     public GameObject universalProjectilePrefab;
 
-    [Header("Eventy")]
+    [Header("Events")]
     public UnityEvent OnFire;
     public UnityEvent OnDryFire;
     public UnityEvent OnRoundChambered;
@@ -410,11 +411,6 @@ public class WeaponControllerBase : MonoBehaviour
         isHammerCocked = true;
         OnBoltReleasedEvent?.Invoke();
     }
-    /// <summary>
-    /// Metoda do manualnego zrzucenia suwadła/zamka (np. przyciskiem Slide Release w pistolecie).
-    /// Wymusza powrót rączki przeładowania do pozycji zerowej i wprowadza nabój.
-    /// </summary>
-    /// <param name="force">Czy zignorować stan magazynka (np. zrzut na sucho)?</param>
     public virtual bool TryChamberFromMagazine()
     {
         if (chamberedRound != null) return true;
@@ -440,8 +436,6 @@ public class WeaponControllerBase : MonoBehaviour
             chamberedRound.transform.position = chamberTransform.position;
             chamberedRound.transform.rotation = chamberTransform.rotation;
             chamberedRound.transform.SetParent(chamberTransform);
-
-            // 🔹 ZMIANA: Przywróć oryginalną skalę z prefabu
             chamberedRound.transform.localScale = bulletData.defaultScale;
 
             Rigidbody rb = chamberedRound.GetComponent<Rigidbody>();
@@ -610,5 +604,105 @@ public class WeaponControllerBase : MonoBehaviour
             }
         }
         Debug.Log($"[WeaponCollision] Zaktualizowano {count} par kolizji (Ignore={ignore}).");
+    }
+    // ---------------------------------------------------------
+    // SYSTEM ZARZĄDZANIA DODATKAMI (DYNAMICZNE KOLIZJE)
+    // ---------------------------------------------------------
+
+    /// <summary>
+    /// Wywoływane w evencie 'Select Entered' na sockecie dodatku (np. szynie).
+    /// </summary>
+    public void OnAttachmentMounted(SelectEnterEventArgs args)
+    {
+
+        var attachmentObj = args.interactableObject.transform.gameObject;
+        RegisterGunPart(attachmentObj);
+    }
+    /// Wywoławne w evencie 'Select Exited' na sockecie dodatku.
+    public void OnAttachmentUnmounted(SelectExitEventArgs args)
+    {
+        // Analogicznie:
+        var attachmentObj = args.interactableObject.transform.gameObject;
+        
+        UnregisterGunPart(attachmentObj);
+    }
+
+    public void RegisterGunPart(GameObject partRoot)
+    {
+        if (partRoot == null) return;
+
+        var newColliders = partRoot.GetComponentsInChildren<Collider>(true);
+        if (newColliders.Length == 0) return;
+
+        // 1. Dodajemy nowe collidery do listy "Swoich"
+        foreach (var col in newColliders)
+        {
+            if (!internalGunParts.Contains(col))
+            {
+                internalGunParts.Add(col);
+
+                // BRUTALNA PRAWDA: Jeśli nie zrobisz tego teraz, dodatek będzie kolidował
+                // z samym szkieletem broni (jeśli parenting nie załatwił sprawy)
+                // albo z magazynkiem, który już siedzi w broni.
+
+                // A. Ignoruj kolizje z resztą broni (opcjonalne, zależne od parentingu)
+                foreach (var existingPart in internalGunParts)
+                {
+                    if (existingPart != col) Physics.IgnoreCollision(col, existingPart, true);
+                }
+
+                // B. Ignoruj kolizje z aktualnie wpiętym magazynkiem (KRYTYCZNE)
+                if (_cachedMagazine != null)
+                {
+                    var magColliders = _cachedMagazine.GetComponentsInChildren<Collider>(true);
+                    foreach (var magCol in magColliders)
+                    {
+                        Physics.IgnoreCollision(col, magCol, true);
+                    }
+                }
+            }
+        }
+
+        Debug.Log($"[WeaponCollision] Zarejestrowano dodatek: {partRoot.name}. Części w sumie: {internalGunParts.Count}");
+    }
+    public void UnregisterGunPart(GameObject partRoot)
+    {
+        if (partRoot == null) return;
+
+        var oldColliders = partRoot.GetComponentsInChildren<Collider>(true);
+
+        foreach (var colToRemove in oldColliders)
+        {
+            // Sprawdzamy, czy ten collider w ogóle był zarejestrowany jako część broni
+            if (internalGunParts.Contains(colToRemove))
+            {
+                //Przywróć kolizje z MAGAZYNKIEM (jeśli jest wpięty)
+                if (_cachedMagazine != null)
+                {
+                    var magColliders = _cachedMagazine.GetComponentsInChildren<Collider>(true);
+                    foreach (var magCol in magColliders)
+                    {
+                        if (magCol != null)
+                            Physics.IgnoreCollision(colToRemove, magCol, false);
+                    }
+                }
+                //Przywróć kolizje z RESZTĄ BRONI 
+                foreach (var existingPart in internalGunParts)
+                {
+                    // Nie przywracaj kolizji z samym sobą i sprawdzaj nulle
+                    if (existingPart != null && existingPart != colToRemove)
+                    {
+                        Physics.IgnoreCollision(colToRemove, existingPart, false);
+                    }
+                }
+
+                // -----------------------------------------------------------
+                // KROK 3: Dopiero teraz usuń z listy
+                // -----------------------------------------------------------
+                internalGunParts.Remove(colToRemove);
+            }
+        }
+
+        Debug.Log($"[WeaponCollision] Odrejestrowano dodatek: {partRoot.name}. Kolizje przywrócone.");
     }
 }

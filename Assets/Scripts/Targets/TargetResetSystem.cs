@@ -3,13 +3,13 @@ using System.Collections;
 
 public class TargetResetSystem : MonoBehaviour
 {
-    [Header("Konfiguracja Ruchu")]
+    [Header("Motion configuration")]
     [Tooltip("O ile jednostek i w którą stronę ma się przesunąć. Np. Z=5 oddali o 5 metrów.")]
     public Vector3 moveOffset = new Vector3(0, 0, 5f);
     public float moveSpeed = 2.0f;
     public bool CleanUpInNextToogle = true;
 
-    [Header("Konfiguracja Czyszczenia")]
+    [Header("Cleanup")]
     [Tooltip("Przypisz tutaj obiekt (dziecko), którego NIE wolno usuwać (np. model tarczy). Wszystko inne (dziury) zostanie usunięte.")]
     public GameObject objectToKeep;
 
@@ -43,7 +43,10 @@ public class TargetResetSystem : MonoBehaviour
 
     private void CleanUpChildren()
     {
-        if (!CleanUpInNextToogle) return;
+        if (!CleanUpInNextToogle) {
+            CleanUpInNextToogle = true;
+            return;
+        } 
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
             Transform child = transform.GetChild(i);

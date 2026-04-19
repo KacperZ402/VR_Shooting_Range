@@ -29,6 +29,12 @@ public class HKPlatform : WeaponControllerBase
 
         // 3. Wystrzel pocisk
         SpawnProjectile(ammoData);
+
+        if (ShootingRangeManager.Instance != null)
+        {
+            ShootingRangeManager.Instance.RegisterShot();
+        }
+
         OnFire?.Invoke();
 
         // 4. 🔹 WAŻNE: Pobierz prefab łuski ZANIM zwrócimy nabój do puli

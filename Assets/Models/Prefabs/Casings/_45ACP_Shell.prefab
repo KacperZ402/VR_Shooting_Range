@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5068623290186880399}
   - component: {fileID: -6322775206375475612}
   - component: {fileID: -3478205808020097348}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: _45ACP_Shell
   m_TagString: Untagged
   m_Icon: {fileID: 0}

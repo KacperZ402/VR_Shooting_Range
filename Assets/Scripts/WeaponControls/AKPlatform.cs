@@ -52,6 +52,11 @@ public class AKPlatform : WeaponControllerBase
         SpawnProjectile(ammoData);
         OnFire?.Invoke();
 
+        if (ShootingRangeManager.Instance != null)
+        {
+            ShootingRangeManager.Instance.RegisterShot();
+        }
+
         // 4. 🔹 WAŻNE: Pobierz prefab łuski ZANIM zniszczymy nabój
         GameObject casingPrefab = ammoData.casingPrefab;
 

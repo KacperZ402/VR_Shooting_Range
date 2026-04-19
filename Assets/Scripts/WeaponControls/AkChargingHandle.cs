@@ -4,7 +4,7 @@ using System.Collections;
 // Dziedziczy z ChargingHandle zamiast MonoBehaviour
 public class AnimatedBoltHandle : ChargingHandle
 {
-    [Header("Animacja strza³u")]
+    [Header("Shoot animation")]
     public int holdFrames = 1;
     public int returnFrames = 2;
 

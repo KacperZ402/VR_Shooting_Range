@@ -9,10 +9,10 @@ public class AmmoSocket : MonoBehaviour
     [HideInInspector] public XRSocketInteractor socket;
     public Magazine currentMagazine;
 
-    [Header("Filtr warstw")]
+    [Header("Layer Filter")]
     public InteractionLayerMask allowedMagazineLayers;
 
-    [Header("Eventy")]
+    [Header("Events")]
     public UnityEvent OnMagazineInserted;
     public UnityEvent OnMagazineRemoved;
 

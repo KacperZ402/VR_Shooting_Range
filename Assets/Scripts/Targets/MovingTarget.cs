@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-
 public class MovingTarget : MonoBehaviour
 {
-    [Header("Konfiguracja Ruchu")]
+    [Header("Motion conf")]
     [Tooltip("Jak szybko cel się porusza.")]
     public float speed = 3.0f;
 
@@ -16,25 +15,19 @@ public class MovingTarget : MonoBehaviour
 
     void Start()
     {
-        // Zapamiętujemy, gdzie cel stał na początku gry
         startPosition = transform.position;
     }
-
     void Update()
     {
         if (!isMoving) return;
-
         // Matematyka "Ping-Pong" - wartość rośnie i maleje liniowo
         // Time.time * speed -> napędza ruch
         // range * 2 -> określa pełną drogę (od lewej do prawej)
         // - range -> centruje ruch wokół punktu startowego
-
         float movement = Mathf.PingPong(Time.time * speed, range * 2) - range;
-
         // Aplikujemy ruch tylko na osi X (lewo/prawo), reszta bez zmian
         transform.position = new Vector3(startPosition.x + movement, transform.position.y, transform.position.z);
     }
-
     // 🔹 Rysuje pomocnicze linie w edytorze (żebyś widział trasę celu)
     void OnDrawGizmosSelected()
     {

@@ -11,18 +11,18 @@ public enum FireMode { Safe, Semi, Burst, Auto, BoltAction }
 [RequireComponent(typeof(XRGrabInteractable))]
 public class FireSelectorSimple : MonoBehaviour
 {
-    [Header("Referencje")]
+    [Header("References")]
     public XRGrabInteractable weaponGrab;
     public Transform selectorLever;
     public Transform gripPoint;
     public WeaponControllerBase weaponController;
 
-    [Header("Tryby ognia")]
+    [Header("Fire Mods")]
     public List<FireMode> availableModes = new List<FireMode> { FireMode.Safe, FireMode.Semi, FireMode.Auto };
     public float rotationStep = 45f;
     public Vector3 positionStep = Vector3.zero;
 
-    [Header("Eventy")]
+    [Header("Events")]
     public UnityEvent OnFireModeChanged; // 🔹 DODANO: Miejsce na podpięcie dźwięku
 
     private int fireModeIndex = 0;

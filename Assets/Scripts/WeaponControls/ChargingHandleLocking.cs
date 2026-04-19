@@ -5,7 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors; // Dodaj ten using
 // 1. ZMIANA: Dziedziczymy z AnimatedBoltHandle, a nie ChargingHandle
 public class ChargingHandleLocking : AnimatedBoltHandle
 {
-    [Header("Blokowanie przy pustym magazynku")]
+    [Header("Bolt catch when magazine is empty")]
     [Tooltip("Czy automatycznie blokowaæ zamek po pustym magazynku?")]
     public bool enableAutoLockOnEmptyMag = true;
 

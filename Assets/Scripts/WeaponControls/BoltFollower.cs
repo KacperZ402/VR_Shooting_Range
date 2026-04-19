@@ -3,15 +3,15 @@ using UnityEngine;
 
 public class BoltFollower : MonoBehaviour
 {
-    [Header("Referencje")]
+    [Header("Refs")]
     public Transform chargingHandle;
     public WeaponControllerBase weaponController;
 
-    [Header("Opcje śledzenia")]
+    [Header("Tracking")]
     public float yEpsilon = 0.0001f;
     public float lockedBackY = 0.05f;
 
-    [Header("Efekt przy strzale")]
+    [Header("Shoot animation")]
     public int holdFrames = 1;
     public int returnFrames = 2;
 

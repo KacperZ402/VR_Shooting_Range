@@ -7,29 +7,29 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 [RequireComponent(typeof(Rigidbody))]
 public class ChargingHandle : MonoBehaviour
 {
-    [Header("Referencje")]
+    [Header("References")]
     public WeaponControllerBase weaponControllerBase;
 
-    [Header("Zakres ruchu (lokalne)")]
+    [Header("Motion range (local)")]
     public float minLocalY = 0f;
     public float maxLocalY = 0.05f;
 
-    [Header("Pozycja lokalna X/Z")]
+    [Header("local postysioin")]
     public float localX = 0f;
     public float localZ = 0f;
 
-    [Header("Powrót")]
+    [Header("Back")]
     public float returnSpeed = 5f;
 
-    [Header("Blokada")]
+    [Header("Lock on full pull")]
     public bool lockOnFullPull = true;
     public float lockRotationY = 50f;
 
-    [Header("Obrót podczas chwytu")]
+    [Header("Rotation on grab")]
     public bool rotateOnGrab = false;
     public float grabRotationZ = -90f;
 
-    [Header("Eventy")]
+    [Header("Events")]
     public UnityEvent OnBoltPulled;
     public UnityEvent OnBoltReleased;
 

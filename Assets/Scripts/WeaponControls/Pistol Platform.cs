@@ -30,6 +30,12 @@ public class PistolPlatform : WeaponControllerBase
 
         // 2. Strzał
         SpawnProjectile(ammoData);
+
+        if (ShootingRangeManager.Instance != null)
+        {
+            ShootingRangeManager.Instance.RegisterShot();
+        }
+
         OnFire?.Invoke();
 
         // 3. Wyrzut łuski

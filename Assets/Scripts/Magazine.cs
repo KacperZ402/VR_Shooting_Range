@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 public class Magazine : MonoBehaviour
 {
-    [Header("Magazynek")]
+    [Header("Mag")]
     public int capacity = 30;
     public string caliber = "5.56x45";
 
-    [Header("Wizualizacja Naboi")]
+    [Header("Ammo Visuals")]
     public bool showVisualAmmo = false;
     public List<Transform> ammoSlots = new();
 

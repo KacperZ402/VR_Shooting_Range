@@ -11,16 +11,7 @@ public enum MagazineLoadType
 
 public class ShotgunPlatform : WeaponControllerBase
 {
-    [Header("Komponenty Strzelby")]
-
-    [Header("System Celowania")]
-    [Tooltip("Obiekt wewnątrz broni (Pivot), wokół którego obraca się broń podczas trzymania oburącz.")]
-    public Transform recoilPivot;
-
-    [Tooltip("Dodatkowa korekta rotacji (Roll/Pitch).")]
-    public Vector3 aimRotationOffset = Vector3.zero;
-
-    [Header("Logika Magazynka")]
+    [Header("Magazine")]
     public MagazineLoadType magazineLoadLogic = MagazineLoadType.PumpAction_LoadForward;
 
     [SerializeField] private MagazineLoader magLoader;
@@ -99,6 +90,12 @@ public class ShotgunPlatform : WeaponControllerBase
 
         // --- STRZAŁ ---
         SpawnProjectile(ammoData);
+
+        if (ShootingRangeManager.Instance != null)
+        {
+            ShootingRangeManager.Instance.RegisterShot();
+        }
+
         OnFire?.Invoke();
 
         // --- OBSŁUGA ŁUSKI (Shotgun Specific) ---

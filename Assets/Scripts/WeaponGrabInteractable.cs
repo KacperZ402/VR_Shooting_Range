@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class WeaponGrabInteractable : XRGrabInteractable
 {
-    [Header("Grip reference (attach point)")]
+    [Header("attach point")]
     public Transform gripAttachPoint; // przypisz w inspectorze attach point gripu
     public WeaponControllerBase weaponController;
 

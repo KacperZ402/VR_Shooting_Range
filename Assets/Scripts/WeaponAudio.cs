@@ -3,7 +3,7 @@
 [RequireComponent(typeof(AudioSource))]
 public class WeaponAudio : MonoBehaviour
 {
-    [Header("Mechanika Broni")]
+    [Header("Weapon sound")]
     public AudioClip fireSound;
     public AudioClip dryFireSound;
     public AudioClip magazineInSound;
@@ -12,7 +12,7 @@ public class WeaponAudio : MonoBehaviour
     public AudioClip boltReleaseSound;
     public AudioClip fireSelectorSound;
 
-    [Header("Interakcja")]
+    [Header("Interaciton")]
     public AudioClip grabSound; // 🔹 NOWE: Dźwięk chwycenia broni
 
     private AudioSource _source;

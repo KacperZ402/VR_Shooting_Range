@@ -60,8 +60,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _CamSize: 0
-    - _Depth: 10
-    - _LensShadowDepth: 1
+    - _Depth: 5
+    - _LensShadowDepth: 5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Thickness: 1

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HammerController : MonoBehaviour
 {
-    [Header("Powi¹zania")]
+    [Header("References")]
     [Tooltip("Obiekt kurka")]
     public Transform hammerTransform;
 
@@ -12,7 +12,7 @@ public class HammerController : MonoBehaviour
     [Tooltip("Skrypt zamka (do pobierania pozycji suwad³a)")]
     public ChargingHandleLocking chargingHandle;
 
-    [Header("Ustawienia Rotacji")]
+    [Header("Rottation Settings")]
     public Vector3 restRotationEuler;
     public Vector3 cockedRotationEuler;
 

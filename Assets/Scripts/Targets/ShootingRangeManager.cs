@@ -23,6 +23,7 @@ public class ShootingRangeManager : MonoBehaviour
 
     // --- ZMIENNE STANU ---
     [SerializeField] private int currentScore = 0;
+    [SerializeField] private int shotsFired = 0; // Licznik strzałów
     private float timeRemaining = 0f;
     private bool isGameRunning = false;
     private bool isMovingMode = false;
@@ -92,6 +93,7 @@ public class ShootingRangeManager : MonoBehaviour
         if (isGameRunning) return;
 
         currentScore = 0;
+        shotsFired = 0;
         timeRemaining = roundTime;
         isGameRunning = true;
         lastActiveTarget = null;
@@ -102,24 +104,27 @@ public class ShootingRangeManager : MonoBehaviour
         UpdateUI();
         ActivateNextTarget();
     }
-
     public void EndGame()
     {
         isGameRunning = false;
-        float timePlayed = roundTime - timeRemaining;
-        timeRemaining = 0;
+        // ... (reset celów itp.)
 
-        ResetAllTargets();
-
-        float avgTimePerHit = 0f;
-        if (currentScore > 0)
+        // OBLICZANIE CELNOŚCI
+        float accuracy = 0f;
+        if (shotsFired > 0)
         {
-            avgTimePerHit = timePlayed / (float)currentScore;
+            // Rzutowanie na float jest kluczowe, inaczej int/int utnie wynik do 0 lub 1
+            accuracy = ((float)currentScore / (float)shotsFired) * 100f;
         }
 
-        string message = $"Hits: {currentScore}\nAvgTime: {avgTimePerHit:F2}s";
-        Debug.Log(message);
+        // Zabezpieczenie na wypadek, gdybyś trafił więcej razy niż strzelił (np. rykoszet, jeden pocisk zbił dwa cele)
+        if (accuracy > 100f) accuracy = 100f;
 
+        string message = $"Hits: {currentScore} / {shotsFired}\n" +
+                         $"Avg Time: {roundTime/currentScore}s\n" +
+                         $"Accurcy: {accuracy:F1}%"; // F1 to jedno miejsce po przecinku
+
+        Debug.Log(message);
         if (finalResultText) finalResultText.text = message;
     }
 
@@ -140,7 +145,11 @@ public class ShootingRangeManager : MonoBehaviour
         StartCoroutine(WaitAndSpawnNext());
     }
 
-    public void RegisterShot() { }
+    public void RegisterShot() 
+    {
+        if (!isGameRunning) return;
+        shotsFired++;
+    }
 
     private IEnumerator WaitAndSpawnNext()
     {
@@ -200,7 +209,6 @@ public class ShootingRangeManager : MonoBehaviour
             }
         }
     }
-
     void UpdateUI()
     {
         if (scoreText) scoreText.text = $"ZDJĘTO: {currentScore}";

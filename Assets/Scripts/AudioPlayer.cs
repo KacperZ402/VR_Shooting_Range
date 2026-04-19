@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(AudioSource))]
 public class UniversalAudioPlayer : MonoBehaviour
 {
-    [Header("Ustawienia G³ówne")]
+    [Header("Main settings")]
     [Tooltip("Lista dŸwiêków. Skrypt wylosuje jeden przy ka¿dym odtworzeniu.")]
     public AudioClip[] audioClips;
 
@@ -14,7 +14,7 @@ public class UniversalAudioPlayer : MonoBehaviour
     [Tooltip("Losowoœæ tonu (Pitch). Nadaje naturalnoœci.")]
     public float pitchRandomness = 0.1f;
 
-    [Header("Logika Kolizji")]
+    [Header("Colision Logic")]
     [Tooltip("Czy ten obiekt ma wydawaæ dŸwiêk przy uderzeniu?")]
     public bool playOnCollision = true;
 

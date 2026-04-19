@@ -3,12 +3,12 @@ using System.Collections;
 
 public class ShootingTarget : MonoBehaviour
 {
-    [Header("Ustawienia Rotacji")]
+    [Header("Rotation settings")]
     public Vector3 uprightRotation = Vector3.zero;
     public Vector3 lieDownRotation = new Vector3(-90f, 0f, 0f);
     public float rotationSpeed = 5f;
 
-    [Header("Dźwięk")]
+    [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip hitSound;
 

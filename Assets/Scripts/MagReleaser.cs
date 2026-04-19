@@ -7,7 +7,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 [RequireComponent(typeof(XRGrabInteractable))]
 public class MagazineReleaseSimple : MonoBehaviour
 {
-    [Header("Referencje")]
+    [Header("Refs")]
     public XRGrabInteractable weaponGrab;
     public Transform gripPoint; // Ten sam attach point co w FireSelector (Główny chwyt)
     public WeaponControllerBase weaponController;

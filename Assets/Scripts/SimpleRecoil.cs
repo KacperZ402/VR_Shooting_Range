@@ -6,27 +6,27 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class WeaponRecoilSystem : MonoBehaviour
 {
-    [Header("Konfiguracja")]
+    [Header("configuration")]
     public WeaponControllerBase weaponController;
     public Transform recoilTransform;
 
-    [Header("Logika Oburęczności")]
+    [Header("Two-handed conf ")]
     [Tooltip("Mnożnik odrzutu, gdy broń trzyma tylko jedna ręka.")]
     public float oneHandMultiplier = 2.0f;
 
-    [Header("Odrzut w osi Y (Tył/Przód)")]
+    [Header("Recoil posistion")]
     public float recoilKickY = -0.05f;
     public float positionRandomness = 0.002f;
 
-    [Header("Odrzut Rotacyjny (Podrzut)")]
+    [Header("Recoil rotation")]
     public float rotationKickX = 10f;
     public float rotationRandomY = 2f;
 
-    [Header("Dynamika")]
+    [Header("Dynamics")]
     public float snappiness = 20f;
     public float returnSpeed = 10f;
 
-    [Header("Haptyka")]
+    [Header("Haptics")]
     public float hapticAmplitude = 0.8f;
     public float hapticDuration = 0.1f;
 

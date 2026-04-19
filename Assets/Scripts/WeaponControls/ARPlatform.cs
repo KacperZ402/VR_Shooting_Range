@@ -16,6 +16,12 @@ public class ARPlatform : WeaponControllerBase
         }
         // 2. Strzał (z bazy)
         SpawnProjectile(ammoData);
+
+        if (ShootingRangeManager.Instance != null)
+        {
+            ShootingRangeManager.Instance.RegisterShot();
+        }
+
         OnFire?.Invoke();
         GameObject casingPrefab = ammoData.casingPrefab;
         // 3. Zwróć nabój do puli (z bazy)
