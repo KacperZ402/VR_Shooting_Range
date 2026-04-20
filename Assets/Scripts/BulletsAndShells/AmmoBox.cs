@@ -106,7 +106,5 @@ public class AmmoBox : MonoBehaviour
                 totalSpawned++;
             }
         }
-
-        Debug.Log($"[AmmoBox] Otwarto i wyrzucono {totalSpawned} nabojów typu {ammoPrefab.name} w siatce.", this);
     }
 }
