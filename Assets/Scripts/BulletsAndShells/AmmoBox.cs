@@ -22,6 +22,7 @@ public class AmmoBox : MonoBehaviour
     public float gridSpacing = 0.05f; // 5 cm
 
     private AmmoPoolManager ammoPool;
+    private AmmoBoxPoolManager boxPoolManager;
 
     // Pobieramy referencjê do puli przy starcie
     void Awake()
@@ -34,6 +35,11 @@ public class AmmoBox : MonoBehaviour
         }
     }
 
+    public void SetPoolManager(AmmoBoxPoolManager manager)
+    {
+        boxPoolManager = manager;
+    }
+
     /// <summary>
     /// Publiczna funkcja, któr¹ mo¿esz wywo³aæ, aby "otworzyæ" pude³ko.
     /// Wyrzuca naboje i niszczy ten obiekt.
@@ -43,22 +49,19 @@ public class AmmoBox : MonoBehaviour
         if (ammoPool == null)
         {
             Debug.LogError("[AmmoBox] Próba otwarcia pude³ka, ale nie znaleziono AmmoPoolManager!", this);
-            Destroy(gameObject);
+            ReturnToPool();
             return;
         }
 
         if (ammoPrefab == null)
         {
             Debug.LogError("[AmmoBox] Nie przypisano 'ammoPrefab'! Niszczê...", this);
-            Destroy(gameObject);
+            ReturnToPool();
             return;
         }
 
-        // 1. Wyrzuæ zawartoœæ
         SpawnRoundsInGrid();
-
-        // 2. Zniszcz pude³ko
-        Destroy(gameObject);
+        ReturnToPool();
     }
 
     /// <summary>
@@ -66,45 +69,38 @@ public class AmmoBox : MonoBehaviour
     /// </summary>
     private void SpawnRoundsInGrid()
     {
-        int totalSpawned = 0;
-        int totalToSpawn = gridColumns * gridRows;
-
-        if (totalToSpawn <= 0) return;
-
         // --- Obliczanie centrowania siatki ---
         // Obliczamy ca³kowit¹ szerokoœæ i g³êbokoœæ siatki
         float gridWidth = (gridColumns - 1) * gridSpacing;
         float gridDepth = (gridRows - 1) * gridSpacing;
 
-        // Znajdujemy punkt startowy (lewy dolny róg), aby siatka by³a wyœrodkowana
-        // na obiekcie AmmoBox. Dodajemy ma³y offset Y, aby naboje nie kolidowa³y z pod³og¹.
         Vector3 startOffset = new Vector3(-gridWidth / 2.0f, 0.01f, -gridDepth / 2.0f);
 
         for (int y = 0; y < gridRows; y++)
         {
             for (int x = 0; x < gridColumns; x++)
             {
-                // A. Pobierz nabój z puli
                 GameObject round = ammoPool.GetRound(ammoPrefab);
                 if (round == null)
                 {
-                    Debug.LogWarning($"[AmmoBox] Pula zwróci³a 'null'. Spawniono {totalSpawned} z {totalToSpawn} nabojów.", this);
                     return; // Przerwij, jeœli pula jest pusta
                 }
-
-                // B. Oblicz pozycjê lokaln¹ dla tego naboju
                 Vector3 localPos = startOffset + new Vector3(x * gridSpacing, 0, y * gridSpacing);
-
-                // C. Przekszta³æ pozycjê lokaln¹ na œwiatow¹, uwzglêdniaj¹c rotacjê pude³ka
                 Vector3 spawnPosition = transform.position + (transform.rotation * localPos);
-
-                // D. Ustaw pozycjê i rotacjê naboju (taka sama jak pude³ka)
                 round.transform.position = spawnPosition;
                 round.transform.rotation = transform.rotation;
-
-                // Usunêliœmy "wyrzut" fizyczny - naboje po prostu pojawi¹ siê u³o¿one
-                totalSpawned++;
             }
+        }
+    }
+    private void ReturnToPool()
+    {
+        if (boxPoolManager != null)
+        {
+            boxPoolManager.ReturnAmmoBox(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }
