@@ -41,7 +41,7 @@ public class MagazineReleaseSimple : MonoBehaviour
         if (attach == gripPoint)
         {
             activeHand = interactor;
-            Debug.Log($"[MagRelease] Aktywna ręka ustawiona: {activeHand.name}");
+            //Debug.Log($"[MagRelease] Aktywna ręka ustawiona: {activeHand.name}");
         }
     }
 
@@ -50,7 +50,7 @@ public class MagazineReleaseSimple : MonoBehaviour
         var interactor = args.interactorObject as XRBaseInteractor;
         if (interactor == activeHand)
         {
-            Debug.Log("[MagRelease] Ręka zwolniła gripPoint — reset.");
+            //Debug.Log("[MagRelease] Ręka zwolniła gripPoint — reset.");
             activeHand = null;
             lastButtonPressed = false;
         }
@@ -58,27 +58,10 @@ public class MagazineReleaseSimple : MonoBehaviour
 
     void Update()
     {
-        // 🔹 1. Failsafe: Automatyczna detekcja
-        if (activeHand == null && weaponGrab != null && weaponGrab.interactorsSelecting.Count > 0)
-        {
-            foreach (var ix in weaponGrab.interactorsSelecting)
-            {
-                var interactor = ix as XRBaseInteractor;
-                if (interactor == null) continue;
-
-                var attach = weaponGrab.GetAttachTransform(interactor);
-                if (attach == gripPoint)
-                {
-                    activeHand = interactor;
-                    break;
-                }
-            }
-        }
-
-        // 🔹 2. Jeśli brak ręki - wyjdź
+        // Jeśli brak ręki - wyjdź
         if (activeHand == null) return;
 
-        // 🔹 3. Sprawdzanie Inputu (Primary Button - A lub X)
+        // Reszta kodu...
         bool pressed = false;
         XRNode node = GetHandNode(activeHand);
         var device = InputDevices.GetDeviceAtXRNode(node);
@@ -86,7 +69,6 @@ public class MagazineReleaseSimple : MonoBehaviour
         if (device.isValid)
             device.TryGetFeatureValue(magReleaseButton, out pressed);
 
-        // 🔹 4. Wykonanie akcji
         if (pressed && !lastButtonPressed && Time.time >= nextButtonTime)
         {
             TryDropMagazine();

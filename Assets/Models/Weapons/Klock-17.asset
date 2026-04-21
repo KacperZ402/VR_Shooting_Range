@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1089f7bb24159d446ab6e50f7a4a1c9f, type: 3}
+  m_Name: Klock-17
+  m_EditorClassIdentifier: 
+  weaponName: Klock-17
+  weaponPrefab: {fileID: 3733108429830405507, guid: 6719e6750f4f19d4aade8b87514e18c2, type: 3}
+  magazinePrefab: {fileID: 6563215697807639973, guid: 0c7565d40836ca2488a549e74ba55081, type: 3}
+  poolSize: 2
+  magsToSpawn: 5

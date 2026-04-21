@@ -54,6 +54,10 @@ public class WeaponRecoilSystem : MonoBehaviour
 
     private void Update()
     {
+        if (!weaponController.weaponGrab.isSelected)
+        {
+            return;
+        }
         // Optymalizacja (Sleep)
         if (targetRecoilPos == Vector3.zero && currentRecoilPos.sqrMagnitude < 0.000001f &&
             targetRecoilRot == Vector3.zero && currentRecoilRot.sqrMagnitude < 0.000001f)
@@ -77,13 +81,12 @@ public class WeaponRecoilSystem : MonoBehaviour
 
     public void AddRecoil()
     {
-        // 1. SPRAWDZENIE: Ile rąk trzyma GŁÓWNY chwyt?
+        // 1. Na początku sprawdzamy ile rąk trzyma GŁÓWNY chwyt
         // Pobieramy to bezpośrednio z WeaponGrabInteractable
         int handCount = 0;
 
         if (weaponController != null && weaponController.weaponGrab != null)
         {
-            // To jest ta lista, o którą Ci chodziło
             handCount = weaponController.weaponGrab.interactorsSelecting.Count;
         }
 

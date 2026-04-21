@@ -360,7 +360,6 @@ MonoBehaviour:
   fireSelector: {fileID: 3942099655791839362}
   weaponGrab: {fileID: 5687849600525772322}
   chamberTransform: {fileID: 4156122662267708392}
-  rangeManager: {fileID: 0}
   ejectionPort: {fileID: 5751525337830534221}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}
@@ -418,8 +417,6 @@ MonoBehaviour:
   OnBoltReleasedEvent:
     m_PersistentCalls:
       m_Calls: []
-  recoilPivot: {fileID: 3687803650993694467}
-  aimRotationOffset: {x: 0, y: 0, z: 0}
   magazineLoadLogic: 0
   magLoader: {fileID: 5826168257087533092}
 --- !u!114 &3942099655791839362
@@ -1435,7 +1432,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7555158023248353991}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.0294, y: -0.08940001, z: 0.02310006}
   m_LocalScale: {x: 0.7692308, y: 0.7692309, z: 0.7692309}
   m_ConstrainProportionsScale: 0

@@ -7,10 +7,10 @@ using System.Collections.Generic;
 public class WeaponGrabInteractable : XRGrabInteractable
 {
     [Header("attach point")]
-    public Transform gripAttachPoint; // przypisz w inspectorze attach point gripu
+    public Transform gripAttachPoint;
     public WeaponControllerBase weaponController;
 
-    private IXRSelectInteractor gripInteractor; // kto faktycznie trzyma za grip
+    private IXRSelectInteractor gripInteractor; // która ręka faktycznie trzyma za grip
 
     protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
@@ -64,6 +64,6 @@ public class WeaponGrabInteractable : XRGrabInteractable
 
     public bool IsGripHeld => gripInteractor != null;
 
-    // Opcjonalnie metoda do debugowania
+    
     public IXRSelectInteractor GetGripInteractor() => gripInteractor;
 }

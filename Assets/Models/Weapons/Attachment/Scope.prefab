@@ -96,7 +96,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2867101045168913500}
   - component: {fileID: 2665174527842937705}
-  - component: {fileID: 3222051232703958032}
   - component: {fileID: 2666578322159998257}
   m_Layer: 0
   m_Name: Camera
@@ -171,14 +170,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &3222051232703958032
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5275187537559971564}
-  m_Enabled: 1
 --- !u!114 &2666578322159998257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,14 +240,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6289147212727120310}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7063412, y: 0, z: 0, w: 0.70787156}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6482446206657580471}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -89.876, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5950808403594773306
 Rigidbody:
   m_ObjectHideFlags: 0

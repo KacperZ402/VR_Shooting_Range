@@ -27,7 +27,7 @@ public class WeaponControllerBase : MonoBehaviour
     [Tooltip("Siła obrotu łuski.")]
     public Vector3 ejectionTorque = new Vector3(10f, 5f, 20f);
 
-    // 🔹 NOWE: Parametr dziedziczenia prędkości
+    //Parametry dziedziczenia prędkości
     [Tooltip("Jak bardzo łuska dziedziczy prędkość ruchu broni (0 = wcale, 1 = w pełni).")]
     [Range(0f, 1f)]
     public float velocityInheritance = 1.0f;
@@ -67,7 +67,7 @@ public class WeaponControllerBase : MonoBehaviour
     protected BulletPoolManager bulletPool;
     protected CasingPoolManager casingPool;
 
-    // 🔹 NOWE: Zmienne do obliczania prędkości broni
+    //Zmienne do obliczania prędkości broni
     protected Vector3 lastFramePosition;
     protected Vector3 currentGunVelocity;
 
@@ -99,7 +99,6 @@ public class WeaponControllerBase : MonoBehaviour
 
     protected virtual void Start()
     {
-        // 🔹 NOWE: Inicjalizacja pozycji startowej
         lastFramePosition = transform.position;
     }
 
@@ -109,7 +108,7 @@ public class WeaponControllerBase : MonoBehaviour
             return;
         }
         // Obliczanie prędkości broni w każdej klatce
-        // Robimy to ręcznie, bo Rigidbody w VR (Kinematic) często zwraca 0.
+        // Robimy to ręcznie, bo Rigidbody zwracał 0.
         if (Time.deltaTime > 0)
         {
             currentGunVelocity = (transform.position - lastFramePosition) / Time.deltaTime;
@@ -209,7 +208,7 @@ public class WeaponControllerBase : MonoBehaviour
             GameObject projectileInstance = bulletPool.GetBullet(universalProjectilePrefab);
             projectileInstance.transform.position = muzzleTransform.position;
 
-            // 🔹 NOWOŚĆ: Obliczanie rozrzutu (Spread)
+            // Obliczanie rozrzutu (Spread)
             Quaternion finalRotation = muzzleTransform.rotation;
 
             if (ammoData.spreadAngle > 0)

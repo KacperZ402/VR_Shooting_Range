@@ -759,7 +759,7 @@ MonoBehaviour:
   isBoltLockedBack: 0
   currentFireMode: 1
   burstCount: 3
-  fireRate: 0.1
+  fireRate: 0.04
   burstDelay: 0.08
   muzzleTransform: {fileID: 6364993379677605684}
   velocityMultiplier: 1

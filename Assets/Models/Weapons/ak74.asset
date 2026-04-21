@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1089f7bb24159d446ab6e50f7a4a1c9f, type: 3}
+  m_Name: ak74
+  m_EditorClassIdentifier: 
+  weaponName: AK-74
+  weaponPrefab: {fileID: 6367552926131927399, guid: fbaf0a97e52d44a478214269c8e0a343, type: 3}
+  magazinePrefab: {fileID: 649604859289046357, guid: 905d0d258d789d24eaecf3b26b1d3dc4, type: 3}
+  poolSize: 2
+  magsToSpawn: 5

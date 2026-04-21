@@ -869,7 +869,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   holdFrames: 1
-  returnFrames: 2
+  returnFrames: 1
   enableAutoLockOnEmptyMag: 1
 --- !u!1 &5219949428993558931
 GameObject:
@@ -1313,7 +1313,7 @@ MonoBehaviour:
   isBoltLockedBack: 0
   currentFireMode: 0
   burstCount: 3
-  fireRate: 0.1
+  fireRate: 0.05
   burstDelay: 0.08
   muzzleTransform: {fileID: 6826234855971240859}
   velocityMultiplier: 1

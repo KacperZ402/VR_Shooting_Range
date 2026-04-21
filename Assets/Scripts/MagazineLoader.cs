@@ -21,14 +21,11 @@ public class MagazineLoader : MonoBehaviour
         // 2. Pobieramy komponent Interactable z naboju
         var bulletInteractable = other.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
 
-        // 3. 🔥 WARUNEK ANULOWANIA GRABA 🔥
+        // 3. WARUNEK ANULOWANIA GRABA 
         // Sprawdzamy, czy nabój jest aktualnie trzymany przez rękę (isSelected)
         if (bulletInteractable != null && bulletInteractable.isSelected)
         {
-            // Pobieramy menedżera interakcji
             var interactionManager = bulletInteractable.interactionManager;
-
-            // JEŚLI RĘKA TRZYMA -> ZMUŚ JĄ DO PUSZCZENIA
             if (interactionManager != null)
             {
                 // To jest ta linijka, która "anuluje garb"

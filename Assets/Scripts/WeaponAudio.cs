@@ -13,7 +13,7 @@ public class WeaponAudio : MonoBehaviour
     public AudioClip fireSelectorSound;
 
     [Header("Interaciton")]
-    public AudioClip grabSound; // 🔹 NOWE: Dźwięk chwycenia broni
+    public AudioClip grabSound;
 
     private AudioSource _source;
 
@@ -31,7 +31,7 @@ public class WeaponAudio : MonoBehaviour
         _source.PlayOneShot(fireSound);
     }
 
-    public void PlayGrab() => PlaySound(grabSound); // 🔹 NOWE
+    public void PlayGrab() => PlaySound(grabSound);
 
     public void PlayDryFire() => PlaySound(dryFireSound);
     public void PlayMagIn() => PlaySound(magazineInSound);

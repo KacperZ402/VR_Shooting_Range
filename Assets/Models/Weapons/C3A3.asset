@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1089f7bb24159d446ab6e50f7a4a1c9f, type: 3}
+  m_Name: C3A3
+  m_EditorClassIdentifier: 
+  weaponName: C3A3
+  weaponPrefab: {fileID: 7247676305410271439, guid: 2601334b3dda78b439b6a63b1386fa1e, type: 3}
+  magazinePrefab: {fileID: 3687052610015025245, guid: bd0205bbc6644f64397fbb0228bd782d, type: 3}
+  poolSize: 2
+  magsToSpawn: 5

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1089f7bb24159d446ab6e50f7a4a1c9f, type: 3}
+  m_Name: Bennetta M9
+  m_EditorClassIdentifier: 
+  weaponName: Bennetta-m9
+  weaponPrefab: {fileID: 2590043390044085970, guid: b5c2911d28bba16489334e087bd2bb90, type: 3}
+  magazinePrefab: {fileID: 1811972663393680158, guid: ab1d40e1b6404ce43a365a7ee2cd3468, type: 3}
+  poolSize: 2
+  magsToSpawn: 5
