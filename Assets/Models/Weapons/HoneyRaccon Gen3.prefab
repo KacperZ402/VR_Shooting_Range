@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 7316088302856340439}
   m_Layer: 8
   m_Name: RailMount (2)
-  m_TagString: Untagged
+  m_TagString: AIM
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1923,6 +1923,9 @@ MonoBehaviour:
   fireSelector: {fileID: 5683355968586993950}
   weaponGrab: {fileID: 6990345966300131600}
   chamberTransform: {fileID: 3488399182980424563}
+  attachmentRotationObjects:
+  - {fileID: 6281533345834150352}
+  - {fileID: 8113532324598811992}
   ejectionPort: {fileID: 6760962000204350665}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}

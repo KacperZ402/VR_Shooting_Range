@@ -16,6 +16,7 @@ public class WeaponControllerBase : MonoBehaviour
     public WeaponGrabInteractable weaponGrab;
     [Tooltip("Transform (pusty GameObject) reprezentujący pozycję komory nabojowej.")]
     public Transform chamberTransform;
+    public Transform[] attachmentRotationObjects;
     // Kolzije Magazynka (aby je wyłączyć podczas podpiecia do gniazda)
     private List<Collider> internalGunParts = new List<Collider>();
 
@@ -445,10 +446,6 @@ public class WeaponControllerBase : MonoBehaviour
 
             chamberedRound.SetActive(true);
         }
-        else
-        {
-            Debug.LogError("Brak 'chamberTransform'!", this);
-        }
 
         OnRoundChambered?.Invoke();
         return true;
@@ -568,14 +565,9 @@ public class WeaponControllerBase : MonoBehaviour
             // Przywracamy kolizję (FALSE)
             SetMagCollision(_cachedMagazine, false);
 
-            Debug.Log($"[WeaponCollision] Wyjęto magazynek: {_cachedMagazine.name}. Kolizje przywrócone.");
 
             // Czyścimy zmienną, bo magazynek już wyszedł
             _cachedMagazine = null;
-        }
-        else
-        {
-            Debug.LogWarning("[WeaponCollision] Próba przywrócenia kolizji, ale nie znaleziono zapamiętanego magazynka.");
         }
     }
     public void SetMagazineCollisionIgnored(GameObject mag)
@@ -613,17 +605,36 @@ public class WeaponControllerBase : MonoBehaviour
     /// </summary>
     public void OnAttachmentMounted(SelectEnterEventArgs args)
     {
-
         var attachmentObj = args.interactableObject.transform.gameObject;
         RegisterGunPart(attachmentObj);
+
+        if (args.interactorObject.transform.gameObject.tag != "AIM") { 
+            return; }
+        
+
+        // Obróć wszystkie przypisane obiekty o -90 stopni na osi X (lokalnie)
+        if (attachmentRotationObjects == null){ 
+            return; }
+        foreach (var rotationObject in attachmentRotationObjects)
+        {   
+            rotationObject.Rotate(-90f, 0, 0, Space.Self);
+        }
     }
     /// Wywoławne w evencie 'Select Exited' na sockecie dodatku.
     public void OnAttachmentUnmounted(SelectExitEventArgs args)
     {
-        // Analogicznie:
         var attachmentObj = args.interactableObject.transform.gameObject;
-        
         UnregisterGunPart(attachmentObj);
+
+        if (args.interactorObject.transform.gameObject.tag != "AIM") return;
+
+        // Obróć wszystkie przypisane obiekty o 90 stopni na osi X (lokalnie) - powrót do pierwszego stanu
+        if (attachmentRotationObjects == null){return;}
+        
+        foreach (var rotationObject in attachmentRotationObjects)
+        {
+            rotationObject.Rotate(90f, 0, 0, Space.Self);
+        }
     }
 
     public void RegisterGunPart(GameObject partRoot)
@@ -636,32 +647,26 @@ public class WeaponControllerBase : MonoBehaviour
         // 1. Dodajemy nowe collidery do listy "Swoich"
         foreach (var col in newColliders)
         {
-            if (!internalGunParts.Contains(col))
+            if (internalGunParts.Contains(col)) return;
+
+            internalGunParts.Add(col);
+
+            // A. Ignoruj kolizje z resztą broni (opcjonalne, zależne od parentingu)
+            foreach (var existingPart in internalGunParts)
             {
-                internalGunParts.Add(col);
+                if (existingPart != col) Physics.IgnoreCollision(col, existingPart, true);
+            }
 
-                // BRUTALNA PRAWDA: Jeśli nie zrobisz tego teraz, dodatek będzie kolidował
-                // z samym szkieletem broni (jeśli parenting nie załatwił sprawy)
-                // albo z magazynkiem, który już siedzi w broni.
-
-                // A. Ignoruj kolizje z resztą broni (opcjonalne, zależne od parentingu)
-                foreach (var existingPart in internalGunParts)
+            // B. Ignoruj kolizje z aktualnie wpiętym magazynkiem (KRYTYCZNE)
+            if (_cachedMagazine != null)
+            {
+                var magColliders = _cachedMagazine.GetComponentsInChildren<Collider>(true);
+                foreach (var magCol in magColliders)
                 {
-                    if (existingPart != col) Physics.IgnoreCollision(col, existingPart, true);
-                }
-
-                // B. Ignoruj kolizje z aktualnie wpiętym magazynkiem (KRYTYCZNE)
-                if (_cachedMagazine != null)
-                {
-                    var magColliders = _cachedMagazine.GetComponentsInChildren<Collider>(true);
-                    foreach (var magCol in magColliders)
-                    {
-                        Physics.IgnoreCollision(col, magCol, true);
-                    }
+                    Physics.IgnoreCollision(col, magCol, true);
                 }
             }
         }
-
         Debug.Log($"[WeaponCollision] Zarejestrowano dodatek: {partRoot.name}. Części w sumie: {internalGunParts.Count}");
     }
     public void UnregisterGunPart(GameObject partRoot)

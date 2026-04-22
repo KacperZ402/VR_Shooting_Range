@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 208475126299868740}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.027183965, z: 0.14933862}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.027184054, z: 0.14933862}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -617,6 +617,9 @@ MonoBehaviour:
   fireSelector: {fileID: 2050700643737593356}
   weaponGrab: {fileID: 9033049900528844603}
   chamberTransform: {fileID: 7227439053098510234}
+  attachmentRotationObjects:
+  - {fileID: 6590719005471164615}
+  - {fileID: 6934674738148572075}
   ejectionPort: {fileID: 6741580834244547238}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}
@@ -1162,8 +1165,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.5, z: 1.5}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 5, y: 1.5, z: 1.5}
+  m_Center: {x: -1.5041394, y: 0, z: 0}
 --- !u!114 &3472181996154003017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1200,7 +1203,7 @@ MonoBehaviour:
   m_HoverEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3472266380231151193}
         m_TargetAssemblyTypeName: WeaponControllerBase, Assembly-CSharp
         m_MethodName: ReleaseBoltAction
         m_Mode: 6
@@ -1443,7 +1446,7 @@ GameObject:
   - component: {fileID: 8520745122710623373}
   m_Layer: 8
   m_Name: RailMount
-  m_TagString: Untagged
+  m_TagString: AIM
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2393,7 +2396,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7541954094250603616}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.41856283, z: 0.14933881}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

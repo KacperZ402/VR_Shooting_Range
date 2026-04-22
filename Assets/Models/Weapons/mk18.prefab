@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9063678837924207975}
   m_Layer: 8
   m_Name: RailMount
-  m_TagString: Untagged
+  m_TagString: AIM
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -520,7 +520,7 @@ Transform:
   m_GameObject: {fileID: 3139136770814114274}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.0202, y: -0.1121, z: 0.092100024}
+  m_LocalPosition: {x: -0.0228, y: -0.1121, z: 0.092100024}
   m_LocalScale: {x: 0.01, y: 0.048030008, z: 0.049360007}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1553,6 +1553,9 @@ MonoBehaviour:
   fireSelector: {fileID: 4214863076152484566}
   weaponGrab: {fileID: 7159066168573395065}
   chamberTransform: {fileID: 1980507748493931841}
+  attachmentRotationObjects:
+  - {fileID: 2262812911491087028}
+  - {fileID: 1716382088601378322}
   ejectionPort: {fileID: 4871266562547317178}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}

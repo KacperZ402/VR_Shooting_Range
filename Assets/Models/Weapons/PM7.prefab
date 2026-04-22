@@ -146,7 +146,7 @@ MonoBehaviour:
   m_HoverEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 9088882985773504918}
         m_TargetAssemblyTypeName: WeaponControllerBase, Assembly-CSharp
         m_MethodName: ReleaseBoltAction
         m_Mode: 6
@@ -542,6 +542,9 @@ MonoBehaviour:
   fireSelector: {fileID: 6153562069140448162}
   weaponGrab: {fileID: 3889297375594456299}
   chamberTransform: {fileID: 3840499731404834296}
+  attachmentRotationObjects:
+  - {fileID: 1085737958822746160}
+  - {fileID: 4444886295483157313}
   ejectionPort: {fileID: 5870661318691307574}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}
@@ -2125,7 +2128,7 @@ GameObject:
   - component: {fileID: 1127996444744298658}
   m_Layer: 8
   m_Name: RailMount
-  m_TagString: Untagged
+  m_TagString: AIM
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
