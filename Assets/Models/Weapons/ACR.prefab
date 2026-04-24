@@ -650,9 +650,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1380246428999488713}
-        m_TargetAssemblyTypeName: BoltFollower, Assembly-CSharp
-        m_MethodName: OnFireKick
+      - m_Target: {fileID: 2068026570794819412}
+        m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
+        m_MethodName: PlayFire
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -667,7 +667,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2068026570794819412}
         m_TargetAssemblyTypeName: WeaponAudio, Assembly-CSharp
-        m_MethodName: PlayFire
+        m_MethodName: PlayDryFire
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

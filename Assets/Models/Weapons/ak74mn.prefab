@@ -645,7 +645,7 @@ MonoBehaviour:
   m_SmoothScale: 0
   m_SmoothScaleAmount: 8
   m_TightenScale: 0.1
-  m_ThrowOnDetach: 1
+  m_ThrowOnDetach: 0
   m_ThrowSmoothingDuration: 0.25
   m_ThrowSmoothingCurve:
     serializedVersion: 2
@@ -694,6 +694,7 @@ MonoBehaviour:
   fireSelector: {fileID: 8185290648932558166}
   weaponGrab: {fileID: 3387686260181674118}
   chamberTransform: {fileID: 8995050536182023261}
+  attachmentRotationObjects: []
   ejectionPort: {fileID: 3161078758548228173}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}
