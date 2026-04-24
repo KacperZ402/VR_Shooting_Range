@@ -47,6 +47,10 @@ public class ChargingHandle : MonoBehaviour
     protected Quaternion lockedRotation;
     protected Quaternion initialRotation;
 
+    private Renderer objectRenderer;
+    private Material originalMaterial;
+    private Material outlineMaterial;
+
     protected virtual void Awake()
     {
         grabInteractable = GetComponent<XRGrabInteractable>();
@@ -60,9 +64,16 @@ public class ChargingHandle : MonoBehaviour
         grabInteractable.selectEntered.AddListener(OnGrab);
         grabInteractable.selectExited.AddListener(OnRelease);
         grabInteractable.hoverEntered.AddListener(OnHoverEnter);
+        grabInteractable.hoverExited.AddListener(OnHoverExit);
 
         grabInteractable.trackPosition = true;
         grabInteractable.trackRotation = false;
+
+        objectRenderer = GetComponent<Renderer>();
+        if (objectRenderer != null)
+        {
+            originalMaterial = objectRenderer.material;
+        }
     }
 
     protected virtual void OnDestroy()
@@ -91,6 +102,7 @@ public class ChargingHandle : MonoBehaviour
 
     protected virtual void OnHoverEnter(HoverEnterEventArgs args)
     {
+        EnableOutline();
         if (isLocked)
         {
             isLocked = false;
@@ -98,6 +110,11 @@ public class ChargingHandle : MonoBehaviour
             rb.isKinematic = false;
             weaponControllerBase.ReleaseBoltAction(true);
         }
+    }
+
+    protected virtual void OnHoverExit(HoverExitEventArgs args)
+    {
+        DisableOutline();
     }
 
     // Zmieniono na 'virtual', aby klasa pochodna mogła ją nadpisać
@@ -166,5 +183,21 @@ public class ChargingHandle : MonoBehaviour
 
         if (transform.parent != parentTransform)
             transform.SetParent(parentTransform, true);
+    }
+    private void EnableOutline()
+    {
+        if (objectRenderer == null) return;
+
+        // Metoda 1: Zmiana emisji (prostsze)
+        outlineMaterial = new Material(originalMaterial);
+        outlineMaterial.SetColor("_EmissionColor", Color.white * 2f);
+        outlineMaterial.EnableKeyword("_EMISSION");
+        objectRenderer.material = outlineMaterial;
+    }
+
+    private void DisableOutline()
+    {
+        if (objectRenderer == null) return;
+        objectRenderer.material = originalMaterial;
     }
 }
