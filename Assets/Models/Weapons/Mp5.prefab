@@ -1152,6 +1152,7 @@ MonoBehaviour:
   fireSelector: {fileID: 6292226902047459728}
   weaponGrab: {fileID: 6859929503773241644}
   chamberTransform: {fileID: 7796177412412324227}
+  attachmentRotationObjects: []
   ejectionPort: {fileID: 4960286091895048798}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}
