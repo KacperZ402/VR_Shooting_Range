@@ -10,6 +10,7 @@ TagManager:
   - Projectile
   - BulletPickup
   - AIM
+  - Mag
   layers:
   - Default
   - TransparentFX

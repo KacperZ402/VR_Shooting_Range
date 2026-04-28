@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: -7620230578914221410}
   m_Layer: 9
   m_Name: MagPull
-  m_TagString: Untagged
+  m_TagString: Mag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

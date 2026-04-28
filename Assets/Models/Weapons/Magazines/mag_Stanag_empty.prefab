@@ -856,7 +856,7 @@ GameObject:
   - component: {fileID: 1580030620156364734}
   m_Layer: 9
   m_Name: mag_Stanag_empty
-  m_TagString: Untagged
+  m_TagString: Mag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -272,7 +272,7 @@ GameObject:
   - component: {fileID: 2500862235669012301}
   m_Layer: 9
   m_Name: Mag_C3A3
-  m_TagString: Untagged
+  m_TagString: Mag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

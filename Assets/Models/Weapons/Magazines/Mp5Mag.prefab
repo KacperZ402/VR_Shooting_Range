@@ -602,7 +602,7 @@ GameObject:
   - component: {fileID: 1293747415224433839}
   m_Layer: 9
   m_Name: Mp5Mag
-  m_TagString: Untagged
+  m_TagString: Mag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

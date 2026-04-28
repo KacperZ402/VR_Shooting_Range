@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: 8786339879911639078}
   m_Layer: 9
   m_Name: MagBerreta
-  m_TagString: Untagged
+  m_TagString: Mag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

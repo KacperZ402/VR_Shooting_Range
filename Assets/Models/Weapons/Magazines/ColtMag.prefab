@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: -6061943924031769983}
   m_Layer: 9
   m_Name: ColtMag
-  m_TagString: Untagged
+  m_TagString: Mag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
