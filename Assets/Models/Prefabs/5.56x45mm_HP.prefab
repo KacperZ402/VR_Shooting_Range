@@ -283,13 +283,13 @@ MonoBehaviour:
   caliber: 5.56x45
   casingPrefab: {fileID: 8177197253499680521, guid: 644698d43afbf494192827793510e71e, type: 3}
   defaultScale: {x: 0, y: 0, z: 0}
-  muzzleEnergy: 2500
-  mass: 0.03
-  dragCoefficient: 0.01
+  muzzleEnergy: 1900
+  mass: 0.0038
+  dragCoefficient: 0.006
   projectileCount: 1
   spreadAngle: 1.01
   penetrationPower: 5
-  ricochetAngle: 60
+  ricochetAngle: 90
   maxRicochets: 1
   ricochetBounciness: 0.2
   ricochetFriction: 0.3

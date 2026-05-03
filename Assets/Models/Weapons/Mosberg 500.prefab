@@ -563,6 +563,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  outlineMaterialPrefab: {fileID: 2100000, guid: 66e3c9c22411f434fa62063a837c8c7c, type: 2}
 --- !u!65 &7825467561776784055
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1136,6 +1137,7 @@ MonoBehaviour:
   fireSelector: {fileID: 3344521818098688027}
   weaponGrab: {fileID: 7792571851279787735}
   chamberTransform: {fileID: 1505144920354372623}
+  attachmentRotationObjects: []
   ejectionPort: {fileID: 7383244491903623168}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}

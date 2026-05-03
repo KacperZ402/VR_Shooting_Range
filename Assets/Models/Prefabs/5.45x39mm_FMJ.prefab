@@ -283,9 +283,9 @@ MonoBehaviour:
   caliber: 5.45x39
   casingPrefab: {fileID: 308721667614648887, guid: 9930c80a260814b44be89259ed9e5b0e, type: 3}
   defaultScale: {x: 0, y: 0, z: 0}
-  muzzleEnergy: 2500
-  mass: 0.03
-  dragCoefficient: 0.01
+  muzzleEnergy: 1350
+  mass: 0.0034
+  dragCoefficient: 0.004
   projectileCount: 1
   spreadAngle: 1.01
   penetrationPower: 15

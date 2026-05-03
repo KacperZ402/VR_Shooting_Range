@@ -47,6 +47,8 @@ public class ChargingHandle : MonoBehaviour
     protected Quaternion lockedRotation;
     protected Quaternion initialRotation;
 
+    public Material outlineMaterialPrefab;
+
     private Renderer objectRenderer;
     private Material originalMaterial;
     private Material outlineMaterial;
@@ -73,6 +75,8 @@ public class ChargingHandle : MonoBehaviour
         if (objectRenderer != null)
         {
             originalMaterial = objectRenderer.material;
+            if (outlineMaterialPrefab != null)
+                outlineMaterial = new Material(outlineMaterialPrefab);
         }
     }
 
@@ -186,18 +190,13 @@ public class ChargingHandle : MonoBehaviour
     }
     private void EnableOutline()
     {
-        if (objectRenderer == null) return;
-
-        // Metoda 1: Zmiana emisji (prostsze)
-        outlineMaterial = new Material(originalMaterial);
-        outlineMaterial.SetColor("_EmissionColor", Color.white * 2f);
-        outlineMaterial.EnableKeyword("_EMISSION");
+        if (objectRenderer == null || outlineMaterial == null) return;
         objectRenderer.material = outlineMaterial;
     }
 
     private void DisableOutline()
     {
-        if (objectRenderer == null) return;
+        if (objectRenderer == null || originalMaterial == null) return;
         objectRenderer.material = originalMaterial;
     }
 }

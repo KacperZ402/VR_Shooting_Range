@@ -283,12 +283,12 @@ MonoBehaviour:
   caliber: 7.62x51
   casingPrefab: {fileID: 7255864969971397780, guid: 21e96cd39e28410428c493905fc1e162, type: 3}
   defaultScale: {x: 0, y: 0, z: 0}
-  muzzleEnergy: 2500
-  mass: 0.03
-  dragCoefficient: 0.01
+  muzzleEnergy: 3500
+  mass: 0.009
+  dragCoefficient: 0.005
   projectileCount: 1
   spreadAngle: 1.01
-  penetrationPower: 15
+  penetrationPower: 40
   ricochetAngle: 60
   maxRicochets: 1
   ricochetBounciness: 0.2

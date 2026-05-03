@@ -282,9 +282,9 @@ MonoBehaviour:
   caliber: 7.62x54
   casingPrefab: {fileID: 56732577848688322, guid: 101a51b279a2f664b9524812e0eea2dd, type: 3}
   defaultScale: {x: 0, y: 0, z: 0}
-  muzzleEnergy: 2500
-  mass: 0.03
-  dragCoefficient: 0.01
+  muzzleEnergy: 3700
+  mass: 0.01
+  dragCoefficient: 0.005
   projectileCount: 1
   spreadAngle: 1
   penetrationPower: 15

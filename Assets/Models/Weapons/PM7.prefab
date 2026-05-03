@@ -1687,7 +1687,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.066568494, y: 0.019377457, z: 0.016160147}
   m_Center: {x: -0.002892673, y: 0.16060129, z: 0.102189936}
@@ -1874,6 +1874,7 @@ MonoBehaviour:
   OnBoltReleased:
     m_PersistentCalls:
       m_Calls: []
+  outlineMaterialPrefab: {fileID: 2100000, guid: 66e3c9c22411f434fa62063a837c8c7c, type: 2}
 --- !u!1 &6338213299083534183
 GameObject:
   m_ObjectHideFlags: 0

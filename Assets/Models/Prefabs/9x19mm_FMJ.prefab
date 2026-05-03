@@ -283,9 +283,9 @@ MonoBehaviour:
   caliber: 9x19
   casingPrefab: {fileID: 9045120380695773608, guid: 9dd2313691c4e8d40aca00195e323710, type: 3}
   defaultScale: {x: 0, y: 0, z: 0}
-  muzzleEnergy: 2500
-  mass: 0.03
-  dragCoefficient: 0.01
+  muzzleEnergy: 500
+  mass: 0.008
+  dragCoefficient: 0.015
   projectileCount: 1
   spreadAngle: 1.01
   penetrationPower: 15

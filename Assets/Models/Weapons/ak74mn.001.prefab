@@ -273,6 +273,7 @@ MonoBehaviour:
   OnBoltReleased:
     m_PersistentCalls:
       m_Calls: []
+  outlineMaterialPrefab: {fileID: 2100000, guid: 66e3c9c22411f434fa62063a837c8c7c, type: 2}
   holdFrames: 1
   returnFrames: 1
 --- !u!65 &8073996583238765262
@@ -935,6 +936,7 @@ MonoBehaviour:
   fireSelector: {fileID: 709551007552528068}
   weaponGrab: {fileID: 1660062839158819119}
   chamberTransform: {fileID: 7319305707070357444}
+  attachmentRotationObjects: []
   ejectionPort: {fileID: 833184616744515960}
   ejectionForce: {x: 1.5, y: 0.5, z: 0}
   ejectionTorque: {x: 10, y: 5, z: 20}

@@ -283,13 +283,13 @@ MonoBehaviour:
   caliber: 7.62x39
   casingPrefab: {fileID: 8546647959994128879, guid: 0ac560b5aec41d147bdc080bad011e31, type: 3}
   defaultScale: {x: 0, y: 0, z: 0}
-  muzzleEnergy: 2500
-  mass: 0.03
-  dragCoefficient: 0.01
+  muzzleEnergy: 2200
+  mass: 0.0075
+  dragCoefficient: 0.008
   projectileCount: 1
   spreadAngle: 1.01
-  penetrationPower: 15
-  ricochetAngle: 60
+  penetrationPower: 5
+  ricochetAngle: 90
   maxRicochets: 1
   ricochetBounciness: 0.2
   ricochetFriction: 0.3

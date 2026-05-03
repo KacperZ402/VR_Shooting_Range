@@ -283,10 +283,10 @@ MonoBehaviour:
   caliber: 12Ga
   casingPrefab: {fileID: 5218414273700352253, guid: 3d44b3526d9c96d489b5e63dd9ee43f6, type: 3}
   defaultScale: {x: 0, y: 0, z: 0}
-  muzzleEnergy: 2500
-  mass: 0.03
+  muzzleEnergy: 350
+  mass: 0.004
   dragCoefficient: 0.01
-  projectileCount: 9
+  projectileCount: 8
   spreadAngle: 5
   penetrationPower: 10
   ricochetAngle: 60

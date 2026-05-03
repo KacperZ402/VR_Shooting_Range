@@ -283,9 +283,9 @@ MonoBehaviour:
   caliber: 4.6x30
   casingPrefab: {fileID: 4689602906764615730, guid: 590f213bb2cc54c43ac5ed29a59229ef, type: 3}
   defaultScale: {x: 0, y: 0, z: 0}
-  muzzleEnergy: 2500
-  mass: 0.03
-  dragCoefficient: 0.01
+  muzzleEnergy: 450
+  mass: 0.002
+  dragCoefficient: 0.008
   projectileCount: 1
   spreadAngle: 1.01
   penetrationPower: 15
