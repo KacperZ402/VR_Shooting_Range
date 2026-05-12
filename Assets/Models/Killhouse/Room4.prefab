@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1029394134661536083
+--- !u!1 &2771657830272742680
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7066157919281143004}
-  - component: {fileID: 5060521337779751245}
-  - component: {fileID: 3359210746015588179}
+  - component: {fileID: 1424208550235583909}
+  - component: {fileID: 7168189000449626728}
+  - component: {fileID: 4834332013600770560}
   m_Layer: 0
   m_Name: Room4
   m_TagString: Untagged
@@ -18,37 +18,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7066157919281143004
+--- !u!4 &1424208550235583909
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1029394134661536083}
+  m_GameObject: {fileID: 2771657830272742680}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -8.152712, y: 0.4044206, z: 19.499329}
+  m_LocalPosition: {x: 14.58293, y: 2.9149663, z: 24.836607}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 550442932803928782}
+  - {fileID: 2142510797585517189}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5060521337779751245
+--- !u!33 &7168189000449626728
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1029394134661536083}
+  m_GameObject: {fileID: 2771657830272742680}
   m_Mesh: {fileID: 1158812305861074756, guid: 237f4d23d9cb8ec4f9cb0e7c5ec8a911, type: 3}
---- !u!23 &3359210746015588179
+--- !u!23 &4834332013600770560
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1029394134661536083}
+  m_GameObject: {fileID: 2771657830272742680}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -65,9 +65,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 3876542345217667742, guid: 237f4d23d9cb8ec4f9cb0e7c5ec8a911, type: 3}
-  - {fileID: 6095938364182914476, guid: 237f4d23d9cb8ec4f9cb0e7c5ec8a911, type: 3}
-  - {fileID: -4858960475221006663, guid: 237f4d23d9cb8ec4f9cb0e7c5ec8a911, type: 3}
+  - {fileID: 3876542345217667742, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+  - {fileID: 6095938364182914476, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
+  - {fileID: -4858960475221006663, guid: 972e344bde7f56941bd5ef2b602062cc, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -89,7 +89,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &4318353237693613746
+--- !u!1 &7753933711554602089
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,26 +97,26 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 550442932803928782}
+  - component: {fileID: 2142510797585517189}
   m_Layer: 0
-  m_Name: Empty.008
+  m_Name: EndPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &550442932803928782
+--- !u!4 &2142510797585517189
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4318353237693613746}
+  m_GameObject: {fileID: 7753933711554602089}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071067, w: 0.7071068}
   m_LocalPosition: {x: -0, y: -6.093914, z: -2.647}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7066157919281143004}
+  m_Father: {fileID: 1424208550235583909}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

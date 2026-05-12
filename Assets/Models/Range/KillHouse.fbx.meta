@@ -3,7 +3,22 @@ guid: 237f4d23d9cb8ec4f9cb0e7c5ec8a911
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BallisticRubber
+    second: {fileID: 2100000, guid: 3dad16bd7f72a484ba42b8dbc2690fe4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Floor
+    second: {fileID: 2100000, guid: f260873150f983d45895c1d8e7908490, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MetalSheet
+    second: {fileID: 2100000, guid: 33c68fb73cf39584b877dfe504338469, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
