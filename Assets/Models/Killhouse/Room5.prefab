@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8932823529231419407}
   - component: {fileID: 2110740076941961130}
   - component: {fileID: 8530100213891410240}
+  - component: {fileID: 7344478325089369812}
   m_Layer: 0
   m_Name: Room5
   m_TagString: Untagged
@@ -26,14 +27,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 935773725210311933}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.7070451, y: 0, z: 0, w: 0.7071685}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5622352361492421126}
+  - {fileID: 2283006682141286433}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.99, y: 0, z: 0}
 --- !u!33 &2110740076941961130
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -89,6 +91,94 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7344478325089369812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935773725210311933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d86eb5a07faed42b5a8c96bee1ae86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomColliders:
+  - {fileID: 5709224995853523637}
+  cellSize: {x: 1.2, y: 1.2}
+  roomProps:
+  - prefab: {fileID: 8801033629766108263, guid: 7f7578b2cdc1ffc499983840e919f678, type: 3}
+    size: {x: 1, y: 1}
+    allowRotate90Z: 0
+  - prefab: {fileID: 6308736139285543473, guid: 4dad3a67083737a4c93baf2ec4cdafb7, type: 3}
+    size: {x: 3, y: 1}
+    allowRotate90Z: 1
+  - prefab: {fileID: 1415120149135083391, guid: 1e47dd81cf8bfe94080db08b25915a70, type: 3}
+    size: {x: 1, y: 1}
+    allowRotate90Z: 0
+  - prefab: {fileID: 2767615236480585917, guid: a49cc2be91ebb3a40a5b4ed5a60e652d, type: 3}
+    size: {x: 3, y: 1}
+    allowRotate90Z: 1
+  - prefab: {fileID: 6161212290266729699, guid: d156de0b2fcaf9c44af23fcbe4697552, type: 3}
+    size: {x: 1, y: 1}
+    allowRotate90Z: 1
+  poolManager: {fileID: 0}
+  poolSizePerPrefab: 2
+  spawnOnStart: 1
+  propsCountRange: {x: 2, y: 3}
+--- !u!1 &5636442822553968407
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2283006682141286433}
+  - component: {fileID: 5709224995853523637}
+  m_Layer: 0
+  m_Name: PropSpawning
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2283006682141286433
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5636442822553968407}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8932823529231419407}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5709224995853523637
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5636442822553968407}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.25, y: 3.44, z: 0}
+  m_Center: {x: 0, y: -3.21, z: -1.32}
 --- !u!1 &8119208717638857671
 GameObject:
   m_ObjectHideFlags: 0

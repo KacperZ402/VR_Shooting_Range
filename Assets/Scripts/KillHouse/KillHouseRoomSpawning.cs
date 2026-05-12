@@ -14,6 +14,9 @@ public class KillHouseRoomSpawning : MonoBehaviour
     private const string EndPointName = "EndPoint";
     private const float FixedGlobalX = -89.99f;
 
+    private readonly Dictionary<GameObject, Queue<GameObject>> _pool = new Dictionary<GameObject, Queue<GameObject>>();
+    private readonly Dictionary<GameObject, GameObject> _instanceToPrefab = new Dictionary<GameObject, GameObject>();
+
     void Start()
     {
         SpawnRooms();
@@ -28,14 +31,15 @@ public class KillHouseRoomSpawning : MonoBehaviour
         }
 
         Transform lastEndPoint = null;
+        float accumulatedZ = transform.rotation.eulerAngles.z;
 
-        float accumulatedY = transform.rotation.eulerAngles.y;
+        int lastPrefabIndex = -1;
 
-        // 1) Start room
+        // Start room
         Vector3 startPos = transform.position;
-        Quaternion startRot = Quaternion.Euler(FixedGlobalX, accumulatedY, 0f);
+        Quaternion startRot = Quaternion.Euler(FixedGlobalX, 0f, accumulatedZ);
 
-        GameObject startRoomInstance = Instantiate(roomStart, startPos, startRot);
+        GameObject startRoomInstance = GetFromPool(roomStart, startPos, startRot);
         lastEndPoint = GetEndPoint(startRoomInstance.transform);
 
         if (lastEndPoint == null)
@@ -44,16 +48,16 @@ public class KillHouseRoomSpawning : MonoBehaviour
             return;
         }
 
-        // 2) Kolejne pokoje
         for (int i = 0; i < roomsToSpawn; i++)
         {
-            GameObject prefab = roomPrefabs[Random.Range(0, roomPrefabs.Count)];
+            int prefabIndex = GetRandomPrefabIndex(lastPrefabIndex);
+            GameObject prefab = roomPrefabs[prefabIndex];
+            lastPrefabIndex = prefabIndex;
 
-            float endPointLocalY = lastEndPoint.localEulerAngles.y;
-            accumulatedY += endPointLocalY;
+            accumulatedZ += lastEndPoint.localEulerAngles.z;
 
-            Quaternion roomRot = Quaternion.Euler(FixedGlobalX, accumulatedY, 0f);
-            GameObject roomInstance = Instantiate(prefab, lastEndPoint.position, roomRot);
+            Quaternion roomRot = Quaternion.Euler(FixedGlobalX, 0f, accumulatedZ);
+            GameObject roomInstance = GetFromPool(prefab, lastEndPoint.position, roomRot);
 
             lastEndPoint = GetEndPoint(roomInstance.transform);
 
@@ -64,12 +68,65 @@ public class KillHouseRoomSpawning : MonoBehaviour
             }
         }
 
-        // 3) Końcowa paleta
         if (endPalettePrefab != null)
         {
-            Quaternion paletteRot = Quaternion.Euler(FixedGlobalX, accumulatedY, 0f);
-            Instantiate(endPalettePrefab, lastEndPoint.position, paletteRot);
+            Quaternion paletteRot = Quaternion.Euler(FixedGlobalX, 0f, accumulatedZ);
+            GetFromPool(endPalettePrefab, lastEndPoint.position, paletteRot);
         }
+    }
+
+    private GameObject GetFromPool(GameObject prefab, Vector3 position, Quaternion rotation)
+    {
+        if (!_pool.TryGetValue(prefab, out var queue))
+        {
+            queue = new Queue<GameObject>();
+            _pool[prefab] = queue;
+        }
+
+        GameObject instance;
+        if (queue.Count > 0)
+        {
+            instance = queue.Dequeue();
+        }
+        else
+        {
+            instance = Instantiate(prefab);
+            _instanceToPrefab[instance] = prefab;
+        }
+
+        instance.transform.SetPositionAndRotation(position, rotation);
+        instance.SetActive(true);
+        return instance;
+    }
+
+    public void ReturnToPool(GameObject instance)
+    {
+        if (instance == null) return;
+
+        if (_instanceToPrefab.TryGetValue(instance, out var prefab))
+        {
+            instance.SetActive(false);
+            _pool[prefab].Enqueue(instance);
+        }
+        else
+        {
+            Destroy(instance);
+        }
+    }
+
+    private int GetRandomPrefabIndex(int lastIndex)
+    {
+        if (roomPrefabs.Count <= 1)
+            return 0;
+
+        int index;
+        do
+        {
+            index = Random.Range(0, roomPrefabs.Count);
+        }
+        while (index == lastIndex);
+
+        return index;
     }
 
     private Transform GetEndPoint(Transform roomRoot)
