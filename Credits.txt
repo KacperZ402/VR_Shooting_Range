@@ -1,0 +1,34 @@
+3D Models used under Creative Commons Attribution (CC BY 4.0):
+ 
+– “Bushmaster ACR” by CloudyRain — https://sketchfab.com/3d-models/bushmaster-acr-01063e46b7344b9396fb5242ab37241a  
+– “AUG A3” by Lolik123654 — https://sketchfab.com/3d-models/aug-a3-78ddc440ee394536ad6b0567b0c0e96e  
+– “Low-Poly H&K MP5” by TastyTony — https://sketchfab.com/3d-models/low-poly-hk-mp5-80980f757c2c463ebc73460a31611652  
+– “Low-Poly Python Revolver” by notcplkerry — https://sketchfab.com/3d-models/low-poly-python-revolver-80be25747ad244e198b889a40e55cec7  
+
+
+Audio used under Creative Commons Zero (CC0 — public domain):
+
+– “Gun Load” by Spennnyyy — https://freesound.org/people/Spennnyyy/sounds/323499/  
+– “Pistol Reloading Sound” by 1234Thekrebwgus — https://freesound.org/people/1234Thekrebwgus/sounds/723211/  
+– “Handgun / Pistol Removing Mag and Inserting Mag Foley” by e9118586020 — https://freesound.org/people/e9118586020/sounds/456195/  
+– “Pistol Shot 2” by MrGungus — https://freesound.org/people/MrGungus/sounds/773860/  
+– “Shotgun sounds” by lensflare8642 — https://freesound.org/people/lensflare8642/sounds/145209/  
+– “Loading bullets into Sauer 404 mag” by moosegravy — https://freesound.org/people/moosegravy/sounds/431830/  
+– “Bolt Action Rifle Reload” by AugustSandberg — https://freesound.org/s/508747/  
+
+
+Audio used under Creative Commons Attribution (CC BY 4.0):
+
+– “Load Shotgun 4” by DrinkingWindGames — https://freesound.org/people/DrinkingWindGames/sounds/789645/  
+– “Shotgun Reload [1]” by Nox_Sound — https://freesound.org/people/Nox_Sound/sounds/490309/  
+
+
+Audio used under custom commercial license:
+
+– “Bullet Impact Body / Concrete / Metal / Flyby Sound Pack”  
+  Source: https://www.dropbox.com/scl/fi/rkh5d50sm27t9rbxbv3mp/BulletImpactBodyConcreteMetalFlyby.zip  
+  License: Free for commercial use. Redistribution or claiming authorship is not permitted.  
+
+License for models: http://creativecommons.org/licenses/by/4.0/  
+License for CC BY audio: http://creativecommons.org/licenses/by/4.0/  
+Audio CC0 (public domain) — attribution optional (listed for documentation).
